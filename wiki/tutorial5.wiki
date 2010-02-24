@@ -1,0 +1,160 @@
+#summary One-sentence summary of this page.
+
+
+<h1>Lesson 5 : Extending the framework</h1>
+
+<p>
+This is the 5th part of the VLDocking Framework tutorial for Java Swing applications.
+
+<p> In this lesson, you will learn (basically) how to extend the VLDocking Framework. But
+reading this lesson is not enough : you'll also have to browse the source code
+ to get a feeling on how to do things....
+
+<ul>
+	<li> <a href="index.php">
+	Back to table of contents</a></li>
+</ul>
+
+
+<h2>Changing of DockableContainers</h2>
+
+
+<p>
+  This chapter will show you how to replace the default DockableContainers by
+  others of your own (or an extended version of the default ones).
+<p>
+  Let's begin by the <code>DockableContainerFactory</code>.
+<h3>The DockableContainerFactory</h3>
+<p>
+  The <code>com.vlsolutions.swing.docking.DockableContainerFactory</code> is an
+abstract class used by the <code>DockingDesktop</code> to create instances of
+Dockable containers.
+<p>
+  When no factory is defined, it will rely on the <code>DefaultDockableContainerFactory</code>
+  implementation.
+<p>
+  To change of factory, create a new Factory class by subclassing either the abstract
+  class or the default implementation, and implement/override the methods you
+  want to change.
+<p>
+  Once your class is ready, invoke the static method <code>DockableContainerFactory.setFactory()</code>
+  and provide and instance of your class as parameter.
+<p>
+  And this is it ! your factory has been adopted by the framework...
+
+
+<h4>Factory methods</h4>
+<p>
+  The methods you'd want to implement or override are :
+<ul>
+  <li> <code>SingleDockableContainer createDockableContainer(Dockable dockable, int parentType)</code> : provide
+    a new container for this dockable, according to its container hierarchy (<code>parentType</code> may
+    be DockableContainerFactory.PARENT_DESKTOP, PARENT_TABBED_CONTAINER, 
+    PARENT_SPLIT_CONTAINER, or PARENT_DETACHED_WINDOW.<br>
+    
+  <li> <code>TabbedDockableContainer createTabbedDockableContainer()</code> : provide a
+    new tabbed dockable container.</li>
+    <li> <code>DockViewTitleBar createTitleBar()</code> : provide a
+    new customized header for single dockables.
+</ul>
+<p>
+  Their default implementations return a <code>DockView</code> (or a subclass of DockView for floating and tabbed 
+  dockables) and a <code>DockTabbedPane</code> or a <code>DockViewTitleBar</code>.
+
+<h3>Extending SingleDockableContainer</h3>
+<p>
+  SingleDockableContainer is the interface that must be implemented by Containers
+  displaying one (and only one) dockable.
+<p>
+  The default implementation is DockView, which comes with a draggable title bar
+  of the <code>DockViewTitleBar</code> class (see the factory method to replace it).
+<p>
+  You can extend the DockView class to provide new decorations to your dockables, 
+  or to remove the title bar (which isn't
+  supported yet).
+
+<h3>Extending TabbedDockableContainer</h3>
+<p>
+  TabbedDockableContainer is the interface that must be implemented by Containers
+  displaying multiple dockables in a tabbed pane fashion.</p>
+<p>
+  The default implementation is DockTabbedPane, which is a JTabbedPane subclass,
+  with tabs at bottom.
+  </p>
+<p>
+  You might want to implement your own TabbedDockableContainer, for example to
+  provide closeable tabs - a feature not yet supported by JTabbedPane, but that should
+  be available with the Mustang (java 1.6) release.
+</p>  
+<h3>Extending a DockViewTitleBar : example of adding a JButton inside </h3>
+<p> First, you will have to declare a new dockable factory and return your custom title bar :
+<div class="example">
+<pre>
+class CustomDockableFactory extends DefaultDockableContainerFactory{  
+  public DockViewTitleBar createTitleBar() {
+    return new CustomizedDockViewTitleBar();
+  }
+} 
+</pre></div>
+<p> The custom title bar can then be declared like this :
+<div class="example">
+<pre>
+class CustomizedDockViewTitleBar extends DockViewTitleBar {
+  CustomizedDockViewTitleBar(){
+  }
+  
+  protected void layoutTitleBar(){
+    // this method is responsible for laying out the buttons in the title bar (jpanel) 
+    super.layoutTitleBar();
+    
+    // insert a button before the "hide" button
+    int buttonIndex = 0;
+    for (int i=0; i &lt; getComponentCount(); i++){
+        Component child = getComponent(i);
+        if (child == getHideOrDockButton()){
+          buttonIndex = i;
+          break;
+        }
+    }
+    
+    final JButton btn = new JButton("test");
+    btn.setBorderPainted(false);
+    btn.setFocusable(false);
+    btn.setContentAreaFilled(false);
+    btn.setToolTipText("Click me !");
+    Insets buttonMargin = new Insets(0, 0, 0, 0);
+    btn.setMargin(buttonMargin);
+      
+    add(btn, buttonIndex);
+      
+    btn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          System.out.println("clicked !");
+        }
+      });
+    }  
+  }
+</pre></div>
+
+<h3>Adding new types of containers</h3>
+<p>
+  This is possible, but will require modifications on the DockingDesktop class.
+<p>
+  Why would you create new types of containers ? a good reason could be to
+  display things in a non-standard way : circular layout, rollover
+  expandable components,...
+<p>
+  This could be tricky... please contact us in case of doubt, we could give you
+  some advices.
+<p>
+  The path to follow would be :
+ <ul>
+   <li> add new methods to the DockingDesktop reflecting the new ways of
+     adding dockables (think about <code>split</code>, <code>createTab</code>...).
+   <li> create your own DockableDragSource for the new containers (don't forget
+     to declare them to the desktop with <code>desktop.installDragSource()</code>).
+   <li> implement DockDropReceiver on your container or one of its children to
+     enable sub-docking.
+   <li> ... test your classes !
+ </ul>
+
