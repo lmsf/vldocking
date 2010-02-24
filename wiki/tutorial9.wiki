@@ -1,0 +1,323 @@
+#summary One-sentence summary of this page.
+
+<h1>Lesson 9 : The VLToolBars </h1>
+
+<p>This is the 9th part of the VLDocking Framework for Java Swing applications.
+<p> This lessons covers the VLToolBars components, an enhanced version of the classic JToolBar Swing 
+component.
+
+<ul>
+	<li> <a href="index.php">
+	Back to table of contents</a></li>
+</ul>
+
+<h2>What are the VLToolbars ?</h2>
+
+<h3>An enhanced JToolBar</h3>
+<p>
+The VLToolBar component provides an enhanced user experience for toolbars.
+
+<p align="center">
+<img src="/images/tutorial/toolbar1.jpg"><br>
+A set of VLToolBars
+</p>
+<p align="center">
+<img src="/images/tutorial/toolbar2.jpg"><br>
+Same set arranged vetically on two columns 
+</p>
+<p>
+Many important usability concerns have been addressed :
+<ul>
+<li> A look and feel with an enhanced ("soft") rollover effect</li>
+<li> multiple toolbars can be positionned around a central user component, horizontally, 
+vertically, and on multiple rows and columns</li>
+<li> Drag and drop support adapted to this new layout, with immediate feedback</li>
+</ul>
+
+<h3>Drag and Drop support</h3>
+<p> A "gripper" at the base of the toolbar can be used as an anchor to drag and drop the toolbar
+around its container.
+
+<h3>Load and save configuration</h3>
+<p>As with VLDocking, VLToolBars use an XML format to save and reload their positionning.
+
+<h2>Using VLToolBars</h2>
+
+<h3>Installing a toolbar</h3>
+<p> Here is an image introducing the components in use with VLToolBars :
+<p align="center"><img src="/images/tutorial/toolbars_overview.gif"><br>
+An overview of the components
+</p>
+<p>
+Installing a set of toolbars is easy :
+<ul>
+  <li> create a ToolBarContainer (a specialized JPanel with a BorderLayout)
+  <li> add you component at the center : container.add(myComp, BorderLayout.CENTER)
+  <li> get a reference to a ToolBarPanel from the ToolBarContainer : container.getToolBarPanelAt(BorderLayout.NORTH)
+  <li> add one or more VLToolBars to it, using the ToolBarConstraints to specify their relative order.
+  <li> enjoy the results !
+</ul>
+<p>
+Details of these operations follow.
+
+<h4> Create a ToolBarContainer </h4>
+<p>
+The ToolBarContainer is a specialized JPanel with a BorderLayout, which can contain up to four sets of toolbars (on every side).
+<p>
+The easiest way to create that container is to use the static method 
+<div class="example">
+<pre>public static ToolBarContainer createDefaultContainer(boolean topToolbar, 
+      boolean leftToolBar, boolean bottomToolBar, boolean rightToolBar)
+</pre>
+</div>
+<p> The four booleans are used to specify the borders used to contain a set of toolbars (you way want to have
+a toolbar on top and bottom, but not on left and right border).
+<p>
+The central part of the container is dedicated to the user component. 
+
+<h4> Accessing borders and specifying layout constraints</h4>
+<p>
+Once the user component and usable borders are specified, you will need to access 
+the border components, which are <code><b>ToolBarPanel</b></code>s. 
+<p> 
+A ToolBarPanel is a specialized JPanel with a ToolBarPanelLayout. It can accept components 
+(VLToolBars) and lay them out horizontally or vertically, at different positions.
+<p>
+These positions are specified as <code><b>ToolBarConstraints</b></code>.
+
+<p>
+Here is an example of accessing some ToolBarPanels.
+<div class="example">
+<pre>
+TooBarContainer container = ToolBarContainer.createDefaultContainer(true, true, true, true);
+// top border
+ToolBarPanel topPanel = container.getToolBarPanelAt(BorderLayout.NORTH);
+VLToolBar toolbar1 = ...
+VLToolBar toolbar2 = ...
+topPanel.add(toolbar1 , new ToolBarConstraints(0,0)); // first row, first column
+topPanel.add(toolbar2 , new ToolBarConstraints(0,1)); // first row, second column
+// left border
+ToolBarPanel leftPanel = container.getToolBarPanelAt(BorderLayout.WEST);
+VLToolBar toolbar3 = ...
+VLToolBar toolbar3 = ...
+leftPanel.add(toolbar3 , new ToolBarConstraints(0,0)); // first <b>column</b>, first row
+leftPanel.add(toolbar4 , new ToolBarConstraints(0,1)); // first column,<b>second row</b> 
+</pre>
+<p align="center"><img src="/images/tutorial/toolbar3.jpg"><br>
+The result of the sample code above
+</p>
+</div>
+
+<p> 
+If you look at the sample code above, you will see that we have used the same constraints to specify
+different layouts. This is because ToolbarConstraints are expressed in terms of <b>major order</b> and
+<b>minor order</b>, which are considered differently whether the toolbar is laid out horizontally or vertically.
+</p>
+<p> 
+So here is an expression of the orders depending on the toolbar orientation :
+<p align="center"><img src="/images/tutorial/major_order_h.jpg"><br>
+The major order in an <b>horizontal</b> ToolBarPanel is the <b>row</b>.
+</p>
+<p align="center"><img src="/images/tutorial/major_order_v.jpg"><br>
+The major order in a <b>vertical</b> ToolBarPanel is the <b> column</b>.
+</p>
+<h4> Major/minor order collapsing</h4>
+<p>
+Please note that if a ToolbarConstraints order (major or minor) is too high for the current 
+contained components, it will be reduced to the next available order.
+<p> For example, if you add a toolbar at (0,7) and there are only 2 toolbars (0,0) and (0,1) at this minor order, 
+the constraints will be reduced to (0,2).
+
+<h4> Adding buttons to a toolbar</h4>
+<p>
+This is really simple, you can add() a component, or addSeparator() to add a separator between two buttons.
+<p>
+If the component added is an instance of JButton, it's UI will be adapted to the one in use for the toolbar.
+
+<h4> Changing the UI for the toolbar</h4>
+<p>
+There is currently no UI delegate for the VLToolBar, but it is easy to change its look and feel by subclassing it or 
+updating its set of ui related properties :
+<p>
+<table><thead><tr><th> VLToolBar property</th><th>Description</th><th>Default Value</th></tr></thead>
+<tbody>
+<tr><td>isRolloverBorderPainted</td><td>paints a rollover border when the mouse is over a JButton</td><td>true</td></tr>
+<tr><td>isRooloverContentAreaFilled</td><td>updates the setContentAreaFilled of a JButton during rollover</td><td>false</td></tr>
+<tr><td>isUseCustomUI</td><td>if true, replace the JButton ui delegate by a VLButtonUI (provides a soft rounded border)</td><td>true</td></tr>
+<tr><td>draggedBorder</td><td>the border used by the toolbar when it is dragged</td><td>a ToolBarButtonBorder (soft rounded border)</td></tr>
+</tbody></table>
+<p>
+You can also update the style of the "gripper" (ToolBarGripper) by replacing its ui delegate : ToolBarGripperUI.
+<p> 
+This can be achieved the same way you update the UI delegates of VLDocking : 
+<ul>
+	<li>Install the default settings by calling <code>DockingUISettings.getInstance().installUI()</code></li>
+	<li>replace the ui property with <code>UIManager.putProperty("ToolBarGripperUI", "your.ui.delegateClassName");</code>
+	(you will have to do this prior VLToolBar install, otherwise your settings might be ignored).
+	</li>
+</ul>
+
+<a name="collapse"></a><h3> The Collapsible toolbars</h3>
+<p> 
+VLDocking 2.0.6 introduces a new UI enhancement : Collapsible toolbars. 
+<p align="center">
+<img src="/images/tutorial/toolbar_not_collapsed.gif"><br> A normal set of toolbars
+</p>
+<p align="center">
+<img src="/images/tutorial/toolbar_collapsed.gif"><br> Same set, but the middle toolbar has been collapsed
+</p>
+<p>
+Collapsing is enabled by default (you just have to click on the toolbar gripper), if you want to disable this 
+feature, just call <code>toolbar.setCollapsible(false)</code>.</p>
+<p>
+You can also trigger collapsing by the API : <code>toolbar.setCollapsed(boolean collapsed)</code></p> 
+
+<h2>Reading and writing </h2>
+<p> 
+To load and save your toolbar positions, use the dedicated call <code>ToolBarIO</code>, with the 
+<code>readXML(InputStream)</code> and <code> writeXML(OutputStream)</code> methods.
+<p>
+This will create (or read) an XML output (input) containing the name of the toolbars and their ToolBarConstraints, 
+the stream will not be closed to allow you to write (read) more data into (from) it.
+
+<h3> Creating an XML output</h3>
+<p>
+Here is the way to go :
+<ul>
+	<li> You must have a valid ToolBarContainer containing a set of VLToolBars</li>
+	<li> The toolbars must have a name (you can use the <code>setName</code> of the JComponent class
+	to set a different name for each toolbar</li>
+	<li> The toolbars must have been registered and added to the container (<code>container.registerToolBar(VLToolBar tb)</code> )</li> 
+	<li> create a new ToolBarIO for this container</li>
+	<li> invoke writeXML on this utility class.	</li>
+</ul>
+<p> And here is a example :
+<div class="example">
+<pre>
+	// create and install the container
+	ToolBarContainer container = ToolBarContainer.createDefaultContainer(...) ;
+	
+	// create and register your toolbars
+	VLToolBar tb1 = new VLToolBar("tb1");
+	VLToolBar tb2 = new VLToolBar("tb2");
+	VLToolBar tb3 = new VLToolBar();
+	tb3.setName("tb3"); // alternative way of giving a name to a toolbar
+	
+	container.registerToolBar(tb1);
+	container.registerToolBar(tb2);
+	container.registerToolBar(tb3);
+	
+	// install the toolbars where you want
+	container.getToolBarPanelAt(BorderLayout.NORTH).add(tb1, 
+	    new ToolBarConstraints(0,0);
+	container.getToolBarPanelAt(BorderLayout.NORTH).add(tb2, 
+	    new ToolBarConstraints(0,1);
+	container.getToolBarPanelAt(BorderLayout.SOUTH).add(tb3, 
+	    new ToolBarConstraints(0,0);
+	
+	// save them as XML
+	ToolBarIO tbIO = new ToolBarIO(container);
+	OutputStream out = ...
+	tbIO.writeXML(out);	
+	// the end (note that the stream is not closed)	
+</pre>
+</div>
+
+<h3> Reading a configuration from XML</h3>
+<p>
+Here is the way to go :
+<ul>
+	<li> You must have a valid (empty or not)ToolBarContainer </li>
+	<li> The toolbars must have a name (you can use the <code>setName</code> of the JComponent class
+	to set a different name for each toolbar</li>
+	<li> The toolbars must have been registered to the container (<code>container.registerToolBar(VLToolBar tb)</code> )
+	but not necessarily be visible</li> 
+	<li> create a new ToolBarIO for this container</li>
+	<li> invoke readXML on this utility class.</li>
+</ul>
+<p> And here is a example of reading :
+<div class="example">
+<pre>
+	// create and install the container
+	ToolBarContainer container = ToolBarContainer.createDefaultContainer(...) ;
+	
+	// create and register your toolbars
+	VLToolBar tb1 = new VLToolBar("tb1");
+	VLToolBar tb2 = new VLToolBar("tb2");
+	VLToolBar tb3 = new VLToolBar();
+	tb3.setName("tb3"); // alternative way of giving a name to a toolbar
+	
+	container.registerToolBar(tb1);
+	container.registerToolBar(tb2);
+	container.registerToolBar(tb3);
+	
+	// install them from XML
+	ToolBarIO tbIO = new ToolBarIO(container);
+	InputStream in = ...
+	tbIO.readXML(in);	
+	// the end (note that the input stream is not closed)	
+</pre>
+</div>
+<p>
+<b>Note : </b> the contents of the toolbars are not saved, it's up to you to add your 
+buttons before (or after) calling ToolbarIO.readXML(). Otherwise you will have a 
+well placed set of ... empty toolbars.
+
+<p>
+
+<h4> Autosave and install of toolbars with <code>ToolBarPersistence</code></h4>
+<p>
+ Coming with VLDocking 2.0.6, this component can be used to automate the process of loading and saving 
+ toolbar configations as java.util.preferences (warning : the API doesn't work on sandboxed environments 
+ (e.g. in unsigned Java Web Start application).</p>
+<p>
+ Using this class is easy : you create a new instance for each toolbar container, and the installation of 
+ toolbars is automated (no need to use the readXML() method anymore).</p>
+<p> 
+Saving is also automated as a shutdown hook : at restart, the user will get the same set and positionning 
+ of toolbars for this container. </p>
+
+<p></p>
+<a name="painter"></a>
+<h2>The BackgroundPainter API</h2>
+<p>
+This small API can be used to replace the default look and feel background for toolbars panels. 
+</p>
+<p>The API is based on a very simple interface <code>BackgroundPainter</code> that can be shared between 
+components. </p>
+<p> Here is an example of a painter using a SwingX Gradient : </p>
+<div class="example">
+<pre>
+import org.jdesktop.swingx.painter.gradient.BasicGradientPainter;
+import com.vlsolutions.swing.toolbars.BackgroundPainter;
+
+// decalre 
+public class CustomBackgroundPainter extends BasicGradientPainter
+                                     <b>implements BackgroundPainter</b> {
+
+    public CustomBackgroundPainter(){
+        super(BasicGradientPainter.GRAY);
+    }
+    <i>/** BackgrounPainer interface impl */</i>
+    public void <b>paintBackground(JComponent component, Graphics g)</b> { 
+        super.paintBackground((Graphics2D)g, component);
+    }       
+}
+</pre>
+</div>
+
+<p>Then you just have to transmit it to a ToolBarPanel : 
+</p>
+<div class="example">
+<pre>
+ToolBarPanel topPanel = container.getToolBarPanelAt(BorderLayout.NORTH);
+topPanel.setOpaque(false); 
+topPanel.setPainter( //set a custom background painter
+     new CustomBackgroundPainter());
+</pre>
+</div>
+<p> Easy, isn't it ?
+</p>
+<p>
+&nbsp;
+</p>
