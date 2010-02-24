@@ -1,0 +1,69 @@
+#summary One-sentence summary of this page.
+
+<h1>Lesson 10 : Compound Dockables</h1>
+<p>
+This is the 10th part of the VLDocking Framework for Java Swing applications.
+<p> 
+This lesson covers the Compound Dockables, which give a means to create nested hierarchy of dockables.
+<p>
+<ul>
+	<li> <a href="index.php">
+	Back to table of contents</a></li>
+</ul>
+
+<p>
+Note : this lesson will be enhanced in the coming days...
+<p>
+<h2>Overview</h2>
+<p><img src="/images/buttons/v2.1.jpg" title="new feature from VLDocking 2.1">
+Compound dockable containers is a feature available since VLDocking 2.1.
+<p>
+This feature adds support for nested containers, for example a Tabbed container in which would be nested splitted dockables.
+
+<p align="center">
+<img src="/images/tutorial/compoundDockables.jpg"><br>
+Compound Dockables (inside a tabbed dockable container)
+</p>
+
+
+<h2>How does it work ?</h2>
+<p>
+VLDocking now contains a specialized Dockable, called CompoundDockable.
+<p>
+Unlike Dockable which is an interface, CompondDockable is a class, and it comes 
+with an associated Component : the CompoundDockingPanel. There shouldn't be any 
+need to subclass CompoundDockable.
+<p>
+You interact with CompoundDockable through its DockKey, which gives you a means 
+to name it, to give it an icon and a tooltip (as that what's DockKeys are meant to be...).
+<p>
+Nesting dockables is performed with the new DockingDesktop method 
+<code>addDockable(CompoundDockable base, Dockable dockable)</code> which can be used 
+to start nesting, and then standard <code>split()</code> or <code>createTab()</code> 
+methods can be used to alter the layout of the nested components.
+<p>
+<h3>Example : creating a tab containing two dockable (horizontal split)</h3>
+<div class="example">
+<pre>
+DockingDesktop desk = ...
+Dockable tab1 = ...;
+Dockable tab2 = ...;
+CompoundDockable compound = new CompoundDockable(new DockKey("Nested"));
+Dockable nested1 = ...;
+Dockable nested2 = ...;
+desk.addDockable(tab1);
+desk.createTab(tab1, tab2, 1);
+desk.createTab(tab1, compound, 2); // compound is added as a tab
+desk.addDockable(compound, nested1); // now we insert nested1
+desk.split(nested1, nested2, DockingConstants.SPLIT_RIGHT); // and we split it
+</pre>
+</div>
+<p>
+Of course, another way of dealing with nested dockable is to use the 
+<a href="http://www.vlsolutions.com/en/products/docking/workspace.php">Workspace Manager Application </a>
+and load directly your layout from a workspace XML stream.
+<p>
+
+
+
+<p> 
