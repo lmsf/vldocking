@@ -20,20 +20,20 @@ The Dockable interface is simple : you just have two methods :
 }}}
 
   The DockKey is the JavaBean that contains presentation and behaviour informations
-  about the dockable (name, icon, ...) and a special <b>key</b> field used as
-  a primary key for loading and saving <i>
-  ( <img src="/images/buttons/v2.jpg" title="new feature from VLDocking 2.0">
+  about the dockable (name, icon, ...) and a special *key* field used as
+  a primary key for loading and saving 
+  ( 
   this field was formerly known as 'dockName' but
-  we have replaced it with a more comprehensive naming)</i>.
+  we have replaced it with a more comprehensive naming).
 
   We will use the most simple constructor, which takes only one argument : key.
 
   So let's look at one of the four GUI blocks and have it implement Dockable :
 
 {{{
-    class MyTextEditor extends JPanel <b>implements Dockable </b>{
+    class MyTextEditor extends JPanel *implements Dockable *{
 
-        <b>DockKey key = new DockKey("textEditor");</b>
+        *DockKey key = new DockKey("textEditor");*
 
         JTextArea textArea = new JTextArea("A Text Area");
         public MyTextEditor() {
@@ -42,17 +42,17 @@ The Dockable interface is simple : you just have two methods :
             jsp.setPreferredSize(new Dimension(200, 400));
             add(jsp, BorderLayout.CENTER);
         }
-        <b>public DockKey getDockKey(){
+        *public DockKey getDockKey(){
             return key;
         }
         public Component getComponent(){
             return this;
-        }</b>
+        }*
     }
 }}}
 
-  As you can see, we have added an instance variable <code>key</code> to identify
-  our component. We also return <code>this</code> for the getComponent() method, which
+  As you can see, we have added an instance variable {{{key}}} to identify
+  our component. We also return {{{this}}} for the getComponent() method, which
   indicates that the Dockable IS the component (we could have created non GUI dockables to
   isolate them from the application code, but this is our first lesson...).
 
@@ -65,7 +65,7 @@ The Dockable interface is simple : you just have two methods :
 
 
 {{{
-<b>import com.vlsolutions.swing.docking.*;</b>
+*import com.vlsolutions.swing.docking.*;*
 
 public class MyFirstFrame extends JFrame {
    MyTextEditor editorPanel = new MyTextEditor();
@@ -73,11 +73,11 @@ public class MyFirstFrame extends JFrame {
    MyGridOfButtons buttonGrid = new MyGridOfButtons();
    MyJTable tablePanel = new MyJTable();
 
-   <b>DockingDesktop desk = new DockingDesktop();</b>
+   *DockingDesktop desk = new DockingDesktop();*
 
    public MyFirstFrame(){
       setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-      <b>getContentPane().add(desk);</b> // desk becomes the only one component
+      *getContentPane().add(desk);* // desk becomes the only one component
       <s>getContentPane().add(editorPanel, BorderLayout.CENTER); </s>
       <s>getContentPane().add(treePanel, BorderLayout.WEST);</s>
       <s>getContentPane().add(buttonGrid, BorderLayout.NORTH);</s>
@@ -111,63 +111,63 @@ There are two ways to build your desktop :
 
   Here is a screenshot of the results :
 
-       <img src="/images/tutorial/frame2.jpg"><br>
+       [http://vldocking.googlecode.com/svn/wiki/frame2.jpg]<br>
        A basic workspace...
 
   Easy, isn't it ? let's decode it :
 == Docking layout methods ==
 
-=== The <code>addDockable</code> method ===
+=== The {{{addDockable}}} method ===
 
   This method is used to set the initial component of the desktop.
 
-=== The <code>split</code> method ===
+=== The {{{split}}} method ===
 
- The <code>split(Dockable base, Dockable newDockable, DockingConstants.Split position) </code> method
-    is used to position a dockable (<code>newDockable</code>) relative to another (the <code>base</code>), and with
-    respect to a positionning (<code>DockingConstants.SPLIT_TOP, SPLIT_LEFT, SPLIT_BOTTOM, SPLIT_RIGHT</code>).
+ The {{{split(Dockable base, Dockable newDockable, DockingConstants.Split position) }}} method
+    is used to position a dockable ({{{newDockable}}}) relative to another (the {{{base}}}), and with
+    respect to a positionning ({{{DockingConstants.SPLIT_TOP, SPLIT_LEFT, SPLIT_BOTTOM, SPLIT_RIGHT}}}).
 
-    The <code>position</code> parameter designates the <b> orientation </b> and <b> order </b> of the added component (SPLIT_TOP, for example, means : split the <code>base</code> container vertically, and put the <code>newDockable</code> on the upper part).
+    The {{{position}}} parameter designates the * orientation * and * order * of the added component (SPLIT_TOP, for example, means : split the {{{base}}} container vertically, and put the {{{newDockable}}} on the upper part).
 
-=== The <code>createTab</code> method ===
+=== The {{{createTab}}} method ===
 
-The <code>createTab(Dockable base, Dockable newDockable, int order)</code> method is used to put two (or more) dockables at the same position on the desktop by creating a tabbed pane.
+The {{{createTab(Dockable base, Dockable newDockable, int order)}}} method is used to put two (or more) dockables at the same position on the desktop by creating a tabbed pane.
 
-  If a tabbed pane is already created, a new tab is added at the <code>order</code> index.
+  If a tabbed pane is already created, a new tab is added at the {{{order}}} index.
 
-=== The <code>setAutoHide</code> method ===
+=== The {{{setAutoHide}}} method ===
 
- <code>setAutoHide(Dockable d, boolean hidden)</code> is used to auto-hide an already
+ {{{setAutoHide(Dockable d, boolean hidden)}}} is used to auto-hide an already
  visible dockable. So, you first add, split or createTab a dockable to display it, and
  then you hide it (that way, it will remember where to be displayed when docked again).
 
-=== The <code>setFloating</code> method ===
+=== The {{{setFloating}}} method ===
 
- <code>setFloating(Dockable d, boolean float)</code> is used to detach a dockable
- and display it in its own window. If <code>float</code> is false, than the floating
+ {{{setFloating(Dockable d, boolean float)}}} is used to detach a dockable
+ and display it in its own window. If {{{float}}} is false, than the floating
  dockable is attached again to its desktop.
 
  Making a dockable floating is allowed when the dockable is already visible and "docked",
  or if it is auto-hidden.
 
-=== The <code>maximize</code> and <code>restore</code> methods ===
+=== The {{{maximize}}} and {{{restore}}} methods ===
 
  These methods allow you to maximize a dockable (have it take the full size of its desktop, hiding the others dockable) and to put it back where it was before (restore). 
 
  Making a dockable maximized is allowed when the dockable is already visible and "docked".
 
-=== The <code>addHiddenDockable</code> method ===
+=== The {{{addHiddenDockable}}} method ===
 
-  <code>addHiddenDockable(Dockable d, RelativeDockingPosition restorePosition)</code> is used to auto-hide a dockable that is not visible.
+  {{{addHiddenDockable(Dockable d, RelativeDockingPosition restorePosition)}}} is used to auto-hide a dockable that is not visible.
 
   The RelativeDockingPosition defines a restore  position (x,y, width, height : values between 0.0 and 1.0) where the component  will be displayed when removed from  its autohide border.
 
-   You can use constants like  <code>RelativeDockingPosition.TOP_LEFT</code> to express
+   You can use constants like  {{{RelativeDockingPosition.TOP_LEFT}}} to express
    this position or  construct a new position (look at the RelativeDockingPosition javadoc API for further   explanations).
 
-=== The <code>registerDockable</code> method ===
+=== The {{{registerDockable}}} method ===
 
-  <code> registerDockable(Dockable d)</code> is used to declare a dockable without displaying  it. You will see later on that there is a <code>DockingSelectorDialog</code> helper window that can  be used to select the dockables to show and those to set unvisible, and which requires  registered Dockables (registration is implicit for visible dockables).
+  {{{ registerDockable(Dockable d)}}} is used to declare a dockable without displaying  it. You will see later on that there is a {{{DockingSelectorDialog}}} helper window that can  be used to select the dockables to show and those to set unvisible, and which requires  registered Dockables (registration is implicit for visible dockables).
 
 === Screenshots ===
 
@@ -177,7 +177,7 @@ The <code>createTab(Dockable base, Dockable newDockable, int order)</code> metho
   <tr>
     <th>Split</th>
     <td rowspan="2">
-      <pre>
+      {{{
 desk.addDockable(editorPanel);
 desk.split(editorPanel, treePanel, 
     DockingConstants.SPLIT_LEFT);
@@ -185,27 +185,27 @@ desk.split(editorPanel, buttonGrid,
     DockingConstants.SPLIT_RIGHT);
 desk.split(buttonGrid, tablePanel, 
     DockingConstants.SPLIT_BOTTOM);
-      </pre>
+      }}}
     </td>
   </tr>
-  <tr><td><img src="/images/tutorial/frame3.jpg"></td></tr>
+  <tr><td>[http://vldocking.googlecode.com/svn/wiki/frame3.jpg]</td></tr>
   <tr>
     <th>Split and Tab</th>
     <td rowspan="2">
-      <pre>
+      {{{
 desk.addDockable(editorPanel);
 desk.split(editorPanel, treePanel, 
     DockingConstants.SPLIT_LEFT);
 desk.split(editorPanel, buttonGrid, 
     DockingConstants.SPLIT_RIGHT);
 desk.createTab(treePanel, tablePanel, 1);
-      </pre>
+      }}}
     </td>
-  <tr><td><img src="/images/tutorial/frame4.jpg"></td></tr>
+  <tr><td>[http://vldocking.googlecode.com/svn/wiki/frame4.jpg]</td></tr>
   <tr>
     <th>Split and Auto-Hide</th>
     <td rowspan="2">
-      <pre>
+      {{{
 desk.addDockable(editorPanel);
 // the tree panel is auto-hidden 
 // and will be restored (docked) 
@@ -217,36 +217,40 @@ desk.split(editorPanel, buttonGrid,
 desk.split(editorPanel, tablePanel, 
     DockingConstants.SPLIT_LEFT);
 
-      </pre>
+      }}}
     </td>
   </tr>
-  <tr><td><img src="/images/tutorial/frame5.jpg"></td></tr>
+  <tr><td>[http://vldocking.googlecode.com/svn/wiki/frame5.jpg]</td></tr>
 </table>
 
 == The Dockable Containers ==
 
   You can see from the screenshots, or from your personal tests, that your dockables have
   been decorated : They all have a title bar with buttons, and a nice shadow border
-  around them (Docking 1.1 style) or <img src="/images/buttons/v2.jpg" title="new feature from VLDocking 2.0">
-  a simpler flat border (Docking 2.0 style). 
-<p>
+  around them (Docking 1.1 style) or a simpler flat border (Docking 2.0 style). 
+
+
   This is because when a dockable is added to a DockingDesktop, it is first included
-  into a <code>DockableContainer </code> then this component is added to the desktop.
-<p>
+  into a {{{DockableContainer }}} then this component is added to the desktop.
+
+
   DockableContainers are specialized components belonging to the Framework, that are
   replaceable (in order to provide a custom look and feel, or to add new features). <br>
   You usually don't interact with them but simply command their behaviour through the DockKey's properties (this is
   the subject of the next lesson).
-<p>
+
+
   There are basically two types of DockableContainers :
-  <ul>
-    <li> <code>SingleDockableContainer</code> is a container for one (and only one) Dockable.
-    <li> <code>TabbedDockableContainer</code> is a container that behaves like a JTabbedPane, displaying
+  
+
+    	 * {{{SingleDockableContainer}}} is a container for one (and only one) Dockable.
+    	 * {{{TabbedDockableContainer}}} is a container that behaves like a JTabbedPane, displaying
      many Dockables on tabs, with always one Dockable selected and visible, on top of the others.
-   </ul>
+   
+
 
 ---
 
-<li> Next : <a href="tutorial2.php">Lesson 2 - Customizing the desktop layout, display and docking behaviour</a></li>
-<li> Or, back to <a href="index.php">table of contents</a></li>.
-</ul>
+Next : [tutorial2 Lesson 2 - Customizing the desktop layout, display and docking behaviour]
+	 
+

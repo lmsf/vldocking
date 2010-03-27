@@ -1,68 +1,91 @@
 #summary One-sentence summary of this page.
 
-<h1>Lesson 4 : VLDocking Workspaces</h1>
+ = Lesson 4 : VLDocking Workspaces = 
 
-<p>
+
+
 This is the 4th part of the VLDocking Framework tutorial for Java Swing applications.
-<p>
+
+
 In this lesson, you will learn to load and save desktop configurations, also
-known as <i>workspaces</i>.
-
-<ul>
-	<li> <a href="index.php">
-	Back to table of contents</a></li>
-</ul>
+known as _workspaces_.
 
 
-<h2>Workspaces</h2>
 
-<p>
+		 * <a href="index.php">
+	Back to table of contents</a>
+
+
+
+
+ == Workspaces == 
+
+
+
   Workspaces are getting more common in Java applications, they are called "perspectives" in eclipse,
   workbenches in other applications, but we'll stick to workspace for the Docking Framework.
-<p>
+
+
   A full description of a workspace in our case could be <cite>"a set of Dockables,
   at a given location and size, on a given visibility state"</cite>.
-<ul>
-  <li> A set of dockables : usually the full set of the application's dockables.
-  <li> At a given location and size : location is determined by the containment
-    hierarchy of the DockingDesktop, size is taken from SplitContainers divider positions.
-  <li> On a given visibility state : this includes auto-hidden and closed dockables.
-</ul>
-<p>
-<p>
-  This is an example of two workpaces of the same application :
-<p align="center" ><img src="/images/tutorial/workspace1.jpg"><br>Workspace 1</p>
-<p align="center" ><img src="/images/tutorial/workspace2.jpg"><br>Workspace 2</p>
-<p>
-<b> Note :</b> as of version 2.0 of VLDocking, a new set of components has been 
-added : the <b>VLToolBars</b>. These components
-have their own methods for saving and reloading (as they may be used from outside the framework).
-<p> 
-VLToolbars will be explained later, in their own <a href="tutorial9.php"> tutorial</a>.
-</p>
 
-<h2>The Workspace Editor application</h2>
-<p><i> This is a new feature from VLDocking 2.0.5</i></p>
-<p> 
+
+  	 * A set of dockables : usually the full set of the application's dockables.
+  	 * At a given location and size : location is determined by the containment
+    hierarchy of the DockingDesktop, size is taken from SplitContainers divider positions.
+  	 * On a given visibility state : this includes auto-hidden and closed dockables.
+
+
+
+
+
+
+  This is an example of two workpaces of the same application :
+<p align="center" >[http://vldocking.googlecode.com/svn/wiki/workspace1.jpg]<br>Workspace 1
+
+<p align="center" >[http://vldocking.googlecode.com/svn/wiki/workspace2.jpg]<br>Workspace 2
+
+
+
+* Note :* as of version 2.0 of VLDocking, a new set of components has been 
+added : the *VLToolBars*. These components
+have their own methods for saving and reloading (as they may be used from outside the framework).
+
+ 
+VLToolbars will be explained later, in their own <a href="tutorial9.php"> tutorial</a>.
+
+
+
+ == The Workspace Editor application == 
+
+_ This is a new feature from VLDocking 2.0.5_
+
+
+ 
 This new application can be started from <a href="../../../products/docking/workspace.php"> here </a> and can be used to 
 define or update workspace files with a GUI editor.
-<p>
+
+
 The user guide is currently limited to the start page of the application, but should be enough to help you define a set of 
 workspaces in a matter of minutes.
-<p>
+
+
 Once your workspace is defined and saved as XML, go to the <a href="#loading">Loading a workspace</a> section of this page to 
 learn how to integrate it into your application.
 
 
-<h2>Saving a workspace</h2>
+ == Saving a workspace == 
 
-<p>
-  To save a workspace, use the <code> writeXML(OutputStream out)</code> of the
-  <code>DockingDesktop</code> object.
-<p>
+
+
+  To save a workspace, use the {{{ writeXML(OutputStream out)}}} of the
+  {{{DockingDesktop}}} object.
+
+
   Here is an example of saving to a file :
-<DIV class="example">
-<pre>
+
+
+{{{
   import java.io.*;
 
   DockingDesktop desk = ...;
@@ -76,15 +99,19 @@ learn how to integrate it into your application.
   } catch (IOException ioe){
     // process exception here
   }
-</pre>
-</DIV>
-<p>
-  <b>Note :</b> Of course, you can save your workspace into something else (a byte
-  array, for example, via the <code>ByteArrayOutputStream</code> output);
-<p>
+}}}
+
+
+
+
+  *Note :* Of course, you can save your workspace into something else (a byte
+  array, for example, via the {{{ByteArrayOutputStream}}} output);
+
+
   Let's have a look at the resulting file (indented for readability) :
-<DIV class="example">
-<pre>
+
+
+{{{
 &lt;?xml version="1.0" ?&gt;
 &lt;DockingDesktop version="1.0"&gt;
   &lt;DockingPanel&gt;
@@ -109,22 +136,29 @@ learn how to integrate it into your application.
     &lt;/Dockable&gt;
   &lt;/Border&gt;
 &lt;/DockingDesktop&gt;
-</pre>
-</DIV>
-<p>
+}}}
+
+
+
+
   As you can see, it's a very simple XML structure, with nested Split (and Tab) elements.
-<p>
+
+
 
 <a name="loading"></a>
-<h2>Loading a workspace from an XML stream</h2>
-<p>
+ == Loading a workspace from an XML stream == 
+
+
   Loading a workspace is as easy as saving it, but requires another step if you
-  use this feature to populate an empty desktop : you have to <code>registerDockable(Dockable d)</code>
-  all your dockables before calling <code> readXML(InputStream in)</code>.
-<p>
-<DIV class="example">
-<p> Loading from an XML File to populate an empty DockingDesktop :
-<pre>
+  use this feature to populate an empty desktop : you have to {{{registerDockable(Dockable d)}}}
+  all your dockables before calling {{{ readXML(InputStream in)}}}.
+
+
+
+
+
+ Loading from an XML File to populate an empty DockingDesktop :
+{{{
   import java.io.*;
 
   DockingDesktop desk = ...;
@@ -132,47 +166,58 @@ learn how to integrate it into your application.
 
   // here we go !
   try {
-    <b>// first : declare the dockables to the desktop (they will be in the "closed" dockable state).
+    *// first : declare the dockables to the desktop (they will be in the "closed" dockable state).
     desk.registerDockable(editorPanel);
     desk.registerDockable(tablePanel);
     desk.registerDockable(buttonGrid);
     desk.registerDockable(treePanel);
-    </b>  
+    *  
     BufferedInputStream in = new BufferedInputStream(new FileInputStream(loadFile)));
-    <b>// then, load the workspace 
+    *// then, load the workspace 
     desk.readXML(in);
-    </b>
+    *
     in.close(); // stream isn't closed
   } catch (IOException ioe){
     // process exception here
   }
-</pre>
-</DIV>
-<p>
-  If your desktop is already populated, you can skip the <code>registerDockable</code> step
+}}}
+
+
+
+
+  If your desktop is already populated, you can skip the {{{registerDockable}}} step
   (assuming the dockable keys of the XML file are the same than those of the desktop's dockables).
-<p>
+
+
 
 <a name="resolver"></a>
-<h2> Lazy Dockable registration : DockableResolver </h2>
-<p>
-Introduced with VLDocking 2.1.2, the <code>DockableResolver</code> interface is a way to register 
+ ==  Lazy Dockable registration : DockableResolver  == 
+
+
+Introduced with VLDocking 2.1.2, the {{{DockableResolver}}} interface is a way to register 
 dockable as lazily as possible (with this interface, they will be registered during the readXML() parsing).
-</p>
-<p> The inteface contains a single method : 
-<DIV class="example"><pre>
+
+
+
+ The inteface contains a single method : 
+
+{{{
 public interface DockableResolver {
   
   /** Returns the dockable which should be associated to this DockKey identifier, or null if 
    * not found.
    */
    public Dockable resolveDockable(String keyName);
-</pre>
-</DIV>
-<p> To use this interface, you just have to give it to a DockingContext before applying a 
+}}}
+
+
+
+ To use this interface, you just have to give it to a DockingContext before applying a 
 workspace :
-</p>
-<DIV class="example"><pre>
+
+
+
+{{{
 DockingContext ctx = ...
 DockableResolver resolver = new DockableResolver(){
 	public Dockable resolveDockable(String keyName){
@@ -190,21 +235,27 @@ DockableResolver resolver = new DockableResolver(){
 ctx.setDockableResolver(resolver);
 // now, there's no need to call registerDockablefirst
 ctx.readXML(aWorkspaceInputStream); 
-</pre>
-</DIV>
+}}}
 
-<h2>The com.vlsolutions.swing.docking.ws package : logical Workspace management</h2>
-<p>
+
+
+ == The com.vlsolutions.swing.docking.ws package : logical Workspace management == 
+
+
 This new package has been introduced with VLDocking 2.1.2, it contains an API to manage workspace configurations. This 
 API will certainly be enhanced in future releases.
 
-<h3>Workspace, WSDesktop and WSDockKey</h3>
-<p>A VLDocking-enabled application can be made of multiple Desktops (on single or multiple JFrames), with dockables
-transferable from a desktop to another (this is possible with the new concept or <code>DockingContext</code>). 
-</p>
-<p>So, the equivalent of <code>DockingContext</code> is the <code>Workspace</code> class. 
-<div class="example">
-<pre>
+ === Workspace, WSDesktop and WSDockKey === 
+
+A VLDocking-enabled application can be made of multiple Desktops (on single or multiple JFrames), with dockables
+transferable from a desktop to another (this is possible with the new concept or {{{DockingContext}}}). 
+
+
+
+So, the equivalent of {{{DockingContext}}} is the {{{Workspace}}} class. 
+
+
+{{{
   DockingContext ctx = ...;
   Workspace workspace1 = new Workspace();
   // define the workspace layout here
@@ -215,23 +266,28 @@ transferable from a desktop to another (this is possible with the new concept or
   workspace1.apply(ctx);
   // workspace applied to the desktops of this docking context
   
-</pre>
-</div>
+}}}
 
-<p>
+
+
+
+
 A WSDesktop is the equivalent of a DockingDesktop : it is a child of a Workspace (one per desktop) and 
 contains layout methods with the same name than the ones of DockingDesktop : split(), createTab(), etc.
 The API beeing similar, it's very easy to understand : defining a layout into a WSDesktop is like creating 
-a layout in DockingDesktop, but that layout can be reused as often as you want with a simple <code>apply()</code> 
+a layout in DockingDesktop, but that layout can be reused as often as you want with a simple {{{apply()}}} 
 invocation.  
-</p>
-<p> As workspace should be very light objects, they must be decoupled from desktop classes.
+
+
+
+ As workspace should be very light objects, they must be decoupled from desktop classes.
 As Dockkeys are often lazily created (at the same time than Dockable objets), its equivalent has been 
-defined, and is called <code>WSDockKey</code>. Like DockKeys, a WSDockKey is used to 
+defined, and is called {{{WSDockKey}}}. Like DockKeys, a WSDockKey is used to 
 identify dockables without the need to instanciate them. 
 
-<div class="example">
-<pre>
+
+
+{{{
   DockingContext ctx = ...;  
   Workspace workspace1 = new Workspace();
   WSDesktop wdesk = workspace1.getDesktop(0); // a single default WSDesktop object is provided 
@@ -251,60 +307,76 @@ identify dockables without the need to instanciate them.
   // registered dockables must have the same DockKey 
   // identifiers ( DockKey k1 = new DockKey("dockable1") )
   
-</pre>
-</div>
-<p>
-Note : the <code>DockableResolver</code> inteface defined <a href="#resolver">here</a> works also 
+}}}
+
+
+
+
+Note : the {{{DockableResolver}}} inteface defined <a href="#resolver">here</a> works also 
 with Workspaces, so both registering methods work :
-<div class="example">
-<pre>
+
+
+{{{
   DockingContext ctx = ...;  
   Workspace workspace1 = new Workspace();
   WSDesktop wdesk = workspace1.getDesktop(0);  
   // define keys and layout
   
   // later...
-  <b>ctx.registerDockable(dockable1);
+  *ctx.registerDockable(dockable1);
   ctx.registerDockable(dockable2);
-  ctx.registerDockable(dockable3);</b>
+  ctx.registerDockable(dockable3);*
   workspace1.apply(ctx);
   
-</pre>
-</div>
-<p>Or :</p>
-<div class="example">
-<pre>
+}}}
+
+
+
+Or :
+
+
+
+{{{
   DockingContext ctx = ...;  
   Workspace workspace1 = new Workspace();
   WSDesktop wdesk = workspace1.getDesktop(0);  
   // define keys and layout
   
   // later...
-  <b>ctx.setDockableResolver(resolver);</b> // lazy dockable resolution
+  *ctx.setDockableResolver(resolver);* // lazy dockable resolution
   workspace1.apply(ctx);
   
-</pre>
-</div>
+}}}
 
 
-<h2>Implementing a workspace switcher (updated for VLDocking 2.1.3)</h2>
-<p>
+
+
+ == Implementing a workspace switcher (updated for VLDocking 2.1.3) == 
+
+
 Implementing a workspace switcher with the Workspace objets is really straightforward :
-you just have to invoke <code>workspace.loadFrom(dockingContext)</code> to save a layout into a workspace, and then     
-<code>workspace.apply(dockingContext)</code> to get back to this layout later.
-</p>
-<h2>Notes about workspaces and Multi-Desktop applications</h2>
-<p>
-<img src="/images/buttons/v2.1.jpg" title="new feature from VLDocking 2.1">
+you just have to invoke {{{workspace.loadFrom(dockingContext)}}} to save a layout into a workspace, and then     
+{{{workspace.apply(dockingContext)}}} to get back to this layout later.
+
+
+ == Notes about workspaces and Multi-Desktop applications == 
+
+
 As of VLDocking version 2.1, new features have been introduced that change the contents of 
-workspace files, such as <b>multiple desktop</b> sharing a common set of dockables, 
-and <b>compound dockable containers</b> allowing more complex component nesting.
-<p>
+workspace files, such as *multiple desktop* sharing a common set of dockables, 
+and *compound dockable containers* allowing more complex component nesting.
+
+
 There features don't change the way you load or save your workspaces, but the new workspace 
 XML file format can't be read from VLDocking 2.0 (while the opposite remains possible).
-<p>
+
+
 The only thing to remember is that readXML() and writeXML() are now redirected to the 
-shared DockingContext (so a <b>single load/save operation is required for a set of desktops</b> sharing the 
+shared DockingContext (so a *single load/save operation is required for a set of desktops* sharing the 
 same context). And that when using multiple desktops, you'd better create the desktop with the 
-<code>DockingDesktop(String name)</code> constructor : this naming information is saved 
+{{{DockingDesktop(String name)}}} constructor : this naming information is saved 
 with the desktop and used on workspace reloading (this information is more detailed in <a href="tutorial11.php">lesson 11</a>).
+
+
+---
+Next : [tutorial5]

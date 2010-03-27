@@ -11,24 +11,30 @@ Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
   * Automatic links to other wiki pages
-<h1>Lesson 8 : Customizing the User Interface </h1>
+ = Lesson 8 : Customizing the User Interface  = 
 
-<p>This is the 8th part of the VLDocking Framework for Java Swing applications.
-<p> This lessons describes how to change the Look And Feel of VLDocking. 
 
-<ul>
-	<li> <a href="index.php">
-	Back to table of contents</a></li>
-</ul>
+This is the 8th part of the VLDocking Framework for Java Swing applications.
 
-<h2>The new UI delegation model of VLDocking</h2>
+ This lessons describes how to change the Look And Feel of VLDocking. 
 
-<h3>VLDocking UI Delegates</h3>
-<p>
+
+
+		 * <a href="index.php">
+	Back to table of contents</a>
+
+
+
+ == The new UI delegation model of VLDocking == 
+
+ === VLDocking UI Delegates === 
+
+
 VLDocking uses UI delegate classes to paint the look and feel of many of its components.
 Theses classes are dynamically loaded at startup, and use many UI properties to give your application
 the desired appearance. Here is the list of the current UI delegates :
-<p>
+
+
 <table><thead><tr><th> Component </th><th>UI Delegate class</th></tr></thead>
 <tbody>
 <tr><td>DockView</td><td>com.vlsolutions.swing.docking.ui.DockViewUI</td></tr>
@@ -39,25 +45,33 @@ the desired appearance. Here is the list of the current UI delegates :
 <tr><td>AutoHideButtonPanel</td><td>com.vlsolutions.swing.docking.ui.AutoHideButtonPanelUI</td></tr>
 <tr><td>AutoHideButton</td><td>com.vlsolutions.swing.docking.ui.AutoHideButtonUI</td></tr>
 </tbody></table>
-<p>
 
-<h3>Replacing UI Delegates</h3>
-<p>
+
+
+ === Replacing UI Delegates === 
+
+
 Please note that most UI settings are accessible with UI properties, and thus cas be changed
 without the need of writing a java class. The only case where you should have to write your own
 UI delegate class is when you want a very different rendering (non rectangular for example). 
-<p>
+
+
 So, if you need a very different rendering for your dockables, then you will have to provide your custom classes.
-<p>
+
+
 Here is how to declare them :
-<ul>
-	<li>pre-install the default ui settings in you main() method, or any method prior DockingDesktop usage</li>
-	<li>put your new settings as UIManager properties	</li>
-</ul>
-<p>
+
+
+		 *pre-install the default ui settings in you main() method, or any method prior DockingDesktop usage
+		 *put your new settings as UIManager properties	
+
+
+
+
 Example :
-<div class="example">
-<pre>
+
+
+{{{
 public static void main(String[] args){
     // first, preload the UI to avoid erasing your own customizations
     DockingUISettings.getInstance().installUI(); 
@@ -66,32 +80,41 @@ public static void main(String[] args){
     // (replaced the DockViewTitleBar UI by another class)
     ...
 }
-</pre>
-</div>
+}}}
 
-<h3> Updating the existing UI </h3>
-<p> 
+
+
+ ===  Updating the existing UI  === 
+
+ 
 The easiest way to update the UI is by tweaking the UIManager properties.
-<p>
+
+
 For example, if you want a special border for maximized dockable, use : 
-<div class="example">
-<pre>
+
+
+{{{
 // declare your border 
 Border myBorder = ...
 // put it in the UI property map. 
-<b>UIManager.put("DockView.maximizedDockableBorder", myBorder);</b>
+*UIManager.put("DockView.maximizedDockableBorder", myBorder);*
 // and that's it !
-</pre>
-</div>
-<p>
-Please note that <b>to avoid having your own UI settings beeing erased </b>by the default ones, 
+}}}
+
+
+
+
+Please note that *to avoid having your own UI settings beeing erased *by the default ones, 
 you will have to follow the pattern :
-<ul>
-	<li>pre-install the default ui settings in you main() method, or any method prior DockingDesktop usage</li>
-	<li>put your new settings as UIManager properties	</li>
-</ul>
-<div class="example">
-<pre>
+
+
+		 *pre-install the default ui settings in you main() method, or any method prior DockingDesktop usage
+		 *put your new settings as UIManager properties	
+
+
+
+
+{{{
 public static void main(String[] args){
     // first, preload the UI to avoid erasing your own customizations
     DockingUISettings.getInstance().installUI(); 
@@ -99,18 +122,21 @@ public static void main(String[] args){
     // declare your border 
     Border myBorder = ...
     // and start customizing...
-    <b>UIManager.put("DockView.maximizedDockableBorder", myBorder);</b>    
+    *UIManager.put("DockView.maximizedDockableBorder", myBorder);*    
     ...
 }
-</pre>
-</div>
-<p>
+}}}
+
+
+
+
  Now that you know how to proceed, here is the long list of customizable properties...
  
-<h2>Customizable properties</h2> 
-<h3> Border properties</h3>
+ == Customizable properties ==  
+ ===  Border properties === 
 
-<p>
+
+
 <table>
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
@@ -135,9 +161,10 @@ public static void main(String[] args){
 <tr> <td>FloatingDialog.titleBorder</td> <td>Border</td> <td>Border used for the title (drag header) of the FloatingDialog</td></tr>
 </tbody></table>
 
-<h3> Color properties </h3>
+ ===  Color properties  === 
 
-<p>
+
+
 <table>
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
@@ -145,9 +172,10 @@ public static void main(String[] args){
 <tr> <td>DockingDesktop.notificationColor</td> <td>Color</td> <td>blinking color for notifications</td></tr>
 </tbody></table>
 
-<h3> Icons</h3>
+ ===  Icons === 
 
-<p>
+
+
 <table>
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
@@ -196,9 +224,10 @@ property must also be set to true</td></tr>
 </tbody></table>
 
 
-<h3> Labels and Fonts </h3>
+ ===  Labels and Fonts  === 
 
-<p>
+
+
 <table>
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
@@ -217,9 +246,10 @@ property must also be set to true</td></tr>
 <tr> <td>DockTabbedPane.floatButtonText</td> <td>String</td> <td>Text for the float button in tab</td></tr>
 </tbody></table>
 
-<h3> Displaying buttons in title bars </h3>
+ ===  Displaying buttons in title bars  === 
 
-<p>
+
+
 <table>
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
@@ -233,9 +263,10 @@ property must also be set to true</td></tr>
 <tr> <td>DockViewTitleBar.isAttachButtonDisplayed</td> <td>boolean</td> <td>display or not the attach button in the title bar</td></tr>
 </tbody></table>
 
-<h3> KeyStrokes </h3>
+ ===  KeyStrokes  === 
 
-<p>
+
+
 <table>
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
@@ -246,8 +277,9 @@ property must also be set to true</td></tr>
 <tr> <td>DockingDesktop.floatActionAccelerator</td> <td>KeyStroke</td> <td>KeyStroke for float/attach action (on selected dockable)</td></tr>
 </tbody></table>
 
-<h3> UI Delegates </h3>
-<p>
+ ===  UI Delegates  === 
+
+
 <table><thead><tr><th>UI property</th><th>type</th><th>effect</th></tr></thead><tbody>
 <tr><td>AutoHideButtonUI</td> <td>class name</td> <td>UI delegate for the AutoHideButton</td></tr>
 <tr><td>AutoHideButtonPanelUI</td> <td>class name</td> <td>UI delegate for the AutoHideButtonPanel</td></tr>
@@ -260,10 +292,12 @@ property must also be set to true</td></tr>
 <tr><td>ToolBarGripperUI</td> <td>class name</td> <td>UI delegate for the toolbar "gripper"</td></tr>
 </tbody></table>
 
-<h3> Cursors</h3>
-<p> Starting from version 2.0.3 it is now possible to change the mouse cursor images used during 
+ ===  Cursors === 
+
+ Starting from version 2.0.3 it is now possible to change the mouse cursor images used during 
 drag gestures.
-<p>
+
+
 
 <table><thead><tr><th>UI property</th><th>type</th><th>effect</th></tr></thead><tbody>
 <tr><td>DragControler.stopDragCursor</td> <td>java.awt.Image</td> <td>Image (max 32x32) used when the mouse pointer is above a place where drop is not possible</td></tr>
@@ -273,8 +307,9 @@ drag gestures.
 </tbody></table>
 
 
-<h3> Other properties</h3>
-<p>
+ ===  Other properties === 
+
+
 <table>
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
@@ -290,32 +325,44 @@ drag gestures.
 <tr> <td>FloatingContainer.paintDragShape </td> <td>Boolean</td> <td>if true, a drag outline shape will follow the mouse when dragging (warning : consumes CPU)</td></tr>
 </tbody> </table>
 
-<h2>The two basic VLDocking styles</h2>
-<p>
+ == The two basic VLDocking styles == 
+
+
 VLDocking 1.0 provided a "shadowed" style (similar to the eclipse look and feel).
-<p>
+
+
 VLDocking 2.0 comes with a default "flat style" where borders take less space. It also comes
 with tabs on top of tabbed containers (version 1.0 had them at bottom).
-<p>
+
+
 You can choose select between the following provided styles (more to come) with the methods : 
-<div class="example">
-<pre>
+
+
+{{{
 // version 1.0 style
 DockingPreferences.setShadowDesktopStyle();
-</pre>
-<p align="center"><img alt="" src="/images/tutorial/shadowed_style.jpg"><br>
-The "Shadow Style"</p>
-<pre>
+}}}
+<p align="center">[http://vldocking.googlecode.com/svn/wiki/shadowed_style.jpg]<br>
+The "Shadow Style"
+
+{{{
 // or version 1.0 alternative style
 DockingPreferences.setDottedDesktopStyle();
-</pre>
-<p align="center"><img alt="" src="/images/tutorial/dotted_style.jpg"><br>
-The "Dotted Style"</p>
-<pre>
+}}}
+<p align="center">[http://vldocking.googlecode.com/svn/wiki/dotted_style.jpg]<br>
+The "Dotted Style"
+
+{{{
 // or version 2.0 default style 
 DockingPreferences.setFlatDesktopStyle();
-<p align="center"><img alt="" src="/images/tutorial/flat_style.jpg"><br>
-The default "Flat Style"</p>
-</div>
+<p align="center">[http://vldocking.googlecode.com/svn/wiki/flat_style.jpg]<br>
+The default "Flat Style"
 
-<p>
+
+
+
+
+
+
+---
+Next : [tutorial9]

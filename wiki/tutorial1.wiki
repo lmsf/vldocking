@@ -131,10 +131,11 @@ public class MyFirstFrame extends JFrame {
 
 Launching this application should give us something like that :
   [http://vldocking.googlecode.com/svn/wiki/frame1.jpg]
+  
   (My First Frame, without docking)
 
 This is the kind of frame layout a standard Swing application would have (although a little bit better, using JSplitPanes or JInternalFrames).
 
 ---
 
-Page 2 : [tutorial1_2 And now... docking !]
+Next : [tutorial1page2 And now... docking !]
