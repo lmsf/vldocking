@@ -1,65 +1,100 @@
-#summary One-sentence summary of this page.
+=Lesson 2 : Customizing the layout, display and docking behaviour=
 
- = Lesson 1 - Page 2 : My First Application  = 
+This is the second part of the VLDocking Tutorial for Java Swing applications.
 
-
-
-
-		 * <a href="index.php">
-	Back to table of contents</a>
+In this second lesson, you will learn how to modifiy the contents and the behaviour of
+the containers of your dockable components.
 
 
 
-
- == And now... Docking !  == 
-
-
-Here is the receipe to transform our application into a docking-enabled application :
-
-
-		 * Have the GUI blocks (our four components) implement the Dockable interface
-        	 * Install a DockingDesktop on our Frame
-        	 * Add the dockables into the desktop.
+ == Things to remember == 
 
 
 
-
-  So let's start...
-
- == Implement the Dockable interface == 
+This lesson assumes you have read the two first parts of the tutorial and that you are
+now familiar with the concepts of :
 
 
 
-The Dockable interface is simple : you just have two methods :
-
-
-{{{
-    public DockKey getDockKey();
-    public Component getComponent();
-}}}
+		 * a Dockable.
+		 * the DockingDesktop
+		 * SingleDockableContainer and TabbedDockableContainer
+      		 * and how to layout your components into their desktop
 
 
 
 
-  The DockKey is the JavaBean that contains presentation and behaviour informations
-  about the dockable (name, icon, ...) and a special *key* field used as
-  a primary key for loading and saving _
-  ( 
-  this field was formerly known as 'dockName' but
-  we have replaced it with a more comprehensive naming)_.
+If you don't feel enough confident about those concepts, please read again the previous lessons.
 
 
-  We will use the most simple constructor, which takes only one argument : key.
-
-
-  So let's look at one of the four GUI blocks and have it implement Dockable :
+ == The DockKey object == 
 
 
 
-{{{
-    class MyTextEditor extends JPanel *implements Dockable *{
+  The <code>DockKey</code> object provides a *unique key* to identify a Dockable during the loading/saving
+  process via its <code><strike>dockName</strike> "key"</code> property.
 
-        *DockKey key = new DockKey("textEditor");*
+
+You have also learned from the previous lesson that the DockKey was the object used to
+customize the DockableContainer of a Dockable.
+
+
+Let's see how it works.
+
+ === Bound properties === 
+
+
+
+  If you have looked at the JavaDoc of the DockKey class, you already know that
+a DockKey is a specialized class following the JavaBean pattern.
+
+
+  You can access a set of properties like <code>name</code>, <code>tooltip</code>,
+  <code>isCloseEnabled</code> and so on, with getters and setters.
+
+
+  You can also attach a <code>java.beans.PropertyListener</code> to be notified when a property
+  is updated.
+
+
+  This is exactly what the Framework does and how it dynamically follows key updates.
+
+
+  Now, we can have a look at the different categories of properties :
+
+
+  	 * Visual properties
+  	 * Behaviour properties
+
+
+
+ === Visual properties === 
+
+
+  Note : keep in mind that <code>SingleDockableContainer</code> and <code>TabbedDockableContainer</code> are
+  interfaces : you can choose to use different implementations than the default one, with visual
+  settings that could be different from those described below.
+
+
+  Default visual properties are listed here :
+
+
+<table border="1" cellpadding="4">
+  <thead> <tr><th width="200">Property</th><th>Type</th><th>Effect</th></tr></thead>
+  <tbody><tr><td><code>name</code></td><td>String</td><td>The label displayed on the title bar</td></tr>
+  <tr><td><code>tooltip</code></td><td>String</td><td>The tooltip associated to the title bar</td></tr>
+  <tr><td><code>icon</code></td><td>16x16 pixels Icon</td><td>The icon used by the title bar (there is no default
+    icon : if set to null, no icon will be drawn)</td></tr>
+</tbody></table>
+ ==== Example. ==== 
+<DIV class="example">
+  
+
+    The following code will add a title, a tooltip and and icon to the <code>MyTextEditor</code> component.
+    {{{
+    class MyTextEditor extends JPanel implements Dockable {
+
+        DockKey key = new DockKey("textEditor");
 
         JTextArea textArea = new JTextArea("A Text Area");
         public MyTextEditor() {
@@ -67,272 +102,349 @@ The Dockable interface is simple : you just have two methods :
             JScrollPane jsp = new JScrollPane(textArea);
             jsp.setPreferredSize(new Dimension(200, 400));
             add(jsp, BorderLayout.CENTER);
+
+            *key.setName("The Text Area");
+            key.setTooltip("This is the text area tooltip");
+            key.setIcon(new ImageIcon(getClass().getResource("document16.gif")));
+          *
+
         }
-        *public DockKey getDockKey(){
+        public DockKey getDockKey(){
             return key;
         }
         public Component getComponent(){
             return this;
-        }*
+        }
     }
 }}}
 
 
-
-
-  As you can see, we have added an instance variable {{{key}}} to identify
-  our component. We also return {{{this}}} for the getComponent() method, which
-  indicates that the Dockable IS the component (we could have created non GUI dockables to
-  isolate them from the application code, but this is our first lesson...).
-
-
-  We leave the implementation of Dockable on the three other components as an exercice to
-  the reader (who can also find it on the final sources of the tutorial).
-
- == Install the DockingDesktop  == 
+And here is a screenshot of the result :
+<p align="center">
+  [http://vldocking.googlecode.com/svn/wiki/frame7.jpg]
 
 
 
-  This step is easy, just create an instance variable on the MyFirstFrame object :
+  ==== Visual Properties and Threads ==== 
+
+
+  Changes are propagated dynamically, you can for example replace
+  an icon by another to reflect a change in the component (a good example is to
+  have an "updated" version of a document icon showing that the document has been
+  updated and needs to be saved).
+
+
+  Visual properties, unlike Behaviour properties, are thread-safe : they can be
+  changed on any application thread.
+
+ === Behaviour properties === 
 
 
 
+The following boolean properties have and effect on the operations allowed (and managed) by the DockingDesktop.
+
+
+  <table border="1" cellpadding="4">
+  <thead><tr><th width="200">Property</th><th>Effect</th></tr></thead>
+  <tbody><tr><td><code>isCloseEnabled</code></td><td>The dockable can be closed (removed from the desktop).<br>
+  if <code>false</code>, the "close" button will be removed from the title bar</td></tr>
+  <tr><td><code>isAutoHideEnabled</code></td><td>The dockable can be iconified <br>
+  if <code>false</code>, the "hide" button will be removed from the title bar</td></tr>
+  <tr><td><code>isMaximizeEnabled</code></td><td>The dockable can be maximized (full size of the desktop)<br>
+    if <code>false</code>, the "maximize" button will be removed from the title bar </td></tr>
+  <tr><td><code>isFloatingEnabled</code></td><td>
+  The dockable can be detached from the desktop and displayed in its own palette window (default value is *false*) </td></tr>
+</tbody></table>
+
+ ==== Example. ==== 
+
+
+  The following code will disable the close and auto-hide features of our MyTextEditor component :
 {{{
-*import com.vlsolutions.swing.docking.*;*
+  class MyTextEditor extends JPanel implements Dockable {
 
-public class MyFirstFrame extends JFrame {
-   MyTextEditor editorPanel = new MyTextEditor();
-   MyTree treePanel = new MyTree();
-   MyGridOfButtons buttonGrid = new MyGridOfButtons();
-   MyJTable tablePanel = new MyJTable();
+        DockKey key = new DockKey("textEditor");
 
-   *DockingDesktop desk = new DockingDesktop();*
+        JTextArea textArea = new JTextArea("A Text Area");
+        public MyTextEditor() {
+            setLayout(new BorderLayout());
+            JScrollPane jsp = new JScrollPane(textArea);
+            jsp.setPreferredSize(new Dimension(200, 400));
+            add(jsp, BorderLayout.CENTER);
 
-   public MyFirstFrame(){
-      setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-      *getContentPane().add(desk);* // desk becomes the only one component
-      <s>getContentPane().add(editorPanel, BorderLayout.CENTER); </s>
-      <s>getContentPane().add(treePanel, BorderLayout.WEST);</s>
-      <s>getContentPane().add(buttonGrid, BorderLayout.NORTH);</s>
-      <s>getContentPane().add(tablePanel, BorderLayout.EAST);</s>
-   }
-}
+            key.setName("The Text Area");
+            key.setToolTip("This is the text area tooltip");
+            key.setIcon(new ImageIcon(getClass().getResource("textArea16.gif")));
+
+            *// turn off autohide and close features
+            key.setCloseEnabled(false);
+            key.setAutoHideEnabled(false);
+            *
+
+        }
+        public DockKey getDockKey(){
+            return key;
+        }
+        public Component getComponent(){
+            return this;
+        }
+    }
 }}}
 
 
-
- ==  Build the desktop  == 
-
- There are two ways to build your desktop : 
-
- 	 * Static : define and load a workspace with the help of the Workspace Editor application.
-	 * Dynamic : invoke the API to create or update your desktop layout.
-
-
-
-
- ===  The Workspace Editor application  === 
-
-*Note : * this is a new feature from VLDocking 2.0.5.
-
-The new <a href="../../../products/docking/workspace.php"> Workspace Editor</a> application is 
-available to help you define your docking layout. It it however preferable to learn the basics of 
-VLDocking (the following methods) before using the Workspace Editor as there this application create "static" layouts,
-and in most cases you will still have to learn how to dynamically add new dockables to your workspace.
-
-
- More explanations on the workspace editor can be found at the <a href="../../../products/docking/workspace.php"> product's page</a> and 
- into the <a href="tutorial4.php">4th part </a>on this tutorial.
-
- ===  The (dynamic) DockingDesktop API  === 
-
-
-
-  The DockingDesktop uses a relative positionning API : Look at the following code
-  and guess what it does...
-
-
-{{{
-  desk.addDockable(editorPanel);
-  desk.split(editorPanel, treePanel, DockingConstants.SPLIT_LEFT);
-  desk.split(editorPanel, buttonGrid, DockingConstants.SPLIT_RIGHT);
-  desk.split(buttonGrid, tablePanel, DockingConstants.SPLIT_BOTTOM);
-}}}
-
-
-
-
-  Here is a screenshot of the results :
+  The following screenshot will show you the effects or this code, you can verify that
+ the close and autohide buttons have been removed from the text area's title bar.
 <p align="center">
-       [http://vldocking.googlecode.com/svn/wiki/tutorial/frame2.jpg]<br>
-       A basic workspace...
+  [http://vldocking.googlecode.com/svn/wiki/frame8.jpg]
 
 
 
-
-  Easy, isn't it ? let's decode it :
- ==  Docking layout methods  == 
-
- === The {{{addDockable}}} method === 
+ ==== Behaviour Properties and Threads ==== 
 
 
-  This method is used to set the initial component of the desktop.
+  Changes are, as for visual properties, propagated dynamically.<br>
+  But, *as they might affect the AWT hierarchy* they should not be considered thread-safe : <br>
+  Once the DockingDesktop is <i>realized</i> (visible on screen),
+  you should restrict the change to the *Event Dispatch Thread* (the thread used
+  by AWT/Swing to deliver UI events).
 
- === The {{{split}}} method === 
-
-
- The {{{split(Dockable base, Dockable newDockable, DockingConstants.Split position) }}} method
-    is used to position a dockable ({{{newDockable}}}) relative to another (the {{{base}}}), and with
-    respect to a positionning ({{{DockingConstants.SPLIT_TOP, SPLIT_LEFT, SPLIT_BOTTOM, SPLIT_RIGHT}}}).
-
-
-    The {{{position}}} parameter designates the * orientation * and * order * of
-    the added component (SPLIT_TOP, for example, means : split the {{{base}}} container vertically, and
-    put the {{{newDockable}}} on the upper part).
-
- === The {{{createTab}}} method === 
-
-The {{{createTab(Dockable base, Dockable newDockable, int order)}}} method is used to
-      put two (or more) dockables at the same position on the desktop by creating a tabbed pane.
+ == Adjusting the size of the dockables == 
 
 
-  If a tabbed pane is already created, a new tab is added at the {{{order}}} index.
- === The {{{setAutoHide}}} method === 
+
+  Until now, you have learned how to <code>split</code> or <code>createTab</code> dockables,
+  but there wasn't any indication of their size requirements.
+
+ To understand how resizing works, you must know first a little bit more about DockingDesktop internals.
+
+ === How are containers laid out inside the DockingDesktop === 
 
 
- {{{setAutoHide(Dockable d, boolean hidden)}}} is used to auto-hide an already
- visible dockable. So, you first add, split or createTab a dockable to display it, and
- then you hide it (that way, it will remember where to be displayed when docked again).
-
- === The {{{setFloating}}} method
- === 
+  The DockingDesktop displays its dockable containers (remember the two kinds : Single/Tabbed-DockableContainer)
+  inside a specialized container : the <code>DockingPanel</code>.
 
 
- {{{setFloating(Dockable d, boolean float)}}} is used to detach a dockable
- and display it in its own window. If {{{float}}} is false, than the floating
- dockable is attached again to its desktop.
+  This DockingPanel (one instance per DockingDesktop) can be recursively subdivided in two
+  when a Dockable is added with the <code>split</code> method. The container realizing the
+  split is a subclass of <code>JSplitPane</code> named <code>com.vlsolutions.swing.docking.SplitContainer</code>.<br>
+  SplitContainer has and enhanced look and feel and a better resizing behaviour.
 
 
- Making a dockable floating is allowed when the dockable is already visible and "docked",
- or if it is auto-hidden.
+  You never access these internal SplitContainers, the main reason beeing that they are
+  the current layout implementation, and that another layout manager could be used in a future
+  version to replace them (and thus would remove the need of nesting of containers).
 
-  === The {{{maximize}}} and {{{restore}}} methods === 
 
-
- These methods allow you to maximize a dockable (have it take the full size of its desktop, 
- hiding the others dockable) and to put it back where it was before (restore). 
+  The following diagram shows how the SplitContainer hierarchy associated to our example.
+<p align="center"> [http://vldocking.googlecode.com/svn/wiki/splitcontainers.jpg]
  
 
- Making a dockable maximized is allowed when the dockable is already visible and "docked".
+
+ === Changing the width or height of a dockable  === 
 
 
- === The {{{addHiddenDockable}}} method === 
-
-
-  {{{addHiddenDockable(Dockable d, RelativeDockingPosition restorePosition)}}} is used
-      to auto-hide a dockable that is not visible.
-
-
-  The RelativeDockingPosition defines a restore
-  position (x,y, width, height : values between 0.0 and 1.0) where the component
-  will be displayed when removed from
-  its autohide border.
- 
-
-   You can use constants like  {{{RelativeDockingPosition.TOP_LEFT}}} to express
-   this position or  construct a new position (look at the RelativeDockingPosition javadoc API for further
-   explanations).
- === The {{{registerDockable}}} method === 
-
-
-  {{{ registerDockable(Dockable d)}}} is used to declare a dockable without displaying
-  it. You will see later on that there is a {{{DockingSelectorDialog}}} helper window that can
-  be used to select the dockables to show and those to set unvisible, and which requires
-  registered Dockables (registration is implicit for visible dockables).
- === Screenshots === 
-
-
-  And here are some images showing the effects of those methods :
-<p align="center">
-  <table>
-  <tr>
-    <th>Split</th>
-    <td rowspan="2">
-      {{{
-desk.addDockable(editorPanel);
-desk.split(editorPanel, treePanel, 
-    DockingConstants.SPLIT_LEFT);
-desk.split(editorPanel, buttonGrid, 
-    DockingConstants.SPLIT_RIGHT);
-desk.split(buttonGrid, tablePanel, 
-    DockingConstants.SPLIT_BOTTOM);
-      }}}
-    </td>
-  </tr>
-  <tr><td>[http://vldocking.googlecode.com/svn/wiki/frame3.jpg]</td></tr>
-  <tr>
-    <th>Split and Tab</th>
-    <td rowspan="2">
-      {{{
-desk.addDockable(editorPanel);
-desk.split(editorPanel, treePanel, 
-    DockingConstants.SPLIT_LEFT);
-desk.split(editorPanel, buttonGrid, 
-    DockingConstants.SPLIT_RIGHT);
-desk.createTab(treePanel, tablePanel, 1);
-      }}}
-    </td>
-  <tr><td>[http://vldocking.googlecode.com/svn/wiki/frame4.jpg]</td></tr>
-  <tr>
-    <th>Split and Auto-Hide</th>
-    <td rowspan="2">
-      {{{
-desk.addDockable(editorPanel);
-// the tree panel is auto-hidden 
-// and will be restored (docked) 
-// on the left of the DockingDesktop
-desk.addHiddenDockable(treePanel, 
-    RelativeDockablePosition.LEFT);
-desk.split(editorPanel, buttonGrid, 
-    DockingConstants.SPLIT_RIGHT);
-desk.split(editorPanel, tablePanel, 
-    DockingConstants.SPLIT_LEFT);
-
-      }}}
-    </td>
-  </tr>
-  <tr><td>[http://vldocking.googlecode.com/svn/wiki/frame5.jpg]</td></tr>
-</table>
-
- == The Dockable Containers == 
-
-
-
-  You can see from the screenshots, or from your personal tests, that your dockables have
-  been decorated : They all have a title bar with buttons, and a nice shadow border
-  around them (Docking 1.1 style) or 
-  a simpler flat border (Docking 2.0 style). 
-
-
-  This is because when a dockable is added to a DockingDesktop, it is first included
-  into a {{{DockableContainer }}} then this component is added to the desktop.
-
-
-  DockableContainers are specialized components belonging to the Framework, that are
-  replaceable (in order to provide a custom look and feel, or to add new features). <br>
-  You usually don't interact with them but simply command their behaviour through the DockKey's properties (this is
-  the subject of the next lesson).
-
-
-  There are basically two types of DockableContainers :
+  This can be done at any time, you just have to use the two dedicated methods of
+  <code>DockingDesktop</code> :
   
 
-    	 * {{{SingleDockableContainer}}} is a container for one (and only one) Dockable.
-    	 * {{{TabbedDockableContainer}}} is a container that behaves like a JTabbedPane, displaying
-     many Dockables on tabs, with always one Dockable selected and visible, on top of the others.
-   
+    	 *<code>setDockableWidth(Dockable dockable, double width)</code> to adjust
+      the width of a dockable
+    	 *<code>setDockableHeight(Dockable dockable, double height)</code> to adjust
+      the height of a dockable
+  
 
 
 
+  Those methods have two arguments : <br>
+  - a <code>Dockable</code>, contained in a SingleDockableContainer
+  or a TabbedDockableContainer. <br>
+  - a <code>double</code> value, between 0 and 1, indicating the proportion of the dockable container
+  into its parent SplitContainer.
+
+
+  *Important * : remember that the proportional width or height is relative to a splitcontainer, which
+  can be smaller than the DockingDesktop, especially when many dockables are shown.
+
+
+
+ === What if the SplitContainer is divided HORIZONTALLY and I change the height of my dockable ? === 
+
+
+
+  It's still possible, the resizing will not occur on this parent SplitContainer,
+  but on the first
+  ancestor encountered with a VERTICAL orientation.
+
+
+  Of course, it's the same rule for changing the width of a dockable contained
+  in a VERTICALLY oriented SplitContainer.
+ === Resizing affects more than one dockable === 
+
+
+  This shoud be evident : as our Desktop is divided in SplitContainers, changing
+  the width or height of a dockable will also change the opposite component.
+
+
+  And, as SplitContainers can be nested, the effect will be propagated to the nesting
+  hierarchy.
+
+
+  Example : if you have a row of dockables, changing the height of one of them
+  will be propagated to the others.
+
+
+ === Adjusting the resize weight of dockables === 
+
+
+The DockKey object has also a <code>setResizeWeight(float weight)</code> affecting its
+*resizeWeight* property. Valid values range from 0.0f (do not resize) to 1.0f (be the most resized).
+
+ 
+Resizing weight is used when the DockingDesktop (usually through its parent window) is made 
+bigger or smaller. This resizing affects the internal layout and the following rules are 
+applied to select the dockable which will be resized :
+
+
+	 * The resizeWeight is propagated into the splitting hierarchy,  giving a maximum resize
+ weight to both parts of a SplitContainer
+	 * when both resizeWeights are 0, the resizing is shared by both sides 
+	 * when a resizeWeight is 0 and the other is positive, then that side takes all the resizing
+	 * when both resizeWeights are positive, a ratio is computed and the splits resized accordingly.
+
+
+
+
+For example, when creating a multiple document application (like a web browser with tabbed browing and some 
+utility dockable around), you can set the resizeWeight of the documents to 1, and the other weights to 0.
+In that case, the utility dockables will remain unchanged when resizing the window, and only the documents
+will grow or shrink.
+
+ ==  Grouping dockables == 
+
+
+Grouping is a feature that helps you to control *which dockable can be included in the same
+tabbed container *.
+
+ For example, when creating a MTDI (multiple tabbed document interface), you want to have
+the following configuration :
+<p align="center">[http://vldocking.googlecode.com/svn/wiki/mtdi.jpg]
+A Multiple Tabbed Document Interface
+
+
+
+And, of course, you don't want to have the "property editor" tabbed in the sames
+tabbed container than the one of your "Documents", but you would also prefer to let 
+the user group the 4 helper dockables in the same tab if he wants so.
+
+ To do this, you just have to declare two *DockGroup*s :
+
+	 * The "documents" group
+	 * The "helper dockables" group
+
+
+
+ 
+Then, you will add this information to your *DockKey*s as in the follwing example :
+<div class="example">
+{{{
+DockGroup documentsGroup = new DockGroup("documents");
+DockGroup helperGroup = new DockGroup("helper dockables");
+
+// set the documentsGroup to all "documents" DockKeys 
+DockKey documentKey1 = new DockKey("document_1", "Document 1");
+DockKey documentKey2 = new DockKey("document_2", "Document 2");
+documentKey1.*setDockGroup(documentGroup)*;
+documentKey2.setDockGroup(documentGroup);
+
+// set the helperGroup to all other DockKeys
+DockKey propertyEditorKey = ...
+propertyEditorKey.*setDockGroup(helperGroup)*;
+DockKey historyKey = ...
+historyKey.setDockGroup(helperGroup);
+...
+
+}}}
+</div>
+
+ 
+Easy isn't it ?
+
+
+Note : this feature is more complex than that : you can create hierarchies of 
+DockGroups to allow certain combinations of dockables (for example, if you want to 
+have two or three sets on non-mixable documents). You can have more information in 
+the DockGroup's javadoc.
+
+ ==  Creating custom pop-up menus on title bars == 
+
+
+Another interesting feature of VLDocking is the customization of title bars
+and tabs. 
+
+ 
+With that feature, you will be able for example to add a "close all documents" pop-up menu
+to your tabbed documents, or some specific menus ("save", "save as...", "cvs...").
+
+
+To do that, you will have to register a special class to your DockKeys using : 
+the <code> public void setActioncustomizer(DockableActionCustomizer actionCustomizer)</code>.
+
+
+The *DockableActionCustomizer* is an abstract class you will have to inherit from 
+in order to add custom menus. 
+
+ 
+Here is an example of such a customizer :
+<div class="example">
+{{{
+// get predefined closeAll and closeAllOther actions from helper class
+Action closeAllInTab = 
+   TabbedContainerActions.createCloseAllAction(dockable, desk);
+
+Action closeAllOtherInTab = 
+   TabbedContainerActions.createCloseAllOtherAction(dockable, desk);
+        
+// create an action customizer
+DockableActionCustomizer customizer = new DockableActionCustomizer(){
+     public void visitSingleDockableTitleBarPopUp(JPopupMenu popUpMenu, Dockable dockable){
+         // this is for title bars
+	 popUpMenu.add(new JMenuItem("test"));
+     }
+     
+     public void visitTabSelectorPopUp(JPopupMenu popUpMenu, Dockable dockable){
+	 // and this is for tabs...
+         popUpMenu.add(new JMenuItem(closeAllInTab));
+         popUpMenu.add(new JMenuItem(closeAllOtherInTab));
+     }
+};
+
+// activate the title bar and tabs features
+customizer.setSingleDockableTitleBarPopUpCustomizer(true);
+customizer.setTabSelectorPopUpCustomizer(true);
+
+// register to a DockKey
+dockable.getDockKey().setActionCustomizer(customizer);
+}}}
+</div>
+
+
+ From now on, whenever a right click will occur on the title bar of the dockable, 
+ a "test" pop-up menu will appear (added at the end of the system-wide actions of 
+ the pop-up menu).
+
+
+ And when this dockable will be added to a TabbedDockableContainer, a right click 
+ on its tab will show the "close all documents" and "close all other documents" menu
+ entries.
+
+
+ *Note : * The visitXXX methods may be called many times (the current implementation
+ does not cache the pop-up menu : it is created and discarded for a specific right mouse click).
+ So it is wise not to declare listeners from inside these methods, or to perform long tasks
+ as they may affect the behaviour (or memory usage) of your application.
+ 
+ 
 ---
-Next : [tutorial3]
+
+Next : [tutorial3 Lesson 3 - Listening to dockable changes]
+
