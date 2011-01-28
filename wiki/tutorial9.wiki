@@ -324,7 +324,7 @@ well placed set of ... empty toolbars.
  ====  Autosave and install of toolbars with {{{ToolBarPersistence}}} ==== 
 
 
- Coming with VLDocking 2.0.6, this component can be used to automate the process of loading and saving toolbar configations as java.util.preferences (warning : the API doesn't work on sandboxed environments  (e.g. in unsigned Java Web Start application).</p>
+ Coming with VLDocking 2.0.6, this component can be used to automate the process of loading and saving toolbar configations as java.util.preferences (warning : the API doesn't work on sandboxed environments  (e.g. in unsigned Java Web Start application).
 
 
  Using this class is easy : you create a new instance for each toolbar container, and the installation of toolbars is automated (no need to use the readXML() method anymore).
