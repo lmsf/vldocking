@@ -11,38 +11,32 @@ In this lesson, you will learn about the docking event model and about writing
 event listeners.
 
 
-
-		 * <a href="index.php">
-	Back to table of contents</a>
+== The docking event model == 
 
 
 
- == The docking event model == 
+The VLDocking Framework works with an event model : to be notified of changes, you
+have to add some listeners to the DockingDesktop, not to override specialized methods.
 
 
+This way, there should be no need for you to subclass DockingDesktop, and you will reduce
+the coupling between listening components and their source.
 
-  The VLDocking Framework works with an event model : to be notified of changes, you
-  have to add some listeners to the DockingDesktop, not to override specialized methods.
-
-
-  This way, there should be no need for you to subclass DockingDesktop, and you will reduce
-  the coupling between listening components and their source.
-
- ===  Package {{{com.vlsolutions.swing.docking.event}}} === 
+===  Package {{{com.vlsolutions.swing.docking.event}}} === 
 
 
-  This package contains events and listeners class, so don't forget to import
-  it in your listener classes.
+This package contains events and listeners class, so don't forget to import
+it in your listener classes.
 
- ===  Categories of events === 
+===  Categories of events === 
 
 
 
 
-  There are 2 kinds of events, dedicated to different purposes :
+There are 2 kinds of events, dedicated to different purposes :
 
 
- 	 * Events that are triggered when an action is performed on a Dockable (or just before) :<br>
+ * Events that are triggered when an action is performed on a Dockable (or just before) :<br>
    [http://vldocking.googlecode.com/svn/wiki/state_changes.png]<br>
    These events are usefull to provide feedback on dockable closing (the "are you sure ?" message)
    or to keep track of components visibility and position.

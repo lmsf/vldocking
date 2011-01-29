@@ -1,58 +1,37 @@
 #summary Multi-desktop applications
 #sidebar TableOfContents
 
- = Lesson 11 : Multi-desktop applications = 
+= Lesson 11 : Multi-desktop applications = 
 
 
 This is the 11th part of the VLDocking Framework for Java Swing applications.
-
  
 This lesson covers the topic of Multiple Desktop applications (applications that are made of many docking desktops sharing a common set of dockables)
 
 
-
-
-
-		 * <a href="index.php">
-	Back to table of contents</a>
-
-
-
-
-
-Note : this lesson will be enhanced in the coming days...
-
-
-
-
-
- == Overview == 
+== Overview == 
 
 
 Sharing dockables across Docking Desktops is a new feature provided by VLDocking 2.1
 
 
-To support this, a new class had to be introduced : the {{{DockingContext}}}.
+To support this, a new class had to be introduced : the `DockingContext`.
 
 
 Two (or more) desktops sharing the same context can exchange dockables with drag and drop gestures, as if they were parts of the same hierarchy.
 
-<p align="center">
-[http://vldocking.googlecode.com/svn/wiki/multipleDesktops.jpg]<br>
-Two destops, sharing their dockables
+[http://vldocking.googlecode.com/svn/wiki/multipleDesktops.jpg]
 
-
+_Two destops, sharing their dockables_
 
 
 It is also possible to have two desktop with different contexts. In that case, Drag and 
 Drop between these desktops will be ignored.
 
- == Usage == 
+== Usage == 
 
 
-To enable context sharing is easy : just use the new DockingDesktop constructors : 
-
-
+To enable context sharing is easy : just use the new `DockingDesktop` constructors : 
 
 
 Example : 
@@ -65,7 +44,7 @@ DockingDesktop desk2 = new DockingDesktop("desktop two", sharedContext);
 
 
 
- == Remarks == 
+== Remarks == 
 
 
 Loading and saving desktops are now forwarded to the DockingContext. This means you j
@@ -76,17 +55,10 @@ There are two ways to acheive this :
 
 
 	 * Select a desktop, and invoke readXML() / writeXML() from it.
-	 * Get the DockingContext from one of the desktops (desk.getDockingContext()), and then 
-invoke the readXML() and writeXML() methods from there.
+	 * Get the DockingContext from one of the desktops (desk.getDockingContext()), and then invoke the readXML() and writeXML() methods from there.
 
 
 
 
-In the case of an application with two or more contexts (i.e. independant desktops), 
-the readXML() and writeXML() method have to be invoked on each set of desktops (on each context).
+In the case of an application with two or more contexts (i.e. independant desktops), the readXML() and writeXML() method have to be invoked on each set of desktops (on each context).
 
-
-
-
----
-Next : [tutorial12]

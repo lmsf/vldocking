@@ -10,40 +10,34 @@ This is the 4th part of the VLDocking Framework tutorial for Java Swing applicat
 In this lesson, you will learn to load and save desktop configurations, also
 known as _workspaces_.
 
-
-
-		 * <a href="index.php">
-	Back to table of contents</a>
+== Workspaces == 
 
 
 
-
- == Workspaces == 
-
-
-
-  Workspaces are getting more common in Java applications, they are called "perspectives" in eclipse,
-  workbenches in other applications, but we'll stick to workspace for the Docking Framework.
+Workspaces are getting more common in Java applications, they are called "perspectives" in eclipse,
+workbenches in other applications, but we'll stick to workspace for the Docking Framework.
 
 
-  A full description of a workspace in our case could be <cite>"a set of Dockables,
-  at a given location and size, on a given visibility state"</cite>.
+A full description of a workspace in our case could be <cite>"a set of Dockables,
+at a given location and size, on a given visibility state"</cite>.
 
 
   	 * A set of dockables : usually the full set of the application's dockables.
   	 * At a given location and size : location is determined by the containment
-    hierarchy of the DockingDesktop, size is taken from SplitContainers divider positions.
+hierarchy of the DockingDesktop, size is taken from SplitContainers divider positions.
   	 * On a given visibility state : this includes auto-hidden and closed dockables.
 
 
+This is an example of two workpaces of the same application :
+
+ [http://vldocking.googlecode.com/svn/wiki/workspace1.jpg]
+
+ _Workspace 1_
 
 
-
-
-  This is an example of two workpaces of the same application :
-<p align="center" >[http://vldocking.googlecode.com/svn/wiki/workspace1.jpg]<br>Workspace 1
-
-<p align="center" >[http://vldocking.googlecode.com/svn/wiki/workspace2.jpg]<br>Workspace 2
+  [http://vldocking.googlecode.com/svn/wiki/workspace2.jpg]
+ 
+  _Workspace 2_
 
 
 
@@ -56,33 +50,29 @@ VLToolbars will be explained later, in their own <a href="tutorial9.php"> tutori
 
 
 
- == The Workspace Editor application == 
+== The Workspace Editor application == 
 
-_ This is a new feature from VLDocking 2.0.5_
-
-
+_This is a new feature from VLDocking 2.0.5_
  
 This new application can be started from <a href="../../../products/docking/workspace.php"> here </a> and can be used to 
 define or update workspace files with a GUI editor.
 
-
 The user guide is currently limited to the start page of the application, but should be enough to help you define a set of 
 workspaces in a matter of minutes.
-
 
 Once your workspace is defined and saved as XML, go to the <a href="#loading">Loading a workspace</a> section of this page to 
 learn how to integrate it into your application.
 
 
- == Saving a workspace == 
+== Saving a workspace == 
 
 
 
-  To save a workspace, use the {{{ writeXML(OutputStream out)}}} of the
-  {{{DockingDesktop}}} object.
+To save a workspace, use the {{{ writeXML(OutputStream out)}}} of the
+{{{DockingDesktop}}} object.
 
 
-  Here is an example of saving to a file :
+Here is an example of saving to a file :
 
 
 {{{
@@ -104,11 +94,11 @@ learn how to integrate it into your application.
 
 
 
-  *Note :* Of course, you can save your workspace into something else (a byte
-  array, for example, via the {{{ByteArrayOutputStream}}} output);
+*Note :* Of course, you can save your workspace into something else (a byte
+array, for example, via the {{{ByteArrayOutputStream}}} output);
 
 
-  Let's have a look at the resulting file (indented for readability) :
+Let's have a look at the resulting file (indented for readability) :
 
 
 {{{
@@ -141,23 +131,19 @@ learn how to integrate it into your application.
 
 
 
-  As you can see, it's a very simple XML structure, with nested Split (and Tab) elements.
+As you can see, it's a very simple XML structure, with nested Split (and Tab) elements.
 
 
 
-<a name="loading"></a>
- == Loading a workspace from an XML stream == 
+== Loading a workspace from an XML stream == 
 
 
-  Loading a workspace is as easy as saving it, but requires another step if you
-  use this feature to populate an empty desktop : you have to {{{registerDockable(Dockable d)}}}
-  all your dockables before calling {{{ readXML(InputStream in)}}}.
+Loading a workspace is as easy as saving it, but requires another step if you
+use this feature to populate an empty desktop : you have to {{{registerDockable(Dockable d)}}}
+all your dockables before calling {{{ readXML(InputStream in)}}}.
 
 
-
-
-
- Loading from an XML File to populate an empty DockingDesktop :
+Loading from an XML File to populate an empty DockingDesktop :
 {{{
   import java.io.*;
 
@@ -183,15 +169,12 @@ learn how to integrate it into your application.
 }}}
 
 
-
-
-  If your desktop is already populated, you can skip the {{{registerDockable}}} step
-  (assuming the dockable keys of the XML file are the same than those of the desktop's dockables).
+ If your desktop is already populated, you can skip the {{{registerDockable}}} step
+ (assuming the dockable keys of the XML file are the same than those of the desktop's dockables).
 
 
 
-<a name="resolver"></a>
- ==  Lazy Dockable registration : DockableResolver  == 
+==  Lazy Dockable registration : DockableResolver  == 
 
 
 Introduced with VLDocking 2.1.2, the {{{DockableResolver}}} interface is a way to register 
@@ -199,7 +182,7 @@ dockable as lazily as possible (with this interface, they will be registered dur
 
 
 
- The inteface contains a single method : 
+The inteface contains a single method : 
 
 {{{
 public interface DockableResolver {
@@ -212,7 +195,7 @@ public interface DockableResolver {
 
 
 
- To use this interface, you just have to give it to a DockingContext before applying a 
+To use this interface, you just have to give it to a DockingContext before applying a 
 workspace :
 
 
@@ -239,13 +222,13 @@ ctx.readXML(aWorkspaceInputStream);
 
 
 
- == The com.vlsolutions.swing.docking.ws package : logical Workspace management == 
+== The com.vlsolutions.swing.docking.ws package : logical Workspace management == 
 
 
 This new package has been introduced with VLDocking 2.1.2, it contains an API to manage workspace configurations. This 
 API will certainly be enhanced in future releases.
 
- === Workspace, WSDesktop and WSDockKey === 
+=== Workspace, WSDesktop and WSDockKey === 
 
 A VLDocking-enabled application can be made of multiple Desktops (on single or multiple JFrames), with dockables
 transferable from a desktop to another (this is possible with the new concept or {{{DockingContext}}}). 
@@ -280,7 +263,7 @@ invocation.
 
 
 
- As workspace should be very light objects, they must be decoupled from desktop classes.
+As workspace should be very light objects, they must be decoupled from desktop classes.
 As Dockkeys are often lazily created (at the same time than Dockable objets), its equivalent has been 
 defined, and is called {{{WSDockKey}}}. Like DockKeys, a WSDockKey is used to 
 identify dockables without the need to instanciate them. 
@@ -351,7 +334,7 @@ Or :
 
 
 
- == Implementing a workspace switcher (updated for VLDocking 2.1.3) == 
+== Implementing a workspace switcher (updated for VLDocking 2.1.3) == 
 
 
 Implementing a workspace switcher with the Workspace objets is really straightforward :
@@ -359,7 +342,7 @@ you just have to invoke {{{workspace.loadFrom(dockingContext)}}} to save a layou
 {{{workspace.apply(dockingContext)}}} to get back to this layout later.
 
 
- == Notes about workspaces and Multi-Desktop applications == 
+== Notes about workspaces and Multi-Desktop applications == 
 
 
 As of VLDocking version 2.1, new features have been introduced that change the contents of 
@@ -377,6 +360,3 @@ same context). And that when using multiple desktops, you'd better create the de
 {{{DockingDesktop(String name)}}} constructor : this naming information is saved 
 with the desktop and used on workspace reloading (this information is more detailed in <a href="tutorial11.php">lesson 11</a>).
 
-
----
-Next : [tutorial5]
