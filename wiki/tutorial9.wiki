@@ -1,4 +1,4 @@
-#the vltoolbars
+#summary the vltoolbars
 Next : [tutorial10]
 
 Prev : [tutorial8]

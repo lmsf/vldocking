@@ -1,38 +1,25 @@
-#summary One-sentence summary of this page.
+#summary Customizing the User interface
+#sidebar TableOfContents
 
 = Introduction =
 
-Add your content here.
-
-
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
- = Lesson 8 : Customizing the User Interface  = 
+= Lesson 8 : Customizing the User Interface  = 
 
 
 This is the 8th part of the VLDocking Framework for Java Swing applications.
 
- This lessons describes how to change the Look And Feel of VLDocking. 
+This lesson describes how to change the Look And Feel of VLDocking. 
 
 
+== The new UI delegation model of VLDocking == 
 
-		 * <a href="index.php">
-	Back to table of contents</a>
-
-
-
- == The new UI delegation model of VLDocking == 
-
- === VLDocking UI Delegates === 
+=== VLDocking UI Delegates === 
 
 
 VLDocking uses UI delegate classes to paint the look and feel of many of its components.
-Theses classes are dynamically loaded at startup, and use many UI properties to give your application
-the desired appearance. Here is the list of the current UI delegates :
+Theses classes are dynamically loaded at startup, and use many UI properties to give your application the desired appearance. Here is the list of the current UI delegates :
 
 
 <table><thead><tr><th> Component </th><th>UI Delegate class</th></tr></thead>
@@ -51,8 +38,7 @@ the desired appearance. Here is the list of the current UI delegates :
  === Replacing UI Delegates === 
 
 
-Please note that most UI settings are accessible with UI properties, and thus cas be changed
-without the need of writing a java class. The only case where you should have to write your own
+Please note that most UI settings are accessible with UI properties, and thus cas be changed without the need of writing a java class. The only case where you should have to write your own
 UI delegate class is when you want a very different rendering (non rectangular for example). 
 
 
