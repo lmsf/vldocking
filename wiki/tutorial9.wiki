@@ -1,7 +1,9 @@
 #the vltoolbars
+Next : [tutorial10]
+Prev : [tutorial8]
+contents : [toc]
 
 = Lesson 9 : The VLToolBars  =
-
 
 This is the 9th part of the VLDocking Framework for Java Swing applications.
 
@@ -15,16 +17,14 @@ component.
 
 The VLToolBar component provides an enhanced user experience for toolbars.
 
-<p align="center">
+
 [http://vldocking.googlecode.com/svn/wiki/toolbar1.jpg]
 A set of VLToolBars
-</p>
 
-<p align="center">
+
+
 [http://vldocking.googlecode.com/svn/wiki/toolbar2.jpg]
 Same set arranged vetically on two columns 
-</p>
-
 
 
 Many important usability concerns have been addressed :
@@ -38,7 +38,7 @@ Many important usability concerns have been addressed :
 
 === Drag and Drop support === 
 
- A "gripper" at the base of the toolbar can be used as an anchor to drag and drop the toolbar around its container.
+A "gripper" at the base of the toolbar can be used as an anchor to drag and drop the toolbar around its container.
 
 === Load and save configuration === 
 
@@ -49,7 +49,8 @@ As with VLDocking, VLToolBars use an XML format to save and reload their positio
 === Installing a toolbar === 
 
  Here is an image introducing the components in use with VLToolBars :
-<p align="center">[http://vldocking.googlecode.com/svn/wiki/toolbars_overview.gif]<br>
+
+ [http://vldocking.googlecode.com/svn/wiki/toolbars_overview.gif]
 An overview of the components
 
 
@@ -63,8 +64,6 @@ Installing a set of toolbars is easy :
   * get a reference to a ToolBarPanel from the `ToolBarContainer` : container.getToolBarPanelAt(BorderLayout.NORTH)
   * add one or more VLToolBars to it, using the ToolBarConstraints to specify their relative order.
   * enjoy the results !
-
-
 
 
 Details of these operations follow.
@@ -85,7 +84,7 @@ public static ToolBarContainer createDefaultContainer(boolean topToolbar,
 
 
 
- The four booleans are used to specify the borders used to contain a set of toolbars (you way want to have a toolbar on top and bottom, but not on left and right border).
+The four booleans are used to specify the borders used to contain a set of toolbars (you way want to have a toolbar on top and bottom, but not on left and right border).
 
 
 The central part of the container is dedicated to the user component. 
@@ -103,7 +102,7 @@ These positions are specified as `*ToolBarConstraints*`.
 
 
 
-Here is an example of accessing some ToolBarPanels.
+Here is an example of accessing some `ToolBarPanels`.
 
 
 {{{
@@ -122,41 +121,39 @@ leftPanel.add(toolbar3 , new ToolBarConstraints(0,0)); // first *column*, first 
 leftPanel.add(toolbar4 , new ToolBarConstraints(0,1)); // first column,*second row* 
 }}}
 
-<p align="center">[http://vldocking.googlecode.com/svn/wiki/toolbar3.jpg]<br>
-The result of the sample code above
-</p>
 
+[http://vldocking.googlecode.com/svn/wiki/toolbar3.jpg]
+The result of the sample code above
 
  
 If you look at the sample code above, you will see that we have used the same constraints to specify different layouts. This is because ToolbarConstraints are expressed in terms of *major order* and *minor order*, which are considered differently whether the toolbar is laid out horizontally or vertically.
 
  
 So here is an expression of the orders depending on the toolbar orientation :
-<p align="center">[http://vldocking.googlecode.com/svn/wiki/major_order_h.jpg]<br>
+[http://vldocking.googlecode.com/svn/wiki/major_order_h.jpg]
 The major order in an *horizontal* ToolBarPanel is the *row*.
-</p>
 
-<p align="center">[http://vldocking.googlecode.com/svn/wiki/major_order_v.jpg]<br>
+
+[http://vldocking.googlecode.com/svn/wiki/major_order_v.jpg]
 The major order in a *vertical* ToolBarPanel is the * column*.
-</p>
 
- ====  Major/minor order collapsing ==== 
+
+====  Major/minor order collapsing ==== 
 
 
 Please note that if a ToolbarConstraints order (major or minor) is too high for the current 
 contained components, it will be reduced to the next available order.
 
- For example, if you add a toolbar at (0,7) and there are only 2 toolbars (0,0) and (0,1) at this minor order, the constraints will be reduced to (0,2).
+For example, if you add a toolbar at (0,7) and there are only 2 toolbars (0,0) and (0,1) at this minor order, the constraints will be reduced to (0,2).
 
- ====  Adding buttons to a toolbar ==== 
-
+====  Adding buttons to a toolbar ==== 
 
 This is really simple, you can add() a component, or addSeparator() to add a separator between two buttons.
 
 
 If the component added is an instance of JButton, it's UI will be adapted to the one in use for the toolbar.
 
- ====  Changing the UI for the toolbar ==== 
+====  Changing the UI for the toolbar ==== 
 
 
 There is currently no UI delegate for the VLToolBar, but it is easy to change its look and feel by subclassing it or 
@@ -187,13 +184,13 @@ This can be achieved the same way you update the UI delegates of VLDocking :
 
  
 VLDocking 2.0.6 introduces a new UI enhancement : Collapsible toolbars. 
-<p align="center">
-[http://vldocking.googlecode.com/svn/wiki/toolbar_not_collapsed.gif]<br> A normal set of toolbars
-</p>
 
-<p align="center">
-[http://vldocking.googlecode.com/svn/wiki/toolbar_collapsed.gif]<br> Same set, but the middle toolbar has been collapsed
-</p>
+[http://vldocking.googlecode.com/svn/wiki/toolbar_not_collapsed.gif]
+A normal set of toolbars
+
+
+[http://vldocking.googlecode.com/svn/wiki/toolbar_collapsed.gif]
+Same set, but the middle toolbar has been collapsed
 
 
 
@@ -312,13 +309,13 @@ well placed set of ... empty toolbars.
 
 
 
- ====  Autosave and install of toolbars with {{{ToolBarPersistence}}} ==== 
+====  Autosave and install of toolbars with {{{ToolBarPersistence}}} ==== 
 
 
- Coming with VLDocking 2.0.6, this component can be used to automate the process of loading and saving toolbar configations as java.util.preferences (warning : the API doesn't work on sandboxed environments  (e.g. in unsigned Java Web Start application).
+Coming with VLDocking 2.0.6, this component can be used to automate the process of loading and saving toolbar configations as java.util.preferences (warning : the API doesn't work on sandboxed environments  (e.g. in unsigned Java Web Start application).
 
 
- Using this class is easy : you create a new instance for each toolbar container, and the installation of toolbars is automated (no need to use the readXML() method anymore).
+Using this class is easy : you create a new instance for each toolbar container, and the installation of toolbars is automated (no need to use the readXML() method anymore).
 
  
 Saving is also automated as a shutdown hook : at restart, the user will get the same set and positionning of toolbars for this container. 
@@ -330,12 +327,10 @@ Saving is also automated as a shutdown hook : at restart, the user will get the 
 
 This small API can be used to replace the default look and feel background for toolbars panels. 
 
-
-
 The API is based on a very simple interface `BackgroundPainter` that can be shared between components. 
 
 
- Here is an example of a painter using a SwingX Gradient : 
+Here is an example of a painter using a SwingX Gradient : 
 
 
 
@@ -358,11 +353,7 @@ public class CustomBackgroundPainter extends BasicGradientPainter
 }}}
 
 
-
-
 Then you just have to transmit it to a ToolBarPanel : 
-
-
 
 
 {{{
@@ -374,7 +365,9 @@ topPanel.setPainter( //set a custom background painter
 
 
 
- Easy, isn't it ?
+Easy, isn't it ?
 
 ---
 Next : [tutorial10]
+Prev : [tutorial8]
+contents : [toc]
