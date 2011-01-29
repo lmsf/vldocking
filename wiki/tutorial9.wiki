@@ -55,6 +55,7 @@ As with VLDocking, VLToolBars use an XML format to save and reload their positio
  Here is an image introducing the components in use with VLToolBars :
 
  [http://vldocking.googlecode.com/svn/wiki/toolbars_overview.gif]
+ 
  _An overview of the components_
 
 
@@ -377,6 +378,7 @@ topPanel.setPainter( //set a custom background painter
 Easy, isn't it ?
 
 ---
+
 Next : [tutorial10]
 
 Prev : [tutorial8]
