@@ -1,13 +1,15 @@
 #the vltoolbars
 Next : [tutorial10]
+
 Prev : [tutorial8]
+
 contents : [toc]
 
 = Lesson 9 : The VLToolBars  =
 
 This is the 9th part of the VLDocking Framework for Java Swing applications.
 
- This lessons covers the VLToolBars components, an enhanced version of the classic JToolBar Swing 
+This lessons covers the VLToolBars components, an enhanced version of the classic JToolBar Swing 
 component.
 
 == What are the VLToolbars ? ==
@@ -18,13 +20,15 @@ component.
 The VLToolBar component provides an enhanced user experience for toolbars.
 
 
-[http://vldocking.googlecode.com/svn/wiki/toolbar1.jpg]
-A set of VLToolBars
+ [http://vldocking.googlecode.com/svn/wiki/toolbar1.jpg]
+
+ _A set of VLToolBars_
 
 
 
-[http://vldocking.googlecode.com/svn/wiki/toolbar2.jpg]
-Same set arranged vetically on two columns 
+ [http://vldocking.googlecode.com/svn/wiki/toolbar2.jpg]
+
+ _Same set arranged vetically on two columns_ 
 
 
 Many important usability concerns have been addressed :
@@ -51,7 +55,7 @@ As with VLDocking, VLToolBars use an XML format to save and reload their positio
  Here is an image introducing the components in use with VLToolBars :
 
  [http://vldocking.googlecode.com/svn/wiki/toolbars_overview.gif]
-An overview of the components
+ _An overview of the components_
 
 
 
@@ -89,7 +93,7 @@ The four booleans are used to specify the borders used to contain a set of toolb
 
 The central part of the container is dedicated to the user component. 
 
- ====  Accessing borders and specifying layout constraints ==== 
+====  Accessing borders and specifying layout constraints ==== 
 
 
 Once the user component and usable borders are specified, you will need to access the border components, which are `*ToolBarPanel*`s. 
@@ -122,20 +126,23 @@ leftPanel.add(toolbar4 , new ToolBarConstraints(0,1)); // first column,*second r
 }}}
 
 
-[http://vldocking.googlecode.com/svn/wiki/toolbar3.jpg]
-The result of the sample code above
+ [http://vldocking.googlecode.com/svn/wiki/toolbar3.jpg]
+ 
+ _The result of the sample code above_
 
  
 If you look at the sample code above, you will see that we have used the same constraints to specify different layouts. This is because ToolbarConstraints are expressed in terms of *major order* and *minor order*, which are considered differently whether the toolbar is laid out horizontally or vertically.
 
  
 So here is an expression of the orders depending on the toolbar orientation :
-[http://vldocking.googlecode.com/svn/wiki/major_order_h.jpg]
-The major order in an *horizontal* ToolBarPanel is the *row*.
+ [http://vldocking.googlecode.com/svn/wiki/major_order_h.jpg]
+ 
+ _The major order in an *horizontal* ToolBarPanel is the *row*._
 
 
-[http://vldocking.googlecode.com/svn/wiki/major_order_v.jpg]
-The major order in a *vertical* ToolBarPanel is the * column*.
+ [http://vldocking.googlecode.com/svn/wiki/major_order_v.jpg]
+ 
+ _The major order in a *vertical* ToolBarPanel is the * column*._
 
 
 ====  Major/minor order collapsing ==== 
@@ -185,12 +192,14 @@ This can be achieved the same way you update the UI delegates of VLDocking :
  
 VLDocking 2.0.6 introduces a new UI enhancement : Collapsible toolbars. 
 
-[http://vldocking.googlecode.com/svn/wiki/toolbar_not_collapsed.gif]
-A normal set of toolbars
+ [http://vldocking.googlecode.com/svn/wiki/toolbar_not_collapsed.gif]
+ 
+ _A normal set of toolbars_
 
 
-[http://vldocking.googlecode.com/svn/wiki/toolbar_collapsed.gif]
-Same set, but the middle toolbar has been collapsed
+ [http://vldocking.googlecode.com/svn/wiki/toolbar_collapsed.gif]
+
+ _Same set, but the middle toolbar has been collapsed_
 
 
 
@@ -369,5 +378,7 @@ Easy, isn't it ?
 
 ---
 Next : [tutorial10]
+
 Prev : [tutorial8]
+
 contents : [toc]
