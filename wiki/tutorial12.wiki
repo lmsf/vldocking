@@ -1,6 +1,6 @@
-#summary One-sentence summary of this page.
-
- = Lesson 12 : Anchored dockables = 
+#summary Anchored dockables
+#sidebar TableOfContents
+= Lesson 12 : Anchored dockables = 
 
 
 This is the 12th part of the VLDocking Framework for Java Swing applications.

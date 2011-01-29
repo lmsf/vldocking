@@ -1,10 +1,5 @@
 #summary the vltoolbars
-Next : [tutorial10]
-
-Prev : [tutorial8]
-
-contents : [toc]
-
+#sidebar TableOfContents
 = Lesson 9 : The VLToolBars  =
 
 This is the 9th part of the VLDocking Framework for Java Swing applications.
@@ -377,10 +372,3 @@ topPanel.setPainter( //set a custom background painter
 
 Easy, isn't it ?
 
----
-
-Next : [tutorial10]
-
-Prev : [tutorial8]
-
-contents : [toc]

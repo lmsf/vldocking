@@ -1,6 +1,7 @@
-#summary One-sentence summary of this page.
+#summary Working with heavyweight components
+#sidebar TableOfContents
 
- = Lesson 7 : Working with heavyweight components = 
+= Lesson 7 : Working with heavyweight components = 
 
 
 This is the 7th and last part of the VLDocking Framework for Java Swing applications.

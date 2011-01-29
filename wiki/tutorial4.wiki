@@ -1,6 +1,6 @@
-#summary One-sentence summary of this page.
-
- = Lesson 4 : VLDocking Workspaces = 
+#summary Vldocking workspaces
+#sidebar TableOfContents
+= Lesson 4 : VLDocking Workspaces = 
 
 
 

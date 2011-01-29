@@ -1,6 +1,6 @@
-#summary One-sentence summary of this page.
-
- = Lesson 10 : Compound Dockables = 
+#summary Compound dockables
+#sidebar TableOfContents
+= Lesson 10 : Compound Dockables = 
 
 
 This is the 10th part of the VLDocking Framework for Java Swing applications.

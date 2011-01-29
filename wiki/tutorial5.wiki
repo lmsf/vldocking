@@ -1,7 +1,6 @@
-#summary One-sentence summary of this page.
-
-
- = Lesson 5 : Extending the framework = 
+#summary Extending the framework
+#sidebar TableOfContents
+= Lesson 5 : Extending the framework = 
 
 
 

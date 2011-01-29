@@ -1,3 +1,5 @@
+#summary Customizing the layout
+#sidebar TableOfContents
 =Lesson 2 : Customizing the layout, display and docking behaviour=
 
 This is the second part of the VLDocking Tutorial for Java Swing applications.

@@ -1,7 +1,6 @@
-#summary One-sentence summary of this page.
-
-
- = Tips and tricks = 
+#summary Tips and tricks
+#sidebar TableOfContents
+= Tips and tricks = 
 
 
  This is the 6th part of the VLDocking Framework tutorial for Java Swing applications.

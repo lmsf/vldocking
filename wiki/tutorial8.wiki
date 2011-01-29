@@ -1,10 +1,6 @@
 #summary Customizing the User interface
 #sidebar TableOfContents
 
-= Introduction =
-
-= Details =
-
 = Lesson 8 : Customizing the User Interface  = 
 
 
