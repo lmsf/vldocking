@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#the vltoolbars
 
 = Lesson 9 : The VLToolBars  =
 
@@ -16,14 +16,14 @@ component.
 The VLToolBar component provides an enhanced user experience for toolbars.
 
 <p align="center">
-[http://vldocking.googlecode.com/svn/wiki/toolbar1.jpg]<br>
+[http://vldocking.googlecode.com/svn/wiki/toolbar1.jpg]
 A set of VLToolBars
-
+</p>
 
 <p align="center">
-[http://vldocking.googlecode.com/svn/wiki/toolbar2.jpg]<br>
+[http://vldocking.googlecode.com/svn/wiki/toolbar2.jpg]
 Same set arranged vetically on two columns 
-
+</p>
 
 
 
@@ -58,9 +58,9 @@ An overview of the components
 Installing a set of toolbars is easy :
 
 
-  * create a ToolBarContainer (a specialized JPanel with a BorderLayout)
+  * create a `ToolBarContainer` (a specialized JPanel with a BorderLayout)
   * add you component at the center : container.add(myComp, BorderLayout.CENTER)
-  * get a reference to a ToolBarPanel from the ToolBarContainer : container.getToolBarPanelAt(BorderLayout.NORTH)
+  * get a reference to a ToolBarPanel from the `ToolBarContainer` : container.getToolBarPanelAt(BorderLayout.NORTH)
   * add one or more VLToolBars to it, using the ToolBarConstraints to specify their relative order.
   * enjoy the results !
 
@@ -69,10 +69,10 @@ Installing a set of toolbars is easy :
 
 Details of these operations follow.
 
- ====  Create a ToolBarContainer  ==== 
+ ====  Create a `ToolBarContainer`  ==== 
 
 
-The ToolBarContainer is a specialized JPanel with a BorderLayout, which can contain up to four sets of toolbars (on every side).
+The `ToolBarContainer` is a specialized JPanel with a BorderLayout, which can contain up to four sets of toolbars (on every side).
 
 
 The easiest way to create that container is to use the static method 
@@ -124,26 +124,21 @@ leftPanel.add(toolbar4 , new ToolBarConstraints(0,1)); // first column,*second r
 
 <p align="center">[http://vldocking.googlecode.com/svn/wiki/toolbar3.jpg]<br>
 The result of the sample code above
-
-
-
-
+</p>
 
 
  
 If you look at the sample code above, you will see that we have used the same constraints to specify different layouts. This is because ToolbarConstraints are expressed in terms of *major order* and *minor order*, which are considered differently whether the toolbar is laid out horizontally or vertically.
 
-
-
  
 So here is an expression of the orders depending on the toolbar orientation :
 <p align="center">[http://vldocking.googlecode.com/svn/wiki/major_order_h.jpg]<br>
 The major order in an *horizontal* ToolBarPanel is the *row*.
-
+</p>
 
 <p align="center">[http://vldocking.googlecode.com/svn/wiki/major_order_v.jpg]<br>
 The major order in a *vertical* ToolBarPanel is the * column*.
-
+</p>
 
  ====  Major/minor order collapsing ==== 
 
@@ -151,8 +146,7 @@ The major order in a *vertical* ToolBarPanel is the * column*.
 Please note that if a ToolbarConstraints order (major or minor) is too high for the current 
 contained components, it will be reduced to the next available order.
 
- For example, if you add a toolbar at (0,7) and there are only 2 toolbars (0,0) and (0,1) at this minor order, 
-the constraints will be reduced to (0,2).
+ For example, if you add a toolbar at (0,7) and there are only 2 toolbars (0,0) and (0,1) at this minor order, the constraints will be reduced to (0,2).
 
  ====  Adding buttons to a toolbar ==== 
 
@@ -189,24 +183,21 @@ This can be achieved the same way you update the UI delegates of VLDocking :
 	(you will have to do this prior VLToolBar install, otherwise your settings might be ignored).
 	
 
-
-
 ===  The Collapsible toolbars === 
 
  
 VLDocking 2.0.6 introduces a new UI enhancement : Collapsible toolbars. 
 <p align="center">
 [http://vldocking.googlecode.com/svn/wiki/toolbar_not_collapsed.gif]<br> A normal set of toolbars
-
+</p>
 
 <p align="center">
 [http://vldocking.googlecode.com/svn/wiki/toolbar_collapsed.gif]<br> Same set, but the middle toolbar has been collapsed
+</p>
 
 
 
-
-Collapsing is enabled by default (you just have to click on the toolbar gripper), if you want to disable this 
-feature, just call `toolbar.setCollapsible(false)`.
+Collapsing is enabled by default (you just have to click on the toolbar gripper), if you want to disable this feature, just call `toolbar.setCollapsible(false)`.
 
 
 You can also trigger collapsing by the API : `toolbar.setCollapsed(boolean collapsed)`
@@ -227,7 +218,7 @@ the stream will not be closed to allow you to write (read) more data into (from)
 Here is the way to go :
 
 
- * You must have a valid ToolBarContainer containing a set of VLToolBars
+ * You must have a valid `ToolBarContainer` containing a set of VLToolBars
  * The toolbars must have a name (you can use the `setName` of the JComponent class
 
 To set a different name for each toolbar
@@ -277,7 +268,7 @@ To set a different name for each toolbar
 Here is the way to go :
 
 
- * You must have a valid (empty or not)ToolBarContainer 
+ * You must have a valid (empty or not)`ToolBarContainer` 
  * The toolbars must have a name (you can use the `setName` of the JComponent class
 
 to set a different name for each toolbar
