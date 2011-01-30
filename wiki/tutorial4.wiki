@@ -360,3 +360,6 @@ same context). And that when using multiple desktops, you'd better create the de
 {{{DockingDesktop(String name)}}} constructor : this naming information is saved 
 with the desktop and used on workspace reloading (this information is more detailed in <a href="tutorial11.php">lesson 11</a>).
 
+----
+
+Next [tutorial5]

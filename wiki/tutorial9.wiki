@@ -377,3 +377,6 @@ topPanel.setPainter( //set a custom background painter
 
 Easy, isn't it ?
 
+----
+
+Next: [tutorial10]

@@ -62,3 +62,5 @@ There are two ways to acheive this :
 
 In the case of an application with two or more contexts (i.e. independant desktops), the readXML() and writeXML() method have to be invoked on each set of desktops (on each context).
 
+----
+next [tutorial12]

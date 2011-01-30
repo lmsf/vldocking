@@ -88,3 +88,6 @@ Look at the following screenshot to have an idea of what it looks like :
 
  _The Docking Selector Dialog_
  
+----
+
+Next [tutorial7]

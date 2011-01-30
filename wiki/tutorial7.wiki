@@ -186,4 +186,5 @@ Note : You can also use this property on other systems : it is not specific to L
 the slow repaint is more visible there).
 
 ----
+
 Next : [tutorial8 Lesson 8 customizing the UI]

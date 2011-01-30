@@ -328,3 +328,6 @@ same DockDropReceiver.
 The DockDropReceiver must process the drop, usually by invoking {{{split}}} or
 {{{createTab }}} methods on the DockingDesktop.
   
+----
+
+Next [tutorial4]

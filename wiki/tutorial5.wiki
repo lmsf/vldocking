@@ -183,3 +183,6 @@ The path to follow would be :
      enable sub-docking.
    	 * ... test your classes !
  
+----
+
+Next [tutorial6]

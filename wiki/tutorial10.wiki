@@ -66,3 +66,5 @@ Of course, another way of dealing with nested dockable is to use the
 Workspace Manager Application 
 and load directly your layout from a workspace XML stream.
 
+----
+Next : [tutorial 11]
