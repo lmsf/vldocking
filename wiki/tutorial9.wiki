@@ -47,7 +47,7 @@ As with VLDocking, VLToolBars use an XML format to save and reload their positio
 
 === Installing a toolbar === 
 
- Here is an image introducing the components in use with VLToolBars :
+Here is an image introducing the components in use with VLToolBars :
 
  [http://vldocking.googlecode.com/svn/wiki/toolbars_overview.gif]
  
@@ -131,6 +131,7 @@ If you look at the sample code above, you will see that we have used the same co
 
  
 So here is an expression of the orders depending on the toolbar orientation :
+
  [http://vldocking.googlecode.com/svn/wiki/major_order_h.jpg]
  
  _The major order in an *horizontal* ToolBarPanel is the *row*._
@@ -207,8 +208,8 @@ You can also trigger collapsing by the API : `toolbar.setCollapsed(boolean colla
 == Reading and writing  ==
 
  
-To load and save your toolbar positions, use the dedicated call `ToolBarIO
-`, with the `readXML(InputStream)` and `writeXML(OutputStream)` methods.
+To load and save your toolbar positions, use the dedicated call `ToolBarIO`, 
+with the `readXML(InputStream)` and `writeXML(OutputStream)` methods.
 
 
 This will create (or read) an XML output (input) containing the name of the toolbars and their ToolBarConstraints, 
@@ -230,7 +231,7 @@ To set a different name for each toolbar
 
 
 
- And here is a example :
+And here is a example :
 
 
 {{{
@@ -280,7 +281,7 @@ to set a different name for each toolbar
 
 
 
- And here is a example of reading :
+And here is a example of reading :
 
 
 {{{
@@ -317,13 +318,17 @@ well placed set of ... empty toolbars.
 ====  Autosave and install of toolbars with {{{ToolBarPersistence}}} ==== 
 
 
-Coming with VLDocking 2.0.6, this component can be used to automate the process of loading and saving toolbar configations as java.util.preferences (warning : the API doesn't work on sandboxed environments  (e.g. in unsigned Java Web Start application).
+Coming with VLDocking 2.0.6, this component can be used to automate the process of loading 
+and saving toolbar configations as java.util.preferences (warning : the API doesn't work 
+on sandboxed environments  (e.g. in unsigned Java Web Start application).
 
 
-Using this class is easy : you create a new instance for each toolbar container, and the installation of toolbars is automated (no need to use the readXML() method anymore).
+Using this class is easy : you create a new instance for each toolbar container, 
+and the installation of toolbars is automated (no need to use the readXML() method anymore).
 
  
-Saving is also automated as a shutdown hook : at restart, the user will get the same set and positionning of toolbars for this container. 
+Saving is also automated as a shutdown hook : at restart, the user 
+will get the same set and positionning of toolbars for this container. 
 
 
 

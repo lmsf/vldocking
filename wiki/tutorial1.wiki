@@ -12,7 +12,7 @@ The Swing application we are going to create is very simple, it will be composed
 	* a Dockable for a text editor component.
 	* a Dockable for a JTree component
 	* a Dockable for a grid of buttons
-      	* and finally, a Dockable for a JTable
+    * and finally, a Dockable for a JTable
 
 This application being a kind of "Hello World", don't expect to get something useful from it (excepted your first knowledge of the framework).
 
@@ -131,12 +131,13 @@ public class MyFirstFrame extends JFrame {
 }}}
 
 Launching this application should give us something like that :
-  [http://vldocking.googlecode.com/svn/wiki/frame1.jpg]
+ 
+ [http://vldocking.googlecode.com/svn/wiki/frame1.jpg]
   
-  (My First Frame, without docking)
+ _My First Frame, without docking)_
 
 This is the kind of frame layout a standard Swing application would have (although a little bit better, using JSplitPanes or JInternalFrames).
 
----
+----
 
 Next : [tutorial1page2 And now... docking !]

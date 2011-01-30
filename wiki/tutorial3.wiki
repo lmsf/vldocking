@@ -58,18 +58,18 @@ There are 2 kinds of events, dedicated to different purposes :
  classes can still be used if you are only interested in high-level changes *
  
 
-  There are two types of DockableStateChange events :
+ There are two types of DockableStateChange events :
 
 
   	 * Events triggered before a state change are instances of
-    {{{DockableStateWillChangeEvent}}}.<br>
-    Those are *vetoable*, meaning you can cancel the state change process if a condition of
-    your own is not fulfilled.
+{{{DockableStateWillChangeEvent}}}.<br>
+Those are *vetoable*, meaning you can cancel the state change process if a condition of
+your own is not fulfilled.
   	 * Notification events, triggered after a state change are instances of {{{DockableStateChangeEvent}}}.
 
 
 
- === DockableStateWillChangeEvent}}} events === 
+=== DockableStateWillChangeEvent}}} events === 
 
 
 To be notified *before* a state change occur, you have to implement the
@@ -91,13 +91,13 @@ as on the following example, on an anonymous class :
 
 
 
-  The DockableStateWillChangeEvent object contains fields that inform you on
-  the dockable which is changing, on what its current state is, and on what
-  its next state will be if not vetoed.
+The DockableStateWillChangeEvent object contains fields that inform you on
+the dockable which is changing, on what its current state is, and on what
+its next state will be if not vetoed.
 
 
 Look at this example, where we cancel a CLOSE operation if it occurs on the editorPanel
-  dockable.
+dockable.
 
 
 
@@ -122,29 +122,29 @@ Look at this example, where we cancel a CLOSE operation if it occurs on the edit
 
 
 
- === DockableStateChangeEvent}}} events === 
+=== DockableStateChangeEvent}}} events === 
 
 
-  These events are triggered *after* the state change, so you cannot veto them.
+These events are triggered *after* the state change, so you cannot veto them.
 
 
-  You listen to them by implementing a {{{DockableStateChangeListener}}} which is
-  different from {{{DockableState*Will*ChangeListener}}}.
+You listen to them by implementing a {{{DockableStateChangeListener}}} which is
+different from {{{DockableState*Will*ChangeListener}}}.
 
 
 
-  They are usefull to keep track of the state of your dockables, especially
-  in the following situations :
+They are usefull to keep track of the state of your dockables, especially
+in the following situations :
   
 
-    	 * You want to "dispose" your dockable and GC its resources : a closed dockable
-      is just "not visible", but still referenced by the desktop (it might show up again).<br>
-      As there is currently no "{{{setDefaultCloseOperation()}}}" on the dockkey 
-      you have to properly code the removal of the dockable after it is closed : <br>
+  * You want to "dispose" your dockable and GC its resources : a closed dockable
+is just "not visible", but still referenced by the desktop (it might show up again).
+As there is currently no "{{{setDefaultCloseOperation()}}}" on the dockkey 
+you have to properly code the removal of the dockable after it is closed : 
 
       
 
-          {{{
+{{{
   DockingDesktop desk = ...
 
   DockableStateChangeListener listener = new DockableStateChangeListener(){
@@ -160,15 +160,15 @@ Look at this example, where we cancel a CLOSE operation if it occurs on the edit
 }}}
 
 
-    	 * You want to know when a dockable becomes visible/not visible to allocate
-      resources only when needed (expecially if the dockable is a Heavyweight AWT component).
-    	 * You want to show a dialog to let the user select the dockables
-      to show and those to close, by a click on a checkbox, and want to update the
-      visible dockables list dynamically .
+ * You want to know when a dockable becomes visible/not visible to allocate
+resources only when needed (expecially if the dockable is a Heavyweight AWT component).
+ * You want to show a dialog to let the user select the dockables
+to show and those to close, by a click on a checkbox, and want to update the
+visible dockables list dynamically .
       
 
-      But keep it mind that there is already a customizable dialog included in the
-      framework : {{{com.vlsolutions.swing.docking.DockingSelectorDialog}}}.
+But keep it mind that there is already a customizable dialog included in the
+framework : {{{com.vlsolutions.swing.docking.DockingSelectorDialog}}}.
   
 
  ===  The DockingAction Events === 
@@ -214,23 +214,25 @@ track the dockable state or position change
 
 
 
- == Listening to Dockable selections  == 
+== Listening to Dockable selections  == 
 
 
-  Some application need to know when a dockable is selected (for example, to show a different 
-  set of icons on their toolbar). By selection, we mean "the title bar is highlighted" of, if you prefer,
-  a component inside the dockable has obtained the keyboard focus (which is exactly the same... as 
-  the framework tracks focus events to highlight title bars).
+Some application need to know when a dockable is selected (for example, to show a different 
+set of icons on their toolbar). By selection, we mean "the title bar is highlighted" of, if you prefer,
+a component inside the dockable has obtained the keyboard focus (which is exactly the same... as 
+the framework tracks focus events to highlight title bars).
 
 
-  so here are the dedicated events and listeners : 
+So here are the dedicated events and listeners : 
+
 <table><thead><tr><th>Class</th><th>Description</th></tr></thead>
 <tbody><tr><td>DockableSelectionEvent</td><td>Describes the dockable that has just been selected</td></tr>
 <tr><td>DockableSelectionListener</td><td>Listener invoked on selection change</td></tr>
 </tbody></table>
 
 
- To add a listener to the desktop, just use the followind methods :
+To add a listener to the desktop, just use the followind methods :
+
 <table><thead><tr><th>Method</th><th>Description</th></tr></thead>
 <tbody><tr><td>DockingDesktop.addDockableSelectionListener(DockableSelectionListener listener)</td>
 <td>Adds a listener for selection changes</td></tr>
@@ -239,92 +241,90 @@ track the dockable state or position change
 </tbody></table>
 
 
- *Note : * There is also another way to know which dockable is currently selected : just ask the desktop :
+*Note : * There is also another way to know which dockable is currently selected : just ask the desktop :
  
 
- {{{
+{{{
  DockingDesktop desk = ...
  Dockable selected = desk.getSelectedDockable(); // may return null
- }}}
+}}}
  
 
  
- == Listening to Drag and Drop docking events == 
+== Listening to Drag and Drop docking events == 
 
 
 
-  This section is for API extenders : developpers that want to add docking features
-  to the API. <br>
-  If you (most probably) are not of that kind, you can skip the end of
-  the lesson and go to the <a href="tutorial4">next one</a>.
- === The DockEvent classes === 
+This section is for API extenders : developpers that want to add docking features
+to the API. <br>
+If you (most probably) are not of that kind, you can skip the end of
+the lesson and go to the <a href="tutorial4">next one</a>.
+
+=== The DockEvent classes === 
 
 
-  There are 3 classes of events : one ancestor class {{{DockEvent}}},
-  and two specialized subclasses {{{DockDragEvent}}} and {{{DockDropEvent}}}.
+There are 3 classes of events : one ancestor class {{{DockEvent}}},
+and two specialized subclasses {{{DockDragEvent}}} and {{{DockDropEvent}}}.
 
 
-  Those events are related to two other classes :
+Those events are related to two other classes :
  
 
    	 *{{{DockableDragSource}}} : an interface implemented by a UI component
-     used to drag a dockable (for example, the default title bar of a {{{SingleDockableContainer}}}
-     is a DockableDragSource).<br>
-     DockableDragSource contains methods to get the associated {{{Dockable }}}
-     and to be notified of a drag gesture start.
-   	 *{{{DockDropReceiver}}} : an inteface implemented by a UI component
-     used to drop a dockable (for example, the whole content of a {{{SingleDockableContainer}}}
-     is a DockDropReceiver).<br>
-     A DockDropReceiver is responsible for accepting (and processing) a "drop" of a dockable.
+used to drag a dockable (for example, the default title bar of a {{{SingleDockableContainer}}}
+is a DockableDragSource).<br>
+DockableDragSource contains methods to get the associated {{{Dockable }}}
+and to be notified of a drag gesture start.
+  	 *{{{DockDropReceiver}}} : an inteface implemented by a UI component
+used to drop a dockable (for example, the whole content of a {{{SingleDockableContainer}}}
+is a DockDropReceiver).<br>
+A DockDropReceiver is responsible for accepting (and processing) a "drop" of a dockable.
  
 
 
- ==== DockEvent   ==== 
+==== DockEvent   ==== 
 
 
-  The {{{DockEvent}}} class contains informations about the {{{DockableDragSource}}}
-  of the event, and the MouseEvent associated to the gesture (pointer coordinates are converted
-  to be used in the target component coordinates system).
+The {{{DockEvent}}} class contains informations about the {{{DockableDragSource}}}
+of the event, and the MouseEvent associated to the gesture (pointer coordinates are converted
+to be used in the target component coordinates system).
 
- ==== DockDragEvent   ==== 
-
-
-  The {{{DockDragEvent}}} event is a subclass of {{{DockEvent}}} which
- is transmitted to {{{DockDropReceiver}}} during a drag gesture.
+==== DockDragEvent   ==== 
 
 
- When the drag gesture begins over a {{{DockableDragSource}}}, the DockingDesktop
- switches to "Drag and Dock" mode :
+The {{{DockDragEvent}}} event is a subclass of {{{DockEvent}}} which
+is transmitted to {{{DockDropReceiver}}} during a drag gesture.
 
 
- 	 * When mouse pointer is over a component implementing DockDropReceiver, a DockDragEvent
-  is triggered and transmitted to this receiver. The receiver can {{{acceptDrag()}}},
-  {{{rejectDrag()}}}, or {{{delegateDrag()}}} (tell the DockingDesktop to look
- up in the containment hierarchy for another receiver).
- 	 * To accept the drag, the DockDropReceiver invokes {{{dragEvent.acceptDrag(Shape outline)}}}
-   on the event, providing a shape that will be used to give a visual feedback to
-   the user (usually, a rectangular shape is enough).
- 	 * The DockingDesktop displays the shape on its glass pane, and the user can
-   complete the drop (releasing the mouse button) or continue the drag gesture over
-   another place in the same container (in that case, the same DockDropReceiver can return different shapes
-   according to the mouse location) or over another DockDropReceiver.
+When the drag gesture begins over a {{{DockableDragSource}}}, the DockingDesktop
+switches to "Drag and Dock" mode :
+
+
+* When mouse pointer is over a component implementing DockDropReceiver, a DockDragEvent
+is triggered and transmitted to this receiver. The receiver can {{{acceptDrag()}}},
+{{{rejectDrag()}}}, or {{{delegateDrag()}}} (tell the DockingDesktop to look
+up in the containment hierarchy for another receiver).
+* To accept the drag, the DockDropReceiver invokes {{{dragEvent.acceptDrag(Shape outline)}}}
+on the event, providing a shape that will be used to give a visual feedback to
+the user (usually, a rectangular shape is enough).
+* The DockingDesktop displays the shape on its glass pane, and the user can
+complete the drop (releasing the mouse button) or continue the drag gesture over
+another place in the same container (in that case, the same DockDropReceiver can return different shapes
+according to the mouse location) or over another DockDropReceiver.
 
 
 
- ==== DockDropEvent   ==== 
+==== DockDropEvent   ==== 
 
 
-  The {{{DockDropEvent}}} is a subclass of DockEvent which is transmitted
-  to a {{{DockDropReceiver}}} at the end of a drag gesture.
+The {{{DockDropEvent}}} is a subclass of DockEvent which is transmitted
+to a {{{DockDropReceiver}}} at the end of a drag gesture.
 
 
-  The event is triggered only if the preceeding DockDragEvent was accepted by the
-  same DockDropReceiver.
+The event is triggered only if the preceeding DockDragEvent was accepted by the
+same DockDropReceiver.
 
 
- The DockDropReceiver must process the drop, usually by invoking {{{split}}} or
- {{{createTab }}} methods on the DockingDesktop.
+The DockDropReceiver must process the drop, usually by invoking {{{split}}} or
+{{{createTab }}} methods on the DockingDesktop.
   
-
----
-Next : [tutorial4]
