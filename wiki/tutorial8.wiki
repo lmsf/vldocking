@@ -18,7 +18,7 @@ VLDocking uses UI delegate classes to paint the look and feel of many of its com
 Theses classes are dynamically loaded at startup, and use many UI properties to give your application the desired appearance. Here is the list of the current UI delegates :
 
 
-<table><thead><tr><th> Component </th><th>UI Delegate class</th></tr></thead>
+<table border="1"><thead><tr><th> Component </th><th>UI Delegate class</th></tr></thead>
 <tbody>
 <tr><td>DockView</td><td>com.vlsolutions.swing.docking.ui.DockViewUI</td></tr>
 <tr><td>DockViewTitleBar</td><td>com.vlsolutions.swing.docking.ui.DockViewTitleBarUI</td></tr>
@@ -107,7 +107,7 @@ Now that you know how to proceed, here is the long list of customizable properti
 == Customizable properties ==  
 ===  Border properties === 
 
-<table>
+<table border="1">
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
 <tbody>
@@ -133,7 +133,7 @@ Now that you know how to proceed, here is the long list of customizable properti
 
 ===  Color properties  === 
 
-<table>
+<table border="1">
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
 <tbody>
@@ -142,7 +142,7 @@ Now that you know how to proceed, here is the long list of customizable properti
 
 ===  Icons === 
 
-<table>
+<table border="1">
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
 <tbody>
@@ -192,7 +192,7 @@ property must also be set to true</td></tr>
 
 ===  Labels and Fonts  === 
 
-<table>
+<table border="1">
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
 <tbody>
@@ -212,7 +212,7 @@ property must also be set to true</td></tr>
 
 ===  Displaying buttons in title bars  === 
 
-<table>
+<table border="1">
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
 <tbody>
@@ -227,7 +227,7 @@ property must also be set to true</td></tr>
 
 ===  KeyStrokes  === 
 
-<table>
+<table border="1">
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
 <tbody>
@@ -240,7 +240,7 @@ property must also be set to true</td></tr>
 ===  UI Delegates  === 
 
 
-<table><thead><tr><th>UI property</th><th>type</th><th>effect</th></tr></thead><tbody>
+<table border="1"><thead><tr><th>UI property</th><th>type</th><th>effect</th></tr></thead><tbody>
 <tr><td>AutoHideButtonUI</td> <td>class name</td> <td>UI delegate for the AutoHideButton</td></tr>
 <tr><td>AutoHideButtonPanelUI</td> <td>class name</td> <td>UI delegate for the AutoHideButtonPanel</td></tr>
 <tr><td>AutoHideExpandPanelUI</td> <td>class name</td> <td>UI delegate for the AutoHideExpandPanel</td></tr>
@@ -257,7 +257,7 @@ property must also be set to true</td></tr>
 Starting from version 2.0.3 it is now possible to change the mouse cursor images used during 
 drag gestures.
 
-<table><thead><tr><th>UI property</th><th>type</th><th>effect</th></tr></thead><tbody>
+<table border="1"><thead><tr><th>UI property</th><th>type</th><th>effect</th></tr></thead><tbody>
 <tr><td>DragControler.stopDragCursor</td> <td>java.awt.Image</td> <td>Image (max 32x32) used when the mouse pointer is above a place where drop is not possible</td></tr>
 <tr><td>DragControler.detachCursor</td> <td>Image</td> <td>Image used to denote a floating action </td></tr>
 <tr><td>DragControler.dragCursor</td> <td>Image</td> <td>Image used (together with a shape) to denote a position where drop is possible</td></tr>
@@ -267,7 +267,7 @@ drag gestures.
 
 ===  Other properties === 
 
-<table>
+<table border="1">
 <thead>
 <tr><th>UI property</th> <th>type</th> <th>effect</th></tr></thead>
 <tbody>

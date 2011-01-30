@@ -74,8 +74,10 @@ The answer is YES !
    
 But, you must be aware it will work only beginning *with Java 1.5 * (J2SE 5.0).
    
-The workaround is based on a new method : Container.setComponentZOrder(Component comp, int order) that has been
-added to AWT in jdk 1.5. With this method, you can precisely define how heavyweight components overlapping is managed, with
+The workaround is based on a new method : `Container.setComponentZOrder(Component comp, int order)` that has been
+added to AWT in jdk 1.5. 
+
+With this method, you can precisely define how heavyweight components overlapping is managed, with
 a Z-order priority (lower value = on top). Before that, it was platform-dependent and changing the priority was not specified.
    
 As Swing components can be included in the Panel class (an AWT container), we just had to ensure the
