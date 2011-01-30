@@ -164,7 +164,7 @@ There is currently no UI delegate for the VLToolBar, but it is easy to change it
 updating its set of ui related properties :
 
 
-<table><thead><tr><th> VLToolBar property</th><th>Description</th><th>Default Value</th></tr></thead>
+<table border="1"><thead><tr><th> VLToolBar property</th><th>Description</th><th>Default Value</th></tr></thead>
 <tbody>
 <tr><td>isRolloverBorderPainted</td><td>paints a rollover border when the mouse is over a JButton</td><td>true</td></tr>
 <tr><td>isRooloverContentAreaFilled</td><td>updates the setContentAreaFilled of a JButton during rollover</td><td>false</td></tr>
