@@ -208,6 +208,7 @@ desk.split(editorPanel, buttonGrid,
 desk.createTab(treePanel, tablePanel, 1);
       }}}
     </td>
+	</tr>
   <tr><td>[http://vldocking.googlecode.com/svn/wiki/frame4.jpg]</td></tr>
   <tr>
     <th>Split and Auto-Hide</th>
