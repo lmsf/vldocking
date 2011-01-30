@@ -49,7 +49,7 @@ There are 2 kinds of events, dedicated to different purposes :
 
 
 
- == Listening to Dockable State changes and Docking Actions == 
+== Listening to Dockable State changes and Docking Actions == 
 
 
  
@@ -58,18 +58,19 @@ There are 2 kinds of events, dedicated to different purposes :
  classes can still be used if you are only interested in high-level changes *
  
 
- There are two types of DockableStateChange events :
+There are two types of DockableStateChange events :
 
 
   	 * Events triggered before a state change are instances of
-{{{DockableStateWillChangeEvent}}}.<br>
+`DockableStateWillChangeEvent`.
+
 Those are *vetoable*, meaning you can cancel the state change process if a condition of
 your own is not fulfilled.
-  	 * Notification events, triggered after a state change are instances of {{{DockableStateChangeEvent}}}.
+  	 * Notification events, triggered after a state change are instances of `DockableStateChangeEvent`.
 
 
 
-=== DockableStateWillChangeEvent}}} events === 
+=== {{{DockableStateWillChangeEvent}}} events === 
 
 
 To be notified *before* a state change occur, you have to implement the
@@ -184,7 +185,7 @@ corresponding class in the event package.
 
  
 Here are the main classes introduced :
-<table><tr><th>Class</th><th> Usage </th></tr>
+<table border="1"><tr><th>Class</th><th> Usage </th></tr>
 <tr><td>DockingActionAddDockableEvent</td><td>Event produced when adding the first dockable to a top-level container</td></tr>
 <tr><td>DockingActionCloseEvent</td><td>Produced when the close button is used on a dockable</td></tr>
 <tr><td>DockingActionCreateTabEvent</td><td>Produced when a dockable is added as a new tab</td></tr>
@@ -225,7 +226,7 @@ the framework tracks focus events to highlight title bars).
 
 So here are the dedicated events and listeners : 
 
-<table><thead><tr><th>Class</th><th>Description</th></tr></thead>
+<table border="1"><thead><tr><th>Class</th><th>Description</th></tr></thead>
 <tbody><tr><td>DockableSelectionEvent</td><td>Describes the dockable that has just been selected</td></tr>
 <tr><td>DockableSelectionListener</td><td>Listener invoked on selection change</td></tr>
 </tbody></table>
@@ -233,7 +234,7 @@ So here are the dedicated events and listeners :
 
 To add a listener to the desktop, just use the followind methods :
 
-<table><thead><tr><th>Method</th><th>Description</th></tr></thead>
+<table border="1"><thead><tr><th>Method</th><th>Description</th></tr></thead>
 <tbody><tr><td>DockingDesktop.addDockableSelectionListener(DockableSelectionListener listener)</td>
 <td>Adds a listener for selection changes</td></tr>
 <tr><td>DockingDesktop.addDockableSelectionListener(DockableSelectionListener listener)</td>
