@@ -138,17 +138,21 @@ changed on any application thread.
 The following boolean properties have and effect on the operations allowed (and managed) by the DockingDesktop.
 
 
-<table border="1" cellpadding="4">
+<table>
   <thead><tr><th width="200">Property</th><th>Effect</th></tr></thead>
-  <tbody><tr><td>`isCloseEnabled`</td><td>The dockable can be closed (removed from the desktop).<br>
+  <tbody><tr><td>`isCloseEnabled`</td><td>The dockable can be closed (removed from the desktop).
+  
   if `false`, the "close" button will be removed from the title bar</td></tr>
-  <tr><td>`isAutoHideEnabled`</td><td>The dockable can be iconified <br>
+  <tr><td>`isAutoHideEnabled`</td><td>The dockable can be iconified 
+  
   if `false`, the "hide" button will be removed from the title bar</td></tr>
-  <tr><td>`isMaximizeEnabled`</td><td>The dockable can be maximized (full size of the desktop)<br>
+  <tr><td>`isMaximizeEnabled`</td><td>The dockable can be maximized (full size of the desktop)
+  
     if `false`, the "maximize" button will be removed from the title bar </td></tr>
   <tr><td>`isFloatingEnabled`</td><td>
   The dockable can be detached from the desktop and displayed in its own palette window (default value is *false*) </td></tr>
-</tbody></table>
+</tbody>
+</table>
 
 ==== Example. ==== 
 
