@@ -48,13 +48,9 @@ Concerning the Docking Framework, overlapping is limited due to the  relative po
 dockables, but it still can occur on the following situations :
   
 
- * a Dockable containing a heavyweight component is near a border of the
-desktop : it will overlap all auto-hide dockables coming from this
-border.
- * a lightweight Dockable is maximized (top layer of the desktop) :
- the heavyweight components on the bottom desktop layer will appear right through it.
- * the custom rendering of drag and gesture (done on a glasspane above the desktop) is
- intercepted by heavyweight components.
+ * a Dockable containing a heavyweight component is near a border of the desktop : it will overlap all auto-hide dockables coming from this border.
+ * a lightweight Dockable is maximized (top layer of the desktop) :  the heavyweight components on the bottom desktop layer will appear right through it.
+ * the custom rendering of drag and gesture (done on a glasspane above the desktop) is intercepted by heavyweight components.
    
 
 === But why is this feature important ? === 
@@ -65,17 +61,11 @@ as fast as heavyweight components ?"
 Here are some reason why we think it's important :
  
 
- * The *Open Cascade* renderer with java bindings provides a high performance simulation and 2D/3D rendering engine, and is used in 
-   industrial contexts.
+ * The *Open Cascade* renderer with java bindings provides a high performance simulation and 2D/3D rendering engine, and is used in industrial contexts.
  * The *Java3D* applications rely on an OpenGL or DirectX heavyweight binding and are used in many scientific/modeling projects.   
- * The *JOGL project *(and probably the future OpenGL JSR-231 official extension) provides an OpenGL pipeline to
-Swing applications. It is faster (especially visible when rendering animations) on low end systems
-when using its heavyweight renderer instead of the Swing one.
- * The *JDIC browser component* allows you to embed a native browser (much better than JEditorPane !) into a Swing application.
-unfortunately, it's a heavyweight component. But include it in a Dockable and you application will rock ! 
-(It's not yet perfect due to some resource management bugs in JDIC, but works fine with community workarounds in most cases)
- * Many *legacy applications* that have been adapted to be displayed as AWT Canvas / ActiveX are still beeing used
-(and will probably remain for a long time).
+ * The *JOGL project *(and probably the future OpenGL JSR-231 official extension) provides an OpenGL pipeline to Swing applications. It is faster (especially visible when rendering animations) on low end systems when using its heavyweight renderer instead of the Swing one.
+ * The *JDIC browser component* allows you to embed a native browser (much better than JEditorPane !) into a Swing application. Unfortunately, it's a heavyweight component. But include it in a Dockable and you application will rock ! (It's not yet perfect due to some resource management bugs in JDIC, but works fine with community workarounds in most cases)
+ * Many *legacy applications* that have been adapted to be displayed as AWT Canvas / ActiveX are still beeing used(and will probably remain for a long time).
  
 
 === So is there a workaround ? === 
@@ -156,7 +146,7 @@ DockingPreferences.setSingleHeavyWeightComponent(true);
 
  * You cannot make the heavyweight Floating (as this option is disabled by default, just think about not turning it on)
  * And finally, you must create the WebBrowser instance with the {{{autodispose}}} flag set to false, and don't 
-forget to {{{dispose()}}} the browser when your window is closed (to release associated resources). 
+   forget to {{{dispose()}}} the browser when your window is closed (to release associated resources). 
 
 
 
