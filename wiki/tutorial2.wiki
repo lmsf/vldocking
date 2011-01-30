@@ -19,19 +19,19 @@ now familiar with the concepts of :
 
 
 	 * a Dockable.
-	 * the DockingDesktop
-	 * SingleDockableContainer and TabbedDockableContainer
+	 * the !DockingDesktop
+	 * !SingleDockableContainer and !TabbedDockableContainer
 	 * and how to layout your components into their desktop
 
 If you don't feel enough confident about those concepts, please read again the previous lessons.
 
-== The DockKey object == 
+== The `DockKey` object == 
 
-The <code>DockKey</code> object provides a *unique key* to identify a Dockable during the loading/saving
-process via its <code><strike>dockName</strike> "key"</code> property.
+The `DockKey` object provides a *unique key* to identify a Dockable during the loading/saving
+process via its ~~dockName~~ `key` property.
 
-You have also learned from the previous lesson that the DockKey was the object used to
-customize the DockableContainer of a Dockable.
+You have also learned from the previous lesson that the !DockKey was the object used to
+customize the !DockableContainer of a Dockable.
 
 
 Let's see how it works.
@@ -40,15 +40,15 @@ Let's see how it works.
 
 
 
-If you have looked at the JavaDoc of the DockKey class, you already know that
-a DockKey is a specialized class following the JavaBean pattern.
+If you have looked at the Javadoc of the !DockKey class, you already know that
+a !DockKey is a specialized class following the !JavaBean pattern.
 
 
-You can access a set of properties like <code>name</code>, <code>tooltip</code>,
-<code>isCloseEnabled</code> and so on, with getters and setters.
+You can access a set of properties like `name`, `tooltip`,
+`isCloseEnabled` and so on, with getters and setters.
 
 
-You can also attach a <code>java.beans.PropertyListener</code> to be notified when a property
+You can also attach a `java.beans.PropertyListener` to be notified when a property
 is updated.
 
 
@@ -66,7 +66,7 @@ Now, we can have a look at the different categories of properties :
 === Visual properties === 
 
 
-Note : keep in mind that <code>SingleDockableContainer</code> and <code>TabbedDockableContainer</code> are
+Note : keep in mind that `SingleDockableContainer` and `TabbedDockableContainer` are
 interfaces : you can choose to use different implementations than the default one, with visual
 settings that could be different from those described below.
 
@@ -76,15 +76,15 @@ Default visual properties are listed here :
 
 <table border="1" cellpadding="4">
   <thead> <tr><th width="200">Property</th><th>Type</th><th>Effect</th></tr></thead>
-  <tbody><tr><td><code>name</code></td><td>String</td><td>The label displayed on the title bar</td></tr>
-  <tr><td><code>tooltip</code></td><td>String</td><td>The tooltip associated to the title bar</td></tr>
-  <tr><td><code>icon</code></td><td>16x16 pixels Icon</td><td>The icon used by the title bar (there is no default
+  <tbody><tr><td>`name`</td><td>String</td><td>The label displayed on the title bar</td></tr>
+  <tr><td>`tooltip`</td><td>String</td><td>The tooltip associated to the title bar</td></tr>
+  <tr><td>`icon`</td><td>16x16 pixels Icon</td><td>The icon used by the title bar (there is no default
     icon : if set to null, no icon will be drawn)</td></tr>
 </tbody></table>
 
 ==== Example. ==== 
 
-The following code will add a title, a tooltip and and icon to the <code>MyTextEditor</code> component.
+The following code will add a title, a tooltip and and icon to the `MyTextEditor` component.
 
 {{{
     class MyTextEditor extends JPanel implements Dockable {
@@ -140,13 +140,13 @@ The following boolean properties have and effect on the operations allowed (and 
 
 <table border="1" cellpadding="4">
   <thead><tr><th width="200">Property</th><th>Effect</th></tr></thead>
-  <tbody><tr><td><code>isCloseEnabled</code></td><td>The dockable can be closed (removed from the desktop).<br>
-  if <code>false</code>, the "close" button will be removed from the title bar</td></tr>
-  <tr><td><code>isAutoHideEnabled</code></td><td>The dockable can be iconified <br>
-  if <code>false</code>, the "hide" button will be removed from the title bar</td></tr>
-  <tr><td><code>isMaximizeEnabled</code></td><td>The dockable can be maximized (full size of the desktop)<br>
-    if <code>false</code>, the "maximize" button will be removed from the title bar </td></tr>
-  <tr><td><code>isFloatingEnabled</code></td><td>
+  <tbody><tr><td>`isCloseEnabled`</td><td>The dockable can be closed (removed from the desktop).<br>
+  if `false`, the "close" button will be removed from the title bar</td></tr>
+  <tr><td>`isAutoHideEnabled`</td><td>The dockable can be iconified <br>
+  if `false`, the "hide" button will be removed from the title bar</td></tr>
+  <tr><td>`isMaximizeEnabled`</td><td>The dockable can be maximized (full size of the desktop)<br>
+    if `false`, the "maximize" button will be removed from the title bar </td></tr>
+  <tr><td>`isFloatingEnabled`</td><td>
   The dockable can be detached from the desktop and displayed in its own palette window (default value is *false*) </td></tr>
 </tbody></table>
 
@@ -207,7 +207,7 @@ by AWT/Swing to deliver UI events).
 
 
 
-Until now, you have learned how to <code>split</code> or <code>createTab</code> dockables,
+Until now, you have learned how to `split` or `createTab` dockables,
 but there wasn't any indication of their size requirements.
 
 To understand how resizing works, you must know first a little bit more about DockingDesktop internals.
@@ -216,12 +216,12 @@ To understand how resizing works, you must know first a little bit more about Do
 
 
 The DockingDesktop displays its dockable containers (remember the two kinds : Single/Tabbed-DockableContainer)
-inside a specialized container : the <code>DockingPanel</code>.
+inside a specialized container : the `DockingPanel`.
 
 
 This DockingPanel (one instance per DockingDesktop) can be recursively subdivided in two
-when a Dockable is added with the <code>split</code> method. The container realizing the
-split is a subclass of <code>JSplitPane</code> named <code>com.vlsolutions.swing.docking.SplitContainer</code>.<br>
+when a Dockable is added with the `split` method. The container realizing the
+split is a subclass of `JSplitPane` named `com.vlsolutions.swing.docking.SplitContainer`.<br>
 SplitContainer has and enhanced look and feel and a better resizing behaviour.
 
 
@@ -240,39 +240,40 @@ The following diagram shows how the SplitContainer hierarchy associated to our e
 
 
 This can be done at any time, you just have to use the two dedicated methods of
-<code>DockingDesktop</code> :
+`DockingDesktop` :
   
 
- *<code>setDockableWidth(Dockable dockable, double width)</code> to adjust
+ *`setDockableWidth(Dockable dockable, double width)` to adjust
 the width of a dockable
- *<code>setDockableHeight(Dockable dockable, double height)</code> to adjust
+ *`setDockableHeight(Dockable dockable, double height)` to adjust
 the height of a dockable
   
 
 
 
-Those methods have two arguments : <br>
-  - a <code>Dockable</code>, contained in a SingleDockableContainer
-  or a TabbedDockableContainer. <br>
-  - a <code>double</code> value, between 0 and 1, indicating the proportion of the dockable container
-  into its parent SplitContainer.
+Those methods have two arguments : 
+
+  - a `Dockable`, contained in a !SingleDockableContainer or a !TabbedDockableContainer. 
+
+  - a `double` value, between 0 and 1, indicating the proportion of the dockable container
+into its parent !SplitContainer.
 
 
 *Important * : remember that the proportional width or height is relative to a splitcontainer, which
-can be smaller than the DockingDesktop, especially when many dockables are shown.
+can be smaller than the !DockingDesktop, especially when many dockables are shown.
 
 
 
-=== What if the SplitContainer is divided HORIZONTALLY and I change the height of my dockable ? === 
+=== What if the !SplitContainer is divided HORIZONTALLY and I change the height of my dockable ? === 
 
 
 
-It's still possible, the resizing will not occur on this parent SplitContainer,
+It's still possible, the resizing will not occur on this parent !SplitContainer,
 but on the first ancestor encountered with a VERTICAL orientation.
 
 
 Of course, it's the same rule for changing the width of a dockable contained
-in a VERTICALLY oriented SplitContainer.
+in a VERTICALLY oriented !SplitContainer.
 
 === Resizing affects more than one dockable === 
 
@@ -291,7 +292,7 @@ will be propagated to the others.
 
 === Adjusting the resize weight of dockables === 
 
-The DockKey object has also a <code>setResizeWeight(float weight)</code> affecting its
+The DockKey object has also a `setResizeWeight(float weight)` affecting its
 *resizeWeight* property. Valid values range from 0.0f (do not resize) to 1.0f (be the most resized).
 
  
@@ -383,7 +384,7 @@ to your tabbed documents, or some specific menus ("save", "save as...", "cvs..."
 
 
 To do that, you will have to register a special class to your DockKeys using : 
-the <code> public void setActioncustomizer(DockableActionCustomizer actionCustomizer)</code>.
+the ` public void setActioncustomizer(DockableActionCustomizer actionCustomizer)`.
 
 
 The *DockableActionCustomizer* is an abstract class you will have to inherit from 
