@@ -301,16 +301,16 @@ When the drag gesture begins over a {{{DockableDragSource}}}, the DockingDesktop
 switches to "Drag and Dock" mode :
 
 
-* When mouse pointer is over a component implementing DockDropReceiver, a DockDragEvent
+ * When mouse pointer is over a component implementing DockDropReceiver, a DockDragEvent
 is triggered and transmitted to this receiver. The receiver can {{{acceptDrag()}}},
 {{{rejectDrag()}}}, or {{{delegateDrag()}}} (tell the DockingDesktop to look
 up in the containment hierarchy for another receiver).
 
-* To accept the drag, the DockDropReceiver invokes {{{dragEvent.acceptDrag(Shape outline)}}}
+ * To accept the drag, the DockDropReceiver invokes {{{dragEvent.acceptDrag(Shape outline)}}}
 on the event, providing a shape that will be used to give a visual feedback to
 the user (usually, a rectangular shape is enough).
 
-* The DockingDesktop displays the shape on its glass pane, and the user can
+ * The DockingDesktop displays the shape on its glass pane, and the user can
 complete the drop (releasing the mouse button) or continue the drag gesture over
 another place in the same container (in that case, the same DockDropReceiver can return different shapes
 according to the mouse location) or over another DockDropReceiver.
