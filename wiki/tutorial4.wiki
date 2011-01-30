@@ -18,8 +18,8 @@ Workspaces are getting more common in Java applications, they are called "perspe
 workbenches in other applications, but we'll stick to workspace for the Docking Framework.
 
 
-A full description of a workspace in our case could be <cite>"a set of Dockables,
-at a given location and size, on a given visibility state"</cite>.
+A full description of a workspace in our case could be "a set of Dockables,
+at a given location and size, on a given visibility state".
 
 
   	 * A set of dockables : usually the full set of the application's dockables.

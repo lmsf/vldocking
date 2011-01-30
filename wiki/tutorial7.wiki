@@ -51,10 +51,10 @@ dockables, but it still can occur on the following situations :
  * a Dockable containing a heavyweight component is near a border of the
 desktop : it will overlap all auto-hide dockables coming from this
 border.
-* a lightweight Dockable is maximized (top layer of the desktop) :
-the heavyweight components on the bottom desktop layer will appear right through it.
-* the custom rendering of drag and gesture (done on a glasspane above the desktop) is
-intercepted by heavyweight components.
+ * a lightweight Dockable is maximized (top layer of the desktop) :
+ the heavyweight components on the bottom desktop layer will appear right through it.
+ * the custom rendering of drag and gesture (done on a glasspane above the desktop) is
+ intercepted by heavyweight components.
    
 
 === But why is this feature important ? === 
