@@ -14,9 +14,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
+
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -45,14 +47,38 @@ public class DragControlerGlassPane extends JComponent {
     ShapeOutlinePainter outlinePainer = new ShapeOutlinePainter();
 
     private DragControler controler;
+    
+    private boolean leftPane = false;
 
-    DragControlerGlassPane(DragControler controler) {
+    DragControlerGlassPane(final DragControler controler) {
         this.controler = controler;
-        addMouseListener(new MouseAdapter() {
-        }); // grab events
+        //addMouseListener(new MouseAdapter() {}); // grab events
         addMouseMotionListener(new MouseMotionAdapter() {
         });
         showDragCursor();
+        this.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(leftPane) {
+					controler.cancelDrag();
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				leftPane = true;
+			}
+        });
     }
 
     /** Enables or disables shape painting */
