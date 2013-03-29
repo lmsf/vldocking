@@ -20,7 +20,7 @@
   <property name="src.dir" value="src" />
   <property name="javadoc.dir" value="doc/api" />
   
-  <property name="vldocking.version" value="3.0.0" />
+  <property name="vldocking.version" value="3.0.2" />
 
   <!-- ===================================================================== -->
   <!-- PREPARE BUILD                                                         -->
@@ -52,9 +52,10 @@
 
     <javac destdir="${build.dir}"
            classpath="${classpath};"
-           debug="on" deprecation="off" optimize="on">
+           debug="on" deprecation="off" optimize="on" includeantruntime="false">
 	<src path="${src.dir}"/>
 	   <include name="com/vldocking/**"/>
+       <include name="resources/**"/>
     </javac>
   </target>
 
@@ -64,36 +65,38 @@
 
   <target name="jar" depends="compile">
 
-    <delete dir="${jar.dir}/vldocking-${vldocking.version}.jar" />
+    <delete dir="${jar.dir}/vldocking_${vldocking.version}.jar" />
 
-    <jar jarfile="${jar.dir}/vldocking-${vldocking.version}.jar"
+    <jar jarfile="${jar.dir}/vldocking_${vldocking.version}.jar"
          basedir="${build.dir}" >
       <include name="com/vldocking/**"/>
+      <include name="resources/**"/>
       <exclude name="**/doc-files/**"/>
     </jar>
 
   </target>
 
-<target name="javadoc" depends="prepare">
+<!-- target name="doc" depends="prepare" -->
   <javadoc destdir="${javadoc.dir}"
-           author="false"
-           version="false"
+           author="true"
+           version="true"
            use="true"
 	   overview="${src.dir}/com/vldocking/swing/docking/overview.html"
            link="http://java.sun.com/j2se/1.5.0/docs/api"
-           windowtitle="VLSolutions Docking Framework ${vldocking.version} API">
+           windowtitle="VLDocking Framework ${vldocking.version} API">
      <classpath>
         <pathelement path="${java.class.path}/"/>
       </classpath>
-    <packageset dir="${src.dir}" >
-      <include name="com/vldocking/**" />
-    </packageset>
+  	
+  	<fileset dir="${src.dir}" defaultexcludes="yes">
+  	      <include name="com/vldocking/swing/**"/>
+  		<exclude name="**/doc-files/**"/>
+  		<exclude name="**/**.html"/>
+  	</fileset>
 
-    <bottom><![CDATA[<i>&copy; Copyright 2004-2009 VLSolutions. All Rights Reserved.
-      <br><a href="http://www.vlsolutions.com">www.vlsolutions.com</a> : Java Components - Smart Client Applications</i>]]></bottom>
+    <bottom><![CDATA[<i>&copy; Copyright 2004-2013 Lilian Chamontin. All Rights Reserved.]]></bottom>
   </javadoc>
-</target>
-
+<!-- /target -->
   <!-- =================================================================== -->
   <!-- CLEAN                                                               -->
   <!-- =================================================================== -->
