@@ -1,20 +1,12 @@
 /*
-    VLDocking Framework 3.0
-    Copyright VLSOLUTIONS, 2004-2009
-    
-    email : info at vlsolutions.com
-------------------------------------------------------------------------
-This software is distributed under the LGPL license
-
-The fact that you are presently reading this and using this class means that you have had
-knowledge of the LGPL license and that you accept its terms.
-
-You can read the complete license here :
-
-    http://www.gnu.org/licenses/lgpl.html
-
-*/
-
+ * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
+ * vlsolutions.com
+ * ------------------------------------------------------------------------ This
+ * software is distributed under the LGPL license The fact that you are
+ * presently reading this and using this class means that you have had knowledge
+ * of the LGPL license and that you accept its terms. You can read the complete
+ * license here : http://www.gnu.org/licenses/lgpl.html
+ */
 
 package com.vldocking.swing.docking;
 
@@ -22,109 +14,112 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/** A Swing panel used as a toolbar for autohide buttons.
- *
+/**
+ * A Swing panel used as a toolbar for autohide buttons.
+ * 
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
- *  */
-public class AutoHideButtonPanel extends JPanel  {
-
+ * */
+public class AutoHideButtonPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-/** The property name associated with the "border" property  */
-  public static final String PROPERTY_BORDERZONE = "borderzone";
-  
-  public static final String uiClassID = "AutoHideButtonPanelUI";
+	/** The property name associated with the "border" property */
+	public static final String PROPERTY_BORDERZONE = "borderzone";
 
-  /** <=> Zone  */
-  private int border;
+	public static final String uiClassID = "AutoHideButtonPanelUI";
 
-  /** highlight effect (rollover) on the contained buttons */
-  private ButtonHighlighter buttonHighlighter = new ButtonHighlighter();
+	/** <=> Zone */
+	private int border;
 
-  /** expansion management  */
-  private AutoHideExpandPanel expandPanel;
+	/** highlight effect (rollover) on the contained buttons */
+	private ButtonHighlighter buttonHighlighter = new ButtonHighlighter();
 
-  /** Constructs a new AutoHideButtonPanel, with a shared expandPanel, and for
-   * a specified border zone.
-   *
-   * @param border constant taken from AutoHideButtonPanel.TOP, AutoHideButtonPanel.LEFT,
-   * AutoHideButtonPanel.BOTTOM, AutoHideButtonPanel.RIGHT
-   * */
-  public AutoHideButtonPanel(AutoHideExpandPanel expandPanel, int border) {
-    this.border = border;
-    this.expandPanel = expandPanel;
-    boolean isHorizontal = (border == DockingConstants.INT_HIDE_TOP)
-        || (border == DockingConstants.INT_HIDE_BOTTOM);
-    setLayout(new AutoHideBorderLayout(isHorizontal));
-    
-    firePropertyChange("borderzone", -1, border);
+	/** expansion management */
+	private AutoHideExpandPanel expandPanel;
 
+	/**
+	 * Constructs a new AutoHideButtonPanel, with a shared expandPanel, and for
+	 * a specified border zone.
+	 * 
+	 * @param border constant taken from AutoHideButtonPanel.TOP,
+	 *            AutoHideButtonPanel.LEFT, AutoHideButtonPanel.BOTTOM,
+	 *            AutoHideButtonPanel.RIGHT
+	 * */
+	public AutoHideButtonPanel(AutoHideExpandPanel expandPanel, int border) {
+		this.border = border;
+		this.expandPanel = expandPanel;
+		boolean isHorizontal = (border == DockingConstants.INT_HIDE_TOP) || (border == DockingConstants.INT_HIDE_BOTTOM);
+		setLayout(new AutoHideBorderLayout(isHorizontal));
 
-  }
-  
-  /** Returns the number of buttons currently displayed by this panel.
-   */
-  public int getVisibleButtonCount(){
-    Component [] comps = getComponents();
-    int count = 0;
-    for (int i=0; i < comps.length; i++){
-      if (comps[i].isVisible()){
-        count ++;
-      }
-    }
-    return count;
-  }
+		firePropertyChange("borderzone", - 1, border);
 
-  /** Returns the border this panel is for.
-   * <p>
-   * Values are : AutoHideButtonPanel.TOP, AutoHideButtonPanel.LEFT,
-   * AutoHideButtonPanel.BOTTOM, AutoHideButtonPanel.RIGHT
-   */
-  public int getBorderZone(){
-    return border;
-  }
+	}
 
-  /** Adds a new AutoHideButton.
-   * */
-  public void add(AutoHideButton btn){
-    add((Component)btn);
+	/**
+	 * Returns the number of buttons currently displayed by this panel.
+	 */
+	public int getVisibleButtonCount() {
+		Component[] comps = getComponents();
+		int count = 0;
+		for(int i = 0; i < comps.length; i++) {
+			if(comps[i].isVisible()) {
+				count++;
+			}
+		}
+		return count;
+	}
 
-    btn.addMouseListener(buttonHighlighter);
-    btn.addMouseListener(expandPanel.getControler());
-  }
+	/**
+	 * Returns the border this panel is for. <p> Values are :
+	 * AutoHideButtonPanel.TOP, AutoHideButtonPanel.LEFT,
+	 * AutoHideButtonPanel.BOTTOM, AutoHideButtonPanel.RIGHT
+	 */
+	public int getBorderZone() {
+		return border;
+	}
 
-  /** Removes an AutoHideButton */
-  public void remove(AutoHideButton btn){
-    super.remove(btn);
-    btn.removeMouseListener(buttonHighlighter);
+	/**
+	 * Adds a new AutoHideButton.
+	 * */
+	public void add(AutoHideButton btn) {
+		add((Component) btn);
 
-  }
+		btn.addMouseListener(buttonHighlighter);
+		btn.addMouseListener(expandPanel.getControler());
+	}
 
-  private class ButtonHighlighter extends MouseAdapter {
-    Color highlight = UIManager.getColor("VLDocking.highlight");
-    public void mouseEntered(MouseEvent e){
-      AutoHideButton btn = (AutoHideButton) e.getSource();
-      if (! btn.isSelected()){ // selected buttons have their own pain style
-        btn.setBackground(highlight);          
-        btn.setOpaque(true);
-        btn.repaint();
-      }
-    }
+	/** Removes an AutoHideButton */
+	public void remove(AutoHideButton btn) {
+		super.remove(btn);
+		btn.removeMouseListener(buttonHighlighter);
 
-    public void mouseExited(MouseEvent e){
-      AutoHideButton btn = (AutoHideButton) e.getSource();
-      if (! btn.isSelected()){ // selected buttons have their own pain style
-        btn.setOpaque(false);
-        btn.repaint();
-      }
-    }
-  }
-  
-  public String getUIClassID() {
-    return uiClassID;
-  }
-  
+	}
+
+	private class ButtonHighlighter extends MouseAdapter {
+
+		Color highlight = UIManager.getColor("VLDocking.highlight");
+
+		public void mouseEntered(MouseEvent e) {
+			AutoHideButton btn = (AutoHideButton) e.getSource();
+			if(! btn.isSelected()) { // selected buttons have their own pain style
+				btn.setBackground(highlight);
+				btn.setOpaque(true);
+				btn.repaint();
+			}
+		}
+
+		public void mouseExited(MouseEvent e) {
+			AutoHideButton btn = (AutoHideButton) e.getSource();
+			if(! btn.isSelected()) { // selected buttons have their own pain style
+				btn.setOpaque(false);
+				btn.repaint();
+			}
+		}
+	}
+
+	public String getUIClassID() {
+		return uiClassID;
+	}
 
 }
