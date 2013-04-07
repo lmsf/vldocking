@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking.ui;
 
@@ -25,15 +33,19 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicLabelUI;
 
-/**
- * The UI delegate for AutoHideButtons. <p> This UI uses the following
- * properties : <ul> <li> UIManager.getBorder("AutoHideButton.expandBorderTop")
- * <li> UIManager.getBorder("AutoHideButton.expandBorderLeft") <li>
- * UIManager.getBorder("AutoHideButton.expandBorderBottom") <li>
- * UIManager.getBorder("AutoHideButton.expandBorderRight") </ul> <p> Feel free
- * to provide different borders they will be used accordingly to the
+/** The UI delegate for AutoHideButtons.
+ *<p>
+ * This UI uses the following properties :
+ * <ul>
+ * <li> UIManager.getBorder("AutoHideButton.expandBorderTop")
+ * <li> UIManager.getBorder("AutoHideButton.expandBorderLeft")
+ * <li> UIManager.getBorder("AutoHideButton.expandBorderBottom")
+ * <li> UIManager.getBorder("AutoHideButton.expandBorderRight")
+ * </ul>
+ * <p>
+ * Feel free to provide different borders they will be used accordingly to the 
  * positionning of the button (TOP, LEFT..)
- * 
+ *
  * @see DockingUISettings
  * @author Lilian Chamontin, VLSolutions
  */
@@ -99,8 +111,7 @@ public class AutoHideButtonUI extends BasicLabelUI implements PropertyChangeList
 		}
 	}
 
-	/**
-	 * Overriden to paint properly the button on vertical sides.
+	/** Overriden to paint properly the button on vertical sides.
 	 */
 	public void paint(Graphics g, JComponent comp) {
 		AutoHideButton btn = (AutoHideButton) comp;
@@ -130,13 +141,7 @@ public class AutoHideButtonUI extends BasicLabelUI implements PropertyChangeList
 				if(icon != null) {
 					icon.paintIcon(btn, g2, i.bottom, i.left);
 					if(text != null) {
-						g2.drawString(text, i.bottom + icon.getIconWidth() + btn.getIconTextGap(), i.left + btn.getWidth() / 2 + fm.getAscent() / 2 /*
-																																					 * fm
-																																					 * .
-																																					 * getAscent
-																																					 * (
-																																					 * )
-																																					 */);
+						g2.drawString(text, i.bottom + icon.getIconWidth() + btn.getIconTextGap(), i.left + btn.getWidth() / 2 + fm.getAscent() / 2 /*       fm.getAscent()*/);
 					}
 				} else {
 					if(text != null) {

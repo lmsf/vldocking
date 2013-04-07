@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -37,17 +45,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
-/**
- * The floating jdialog for floatable dockables. This is the default
- * implementation of the FloatingDockableContainer interface.
- * 
+/** The floating jdialog for floatable dockables. This is the default implementation of
+ * the FloatingDockableContainer interface.
+ *
  * @author Lilian Chamontin, VLSolutions
  * @since 2.0
- * @update 2005/10/06 Lilian Chamontin : Reworked the layout (added border
- *         components) to have better cursor and resize management and to allow
- *         nesting dockables as tabs.
- * 
+ * @update 2005/10/06 Lilian Chamontin : Reworked the layout (added border components) to
+ * have better cursor and resize management and to allow nesting dockables as tabs.
+ *
  */
+@SuppressWarnings("unused")
 public class FloatingDialog extends JDialog implements FloatingDockableContainer {
 
 	private static final long serialVersionUID = 1L;
@@ -60,9 +67,9 @@ public class FloatingDialog extends JDialog implements FloatingDockableContainer
 	/** the drag header height */
 	protected int titleHeight = 6;
 
-	//private Color controlColor = UIManager.getColor("control");
-	//private Color highlight = UIManager.getColor("VLDocking.highlight");
-	//private Color shadow = UIManager.getColor("VLDocking.shadow");
+	private Color controlColor = UIManager.getColor("control");
+	private Color highlight = UIManager.getColor("VLDocking.highlight");
+	private Color shadow = UIManager.getColor("VLDocking.shadow");
 
 	private Color activeCaptionColor = UIManager.getColor("activeCaption");
 	private Color inactiveCaptionColor = UIManager.getColor("inactiveCaption");
@@ -118,9 +125,9 @@ public class FloatingDialog extends JDialog implements FloatingDockableContainer
 		//    addMouseListener(listener);
 	}
 
-	/**
-	 * Installs or not the window decorations on this dialog. <p> uses
-	 * setUndecorated(booelan)
+	/** Installs or not the window decorations on this dialog.
+	 * <p>
+	 * uses setUndecorated(booelan)
 	 */
 	public void installDecoration() {
 		setUndecorated(true);
@@ -139,9 +146,7 @@ public class FloatingDialog extends JDialog implements FloatingDockableContainer
 		((JPanel) getContentPane()).setBorder(border);
 	}
 
-	/**
-	 * installs the components used for resizing (on left/right/bottom borders)
-	 * 
+	/** installs the components used for resizing (on left/right/bottom borders)
 	 * @since 2.0.1
 	 */
 	public void installResizers() { // 2005/10/06
@@ -266,11 +271,18 @@ public class FloatingDialog extends JDialog implements FloatingDockableContainer
 		public void mousePressed(MouseEvent e) {
 			dragType = 0;
 			Point p = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), getContentPane());
-			/*
-			 * if (p.y < 10){ dragType |= DRAG_TOP; } if (p.x < 5){ dragType |=
-			 * DRAG_LEFT; } if (p.x > getWidth() - 5){ dragType |= DRAG_RIGHT; }
-			 * if (p.y > getHeight() - 5){ dragType |= DRAG_BOTTOM; }
-			 */
+			/*if (p.y < 10){
+			  dragType |= DRAG_TOP;
+			}
+			if (p.x < 5){
+			  dragType |= DRAG_LEFT;
+			}
+			if (p.x > getWidth() - 5){
+			  dragType |= DRAG_RIGHT;
+			}
+			if (p.y > getHeight() - 5){
+			  dragType |= DRAG_BOTTOM;
+			}*/
 			if(p.y < title.getY() + title.getHeight()) {
 				dragType |= DRAG_TOP;
 			}
@@ -354,7 +366,6 @@ public class FloatingDialog extends JDialog implements FloatingDockableContainer
 
 		public void paintComponent(Graphics g) {
 			// @todo : this will be refactored to plug custom title rendering
-			@SuppressWarnings("unused")
 			Color darker, brighter;
 			if(isActive()) {
 				darker = activeCaptionColor;
@@ -363,11 +374,12 @@ public class FloatingDialog extends JDialog implements FloatingDockableContainer
 				darker = inactiveCaptionColor;
 				brighter = inactiveCaptionBorderColor;
 			}
-			/*
-			 * Graphics2D g2 = (Graphics2D) g; Paint paint = g2.getPaint();
-			 * GradientPaint gradient = new GradientPaint(0,0, darker, 0,
-			 * getHeight(), brighter); g2.setPaint(gradient); g2.fillRect(0,0,
-			 * getWidth(), getHeight()); g2.setPaint(paint); // restore
+			/*      Graphics2D g2 = (Graphics2D) g;
+			      Paint paint = g2.getPaint();
+			      GradientPaint gradient = new GradientPaint(0,0, darker, 0, getHeight(), brighter);
+			      g2.setPaint(gradient);
+			      g2.fillRect(0,0, getWidth(), getHeight());
+			      g2.setPaint(paint); // restore
 			 */
 			Graphics2D g2 = (Graphics2D) g;
 

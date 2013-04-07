@@ -1,8 +1,9 @@
 /*
     VLDocking Framework 3.0
-    Copyright VLSOLUTIONS, 2004-2009
+    Copyright Lilian Chamontin, 2004-2013
     
-    email : info at vlsolutions.com
+    www.vldocking.com
+    vldocking@googlegroups.com
 ------------------------------------------------------------------------
 This software is distributed under the LGPL license
 
@@ -14,7 +15,6 @@ You can read the complete license here :
     http://www.gnu.org/licenses/lgpl.html
 
 */
-
 
 package com.vldocking.swing.toolbars;
 
@@ -32,33 +32,33 @@ import javax.swing.UIManager;
  *
  * @author Lilian Chamontin, VLSolutions
  */
-public class RolloverIcon implements Icon{ 
-    private int shadowWidth = 1; 
-    private int shadowHeight = 1; 
-    private Icon icon, shadowIcon; 
- 
-    public RolloverIcon(Icon icon){ 
-        this.icon = icon; 
-        shadowIcon = new ImageIcon(GrayFilter.createDisabledImage(((ImageIcon)icon).getImage())); 
-    } 
- 
-    public int getIconHeight(){ 
-        return icon.getIconWidth(); 
-    } 
- 
-    public int getIconWidth(){ 
-        return icon.getIconHeight(); 
-    } 
- 
-    public void paintIcon(Component c, Graphics g, int x, int y){ 
-      Color highlight = UIManager.getColor("VLDocking.highlight");
-      //Color shadow = UIManager.getColor("VLDocking.shadow");
-      g.setColor(highlight);
-      g.fillRect(x, y, getIconWidth(), getIconHeight());
-      shadowIcon.paintIcon(c, g, x + shadowWidth-1, y + shadowHeight-1); 
-      icon.paintIcon(c, g, x-1,  y-1); 
-    } 
+public class RolloverIcon implements Icon {
 
+	private int shadowWidth = 1;
+	private int shadowHeight = 1;
+	private Icon icon, shadowIcon;
 
-  
+	public RolloverIcon(Icon icon) {
+		this.icon = icon;
+		shadowIcon = new ImageIcon(GrayFilter.createDisabledImage(((ImageIcon) icon).getImage()));
+	}
+
+	public int getIconHeight() {
+		return icon.getIconWidth();
+	}
+
+	public int getIconWidth() {
+		return icon.getIconHeight();
+	}
+
+	public void paintIcon(Component c, Graphics g, int x, int y) {
+		Color highlight = UIManager.getColor("VLDocking.highlight");
+		@SuppressWarnings("unused")
+		Color shadow = UIManager.getColor("VLDocking.shadow");
+		g.setColor(highlight);
+		g.fillRect(x, y, getIconWidth(), getIconHeight());
+		shadowIcon.paintIcon(c, g, x + shadowWidth - 1, y + shadowHeight - 1);
+		icon.paintIcon(c, g, x - 1, y - 1);
+	}
+
 }

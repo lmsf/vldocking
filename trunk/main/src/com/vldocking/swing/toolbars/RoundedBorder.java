@@ -1,8 +1,9 @@
 /*
     VLDocking Framework 3.0
-    Copyright VLSOLUTIONS, 2004-2009
+    Copyright Lilian Chamontin, 2004-2013
     
-    email : info at vlsolutions.com
+    www.vldocking.com
+    vldocking@googlegroups.com
 ------------------------------------------------------------------------
 This software is distributed under the LGPL license
 
@@ -14,7 +15,6 @@ You can read the complete license here :
     http://www.gnu.org/licenses/lgpl.html
 
 */
-
 
 package com.vldocking.swing.toolbars;
 
@@ -33,24 +33,22 @@ import javax.swing.border.Border;
  */
 public class RoundedBorder implements Border {
 
-  private Insets insets = new Insets(2,2,2,2);
-  private Color shadow = UIManager.getColor("controlShadow");
+	private Insets insets = new Insets(2, 2, 2, 2);
+	private Color shadow = UIManager.getColor("controlShadow");
 
-  public RoundedBorder() {
-  }
+	public RoundedBorder() {}
 
-  public boolean isBorderOpaque() {
-    return false;
-  }
+	public boolean isBorderOpaque() {
+		return false;
+	}
 
-  public void paintBorder(Component component, Graphics graphics, int x,
-      int y, int w, int h) {
-    graphics.setColor(shadow);
-    graphics.drawRoundRect(x,y, w-1, h-1, 9, 9);
-     
-  }
+	public void paintBorder(Component component, Graphics graphics, int x, int y, int w, int h) {
+		graphics.setColor(shadow);
+		graphics.drawRoundRect(x, y, w - 1, h - 1, 9, 9);
 
-  public Insets getBorderInsets(Component component) {
-    return insets;
-  }
+	}
+
+	public Insets getBorderInsets(Component component) {
+		return insets;
+	}
 }

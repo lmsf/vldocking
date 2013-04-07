@@ -1,47 +1,50 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
 import java.util.*;
 import java.awt.*;
 
-/**
- * A Layout Manager for auto-hide borders.
- * 
+/** A Layout Manager for auto-hide borders.
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class AutoHideBorderLayout implements LayoutManager2 {
 
-	private ArrayList<Component> components = new ArrayList<Component>();
+	private ArrayList components = new ArrayList();
 	private boolean isHorizontal;
 	private int gap; // gap in pixels between components
 
-	/**
-	 * Constructs a new Layout.
-	 * 
-	 * @param isHorizontal indicates if the layout will be horizontal or
-	 *            vertical.
-	 * 
+	/** Constructs a new Layout.
+	 *
+	 * @param isHorizontal  indicates if the layout will be horizontal or vertical.
+	 *
 	 * */
 	public AutoHideBorderLayout(boolean isHorizontal) {
 		this(isHorizontal, AutoHidePolicy.getPolicy().getDefaultGap());
 		/** @todo we do not yet listen to gap property change */
 	}
 
-	/**
-	 * Constructs a new Layout.
-	 * 
-	 * @param isHorizontal indicates if the layout will be horizontal or
-	 *            vertical.
+	/** Constructs a new Layout.
+	 * @param isHorizontal  indicates if the layout will be horizontal or vertical.
 	 * @param gap gap in pixels between components
 	 * */
 	public AutoHideBorderLayout(boolean isHorizontal, int gap) {
@@ -114,9 +117,7 @@ public class AutoHideBorderLayout implements LayoutManager2 {
 		return minimumLayoutSize(parent);
 	}
 
-	/**
-	 * overridden to adjust position (x(top) = width(left), y(left) =
-	 * height(top)
+	/** overridden to adjust position (x(top) = width(left), y(left) = height(top)
 	 */
 	public void layoutContainer(Container target) {
 		synchronized(target.getTreeLock()) {

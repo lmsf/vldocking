@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -37,62 +45,59 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/**
- * A context that can be shared by multiple docking desktops. <p> Keeps track of
- * registered dockables and manages import export. <p> A DockingContext can be
- * seen as the top-most grouping element of docking (as DockingDesktop can be
- * contained is a context), and as such, all methods related to workspace
- * management have been promoted to this class.
- * 
- * 
+/** A context that can be shared by multiple docking desktops.
+ *<p>
+ * Keeps track of registered dockables and manages import export.
+ *<p>
+ * A DockingContext can be seen as the top-most grouping element of docking
+ * (as DockingDesktop can be contained is a context), and as such, all
+ * methods related to workspace management have been promoted to this class.
+ *
+ *
  * @author Lilian Chamontin, VLSolutions
  * @since 2.1
- * @update 2007/01/08 Lilian Chamontin : updated registerDockable to put the
- *         dockable in the CLOSED state if not previously registered (was null
- *         before v2.1.3)
+ * @update 2007/01/08 Lilian Chamontin : updated registerDockable to 
+ * put the dockable in the CLOSED state if not previously registered (was null before v2.1.3)
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class DockingContext {
 
-	/**
-	 * All dockables must be registered (even if not shown) in order to be
-	 * processed by the XML Parser or to be displayed in the
-	 * DockingSelectorDialog
+	/** All dockables must be registered (even if not shown) in order to be processed
+	 * by the XML Parser or to be displayed in the DockingSelectorDialog
 	 */
-	protected ArrayList<Dockable> registeredDockables = new ArrayList<Dockable>();
+	protected ArrayList<Dockable> registeredDockables = new ArrayList();
 
 	/** inner state of the dockables */
-	protected HashMap<Dockable, DockableState> dockableStates = new HashMap<Dockable, DockableState>(); // key : Dockable / value : <DockableState>
+	protected HashMap<Dockable, DockableState> dockableStates = new HashMap(); // key : Dockable / value : <DockableState>
 
 	/* DockableState change listeners */
 	// before state change :
-	private ArrayList<DockableStateWillChangeListener> dockableStateWillChangeListeners = new ArrayList<DockableStateWillChangeListener>();
+	private ArrayList<DockableStateWillChangeListener> dockableStateWillChangeListeners = new ArrayList();
 	// after state change :
-	private ArrayList<DockableStateChangeListener> dockableStateChangeListeners = new ArrayList<DockableStateChangeListener>();
+	private ArrayList<DockableStateChangeListener> dockableStateChangeListeners = new ArrayList();
 
 	/** selection change */
-	private ArrayList<DockableSelectionListener> dockableSelectionListeners = new ArrayList<DockableSelectionListener>();
+	private ArrayList<DockableSelectionListener> dockableSelectionListeners = new ArrayList();
 
 	/** Docking action listener (preferred way to track docking changes) */
-	private ArrayList<DockingActionListener> dockingActionListeners = new ArrayList<DockingActionListener>();
+	private ArrayList<DockingActionListener> dockingActionListeners = new ArrayList();
 
-	private ArrayList<DockingDesktop> desktops = new ArrayList<DockingDesktop>();
+	private ArrayList<DockingDesktop> desktops = new ArrayList();
 
-	/**
-	 * An always ordered list of window (used to keep track of which one is
-	 * above which one, to resolve some DnD issues)
+	/** An always ordered list of window (used to keep track of which one is above which one, to resolve some
+	 * DnD issues)
 	 */
-	private LinkedList<Window> ownedWindowActivationOrder = new LinkedList<Window>();
+	private LinkedList<Window> ownedWindowActivationOrder = new LinkedList();
 
-	/**
-	 * Finds new Dockables given a key name (useful when processing an XML
-	 * stream if the dockable hasn't been registered yet.
+	/** Finds new Dockables given a key name (useful when processing an XML stream if the dockable
+	 * hasn't been registered yet.
 	 */
 	private DockableResolver dockableResolver = null;
 
-	/** Constructs a new DockingContext */
+	/** Constructs a new DockingContext  */
 	public DockingContext() {}
 
-	/** Adds a desktop to this context */
+	/** Adds a desktop to this context  */
 	public void addDesktop(DockingDesktop desktop) {
 		if(! desktops.contains((desktop))) {
 			desktops.add(desktop);
@@ -103,7 +108,7 @@ public class DockingContext {
 	public void removeDesktop(DockingDesktop desktop) {
 		desktops.remove(desktop);
 		// time to check if some windows should be removed as not ancestors of remaining desktops
-		Iterator<Window> it = ownedWindowActivationOrder.iterator();
+		Iterator it = ownedWindowActivationOrder.iterator();
 		while(it.hasNext()) {
 			Window w = (Window) it.next();
 			boolean ancestor = false;
@@ -121,13 +126,12 @@ public class DockingContext {
 		}
 	}
 
-	/**
-	 * Every dockable must be registered in order to be managed by a
-	 * DockingDesktop. <p> if this method is invoked and the dockable is already
-	 * registered, nothing happens. if the dockable is still unknown, it is
-	 * added to the dockables set and (since 2.1.3) its state is set to CLOSED
-	 * (prior 2.1.3, the state was null).
-	 * 
+	/** Every dockable must be registered in order to be managed by a DockingDesktop.
+	 *<p>
+	 * if this method is invoked and the dockable is already registered, nothing happens.
+	 * if the dockable is still unknown, it is added to the dockables set and (since 2.1.3)
+	 * its state is set to CLOSED (prior 2.1.3, the state was null).
+	 *
 	 * */
 	public void registerDockable(Dockable dockable) {
 		if(! registeredDockables.contains(dockable)) {
@@ -139,10 +143,9 @@ public class DockingContext {
 		}
 	}
 
-	/**
-	 * Unregisters the dockable, which can be garbage collected (no longer used
+	/** Unregisters the dockable, which can be garbage collected (no longer used
 	 * by docking desktops.
-	 * */
+	 *  */
 	public void unregisterDockable(Dockable dockable) {
 		close(dockable); // in case it was still visible
 		registeredDockables.remove(dockable);
@@ -158,10 +161,7 @@ public class DockingContext {
 		}
 	}
 
-	/**
-	 * Returns the current state of a dockable (CLOSED, HIDDEN, DOCKED,
-	 * MAXIMIZED, FLOATING)
-	 */
+	/** Returns the current state of a dockable (CLOSED, HIDDEN, DOCKED, MAXIMIZED, FLOATING) */
 	public DockableState getDockableState(Dockable dockable) {
 		return dockableStates.get(dockable);
 	}
@@ -171,14 +171,14 @@ public class DockingContext {
 		dockableStates.put(dockable, state);
 	}
 
-	/**
-	 * Adds a new DockableStateChangeListener to this desktop. <p>
+	/** Adds a new DockableStateChangeListener to this desktop.
+	 * <p>
 	 * DockableStateChange Events are triggered after the state change.
-	 * 
-	 * <p> As of version 2.0 of the framework, this method can also be replaced
-	 * by adding a propertychangeListener on the DockKey object (and react to
-	 * its DockableState property).
-	 * 
+	 *
+	 * <p> As of version 2.0 of the framework, this method can also be replaced by
+	 * adding a propertychangeListener on the DockKey object (and react to its DockableState
+	 * property).
+	 *
 	 * */
 	public void addDockableStateChangeListener(DockableStateChangeListener listener) {
 		if(! dockableStateChangeListeners.contains(listener)) {
@@ -186,17 +186,16 @@ public class DockingContext {
 		}
 	}
 
-	/**
-	 * Removes a DockableStateChangeListener from this desktop.
+	/** Removes a DockableStateChangeListener from this desktop.
 	 * */
 	public void removeDockableStateChangeListener(DockableStateChangeListener listener) {
 		dockableStateChangeListeners.remove(listener);
 	}
 
-	/**
-	 * Adds a new DockableStateWillChangeListener to this desktop. <p>
-	 * DockableStateWillChange Events are triggered <b>before</b> the state
-	 * change, and are vetoable.
+	/** Adds a new DockableStateWillChangeListener to this desktop.
+	 * <p>
+	 * DockableStateWillChange Events are triggered <b>before</b> the state change, and
+	 * are vetoable.
 	 * */
 
 	public void addDockableStateWillChangeListener(DockableStateWillChangeListener listener) {
@@ -205,18 +204,16 @@ public class DockingContext {
 		}
 	}
 
-	/**
-	 * Removes a DockableStateWillChangeListener from this desktop.
+	/** Removes a DockableStateWillChangeListener from this desktop.
 	 * */
 	public void removeDockableStateWillChangeListener(DockableStateWillChangeListener listener) {
 		dockableStateWillChangeListeners.remove(listener);
 	}
 
-	/**
-	 * Creates and returns an array of all registered dockable with their
-	 * current state. <p> Visibility states are [DockableState.CLOSED, DOCKED,
-	 * HIDDEN]
-	 * 
+	/** Creates and returns an array of all registered dockable with their current
+	 * state.
+	 * <p>
+	 * Visibility states are [DockableState.CLOSED, DOCKED, HIDDEN]
 	 * @return an array of DockableState
 	 */
 	public DockableState[] getDockables() {
@@ -232,13 +229,14 @@ public class DockingContext {
 		return states;
 	}
 
-	/**
-	 * Saves the current desktop configuration into an XML stream. <p> The
-	 * workspace is composed of every desktop layouts associated with this
-	 * context (desktops are identified by their 'desktopName' property).
-	 * 
-	 * <p> The stream is not closed at the end of the operation.
-	 * 
+	/** Saves the current desktop configuration into an XML stream.
+	 * <p>
+	 * The workspace is composed of every desktop layouts associated
+	 * with this context (desktops are identified by their 'desktopName' property).
+	 *
+	 * <p>
+	 * The stream is not closed at the end of the operation.
+	 *
 	 * @see #readXML(InputStream)
 	 * */
 	public void writeXML(OutputStream stream) throws IOException {
@@ -254,28 +252,33 @@ public class DockingContext {
 		out.flush();
 	}
 
-	/**
-	 * Reads an XML encoded stream as the new desktop configuration. <p> When
-	 * the method returns, the desktops associated to this context are totally
+	/** Reads an XML encoded stream as the new desktop configuration.
+	 * <p>
+	 * When the method returns, the desktops associated to this context are totally
 	 * reconfigured with posiibly different dockables at different positions.
-	 * <p> <b>Note : </b> The <code>DockKey</code>s of the stream must be
-	 * registered with the {@link #registerDockable(Dockable) registerDockable}
-	 * method, prior readXML.<br>
-	 * 
-	 * This is the case if the desktop is already open and dockables laid out,
-	 * but might not be the case if this method is used at application startup
-	 * to populate an empty desktop. <p> Note : altenatively (since 2.1.2) if a
-	 * DockableResolver has been set, it will be use to auto-register the new
-	 * dockables encountered along the stream. <br> <p> Dismisses all visible
-	 * dockables (docked and auto-hidden), and clear their DockableState. <p>
-	 * The stream is not closed at the end of the operation. <p> Note : When
-	 * multiple desktops are loaded from the stream, the context uses their
-	 * "desktopName" property (desk.getDesktopName()) to identify them.
-	 * 
+	 * <p>
+	 * <b>Note : </b> The <code>DockKey</code>s of the stream must be registered with
+	 * the {@link #registerDockable(Dockable) registerDockable} method,
+	 * prior readXML.<br>
+	 *
+	 * This is the case if the desktop is already open and dockables
+	 * laid out, but might not be the case if this method is used at application startup
+	 * to populate an empty desktop.
+	 * <p>
+	 * Note : altenatively (since 2.1.2) if a DockableResolver has been set, it will
+	 * be use to auto-register the new dockables encountered along the stream. <br>
+	 * <p>
+	 * Dismisses all visible dockables (docked and auto-hidden), and clear their DockableState.
+	 * <p>
+	 * The stream is not closed at the end of the operation.
+	 * <p>
+	 * Note : When multiple desktops are loaded from the stream, the context uses their "desktopName"
+	 * property (desk.getDesktopName()) to identify them.
+	 *
 	 * @see #writeXML(OutputStream)
 	 * @see #registerDockable(Dockable)
 	 * @see #setDockableResolver(DockableResolver)
-	 * */
+	 *  */
 	public void readXML(InputStream in) throws ParserConfigurationException, IOException, SAXException {
 		// remove all dockable states
 
@@ -326,12 +329,9 @@ public class DockingContext {
 
 	}
 
-	/**
-	 * constructs and returns the list of dockables corresponding to a desktop,
-	 * at a specific state
-	 */
+	/** constructs and returns the list of dockables corresponding to a desktop, at a specific state*/
 	public ArrayList<Dockable> getDockablesByState(DockingDesktop desktop, DockableState.Location state) {
-		ArrayList<Dockable> list = new ArrayList<Dockable>();
+		ArrayList<Dockable> list = new ArrayList();
 		for(int i = 0; i < registeredDockables.size(); i++) {
 			Dockable d = registeredDockables.get(i);
 			DockableState dState = dockableStates.get(d);
@@ -342,11 +342,11 @@ public class DockingContext {
 		return list;
 	}
 
-	/**
-	 * Returns the (registered) dockable corresponding to the given key id, or
-	 * null if not found <p> Note : since VLDocking 2.1.2, this method also
-	 * tries to use its DockableResolver if null would have been returned.
-	 * 
+	/** Returns the (registered) dockable corresponding to the given key id,
+	 * or null if not found
+	 *<p>
+	 * Note : since VLDocking 2.1.2, this method also tries to use its DockableResolver
+	 * if null would have been returned.
 	 * @see DockableResolver
 	 */
 	public Dockable getDockableByKey(String dockKey) {
@@ -367,7 +367,7 @@ public class DockingContext {
 		return null;
 	}
 
-	/* package protected */void fireDockableStateChange(DockableStateChangeEvent e) {
+	/*package protected */void fireDockableStateChange(DockableStateChangeEvent e) {
 
 		for(int i = 0; i < dockableStateChangeListeners.size(); i++) {
 			DockableStateChangeListener listener = dockableStateChangeListeners.get(i);
@@ -375,7 +375,7 @@ public class DockingContext {
 		}
 	}
 
-	/* package protected */boolean fireDockableStateWillChange(DockableStateWillChangeEvent e) {
+	/*package protected */boolean fireDockableStateWillChange(DockableStateWillChangeEvent e) {
 
 		DockingDesktop desk = e.getFutureState().getDesktop();
 
@@ -407,10 +407,10 @@ public class DockingContext {
 		return true;
 	}
 
-	/**
-	 * Adds a new DockableSelectionListener to this desktop. <p>
+	/** Adds a new DockableSelectionListener to this desktop.
+	 * <p>
 	 * DockableSelection Events are triggered when a dockable takes the focus.
-	 * 
+	 *
 	 */
 	public void addDockableSelectionListener(DockableSelectionListener listener) {
 		if(! dockableSelectionListeners.contains(listener)) {
@@ -418,14 +418,13 @@ public class DockingContext {
 		}
 	}
 
-	/**
-	 * Removes a DockableSelectionListener from this desktop.
+	/** Removes a DockableSelectionListener from this desktop.
 	 * */
 	public void removeDockableSelectionListener(DockableSelectionListener listener) {
 		dockableSelectionListeners.remove(listener);
 	}
 
-	/* package protected */void fireDockableSelectionChange(DockableSelectionEvent e) {
+	/*package protected */void fireDockableSelectionChange(DockableSelectionEvent e) {
 		for(int i = 0; i < dockableSelectionListeners.size(); i++) {
 			DockableSelectionListener listener = dockableSelectionListeners.get(i);
 			listener.selectionChanged(e);
@@ -443,12 +442,9 @@ public class DockingContext {
 		dockingActionListeners.remove(listener);
 	}
 
-	/**
-	 * returns false if the docking action is rejected, or true if accepted by
-	 * all listeners
-	 */
+	/** returns false if the docking action is rejected, or true if accepted by all listeners*/
 	boolean fireAcceptDockingAction(DockingActionEvent e) {
-		/* package protected */
+		/*package protected */
 		for(int i = 0; i < dockingActionListeners.size(); i++) {
 			DockingActionListener listener = dockingActionListeners.get(i);
 			if(! listener.acceptDockingAction(e)) {
@@ -458,7 +454,7 @@ public class DockingContext {
 		return true;
 	}
 
-	/* package protected */void fireDockingActionPerformed(DockingActionEvent e) {
+	/*package protected */void fireDockingActionPerformed(DockingActionEvent e) {
 		for(int i = 0; i < dockingActionListeners.size(); i++) {
 			DockingActionListener listener = dockingActionListeners.get(i);
 			listener.dockingActionPerformed(e);
@@ -466,17 +462,14 @@ public class DockingContext {
 	}
 
 	/** Returns a list of the desktops sharing this context */
-	public ArrayList<DockingDesktop> getDesktopList() {
+	public ArrayList getDesktopList() {
 		return desktops;
 	}
 
-	/**
-	 * used to track window activation (to have an up to date z ordered list of
-	 * window)
-	 */
+	/** used to track window activation (to have an up to date z ordered list of window) */
 	void windowActivated(WindowEvent e) {
 		/* package protected */
-		/* these events are forwarded by docking desktops */
+		/* these events are forwarded by docking desktops  */
 		Window w = e.getWindow();
 		if(ownedWindowActivationOrder.size() > 0 && ownedWindowActivationOrder.getFirst() != w) {
 			ownedWindowActivationOrder.remove(w);
@@ -485,7 +478,7 @@ public class DockingContext {
 	}
 
 	/** Returns a list of owned windows, ordered by window z-order */
-	LinkedList<Window> getOwnedWindowActionOrder() {
+	LinkedList getOwnedWindowActionOrder() {
 		/* package protected */
 		return ownedWindowActivationOrder;
 	}
@@ -496,19 +489,14 @@ public class DockingContext {
 		ownedWindowActivationOrder.addLast(w);
 	}
 
-	/**
-	 * Returns the dockable resolver used by this context (or null if none
-	 * defined)
-	 * 
+	/** Returns the dockable resolver used by this context (or null if none defined)
 	 * @since 2.1.2
 	 */
 	public DockableResolver getDockableResolver() {
 		return dockableResolver;
 	}
 
-	/**
-	 * Updates the dockable resolver used by this context (can be set to null)
-	 * 
+	/** Updates the dockable resolver used by this context (can be set to null)
 	 * @since 2.1.2
 	 */
 	public void setDockableResolver(DockableResolver dockableResolver) {

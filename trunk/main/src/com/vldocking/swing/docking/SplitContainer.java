@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -15,13 +23,14 @@ import java.awt.*;
 import java.awt.geom.*;
 import com.vldocking.swing.docking.event.*;
 
-/**
- * A Specialized JSplitPane which accepts drag and drop of DockableContainer.
- * <p> The split container should be used only by the DockingDesktop. <p> It is
- * a SplitPane with bug workarounds and a custom UI (in fact : no UI painting at
- * all, by default).
- * 
- * 
+/** A Specialized JSplitPane which accepts drag and drop of DockableContainer.
+ *<p>
+ * The split container should be used only by the DockingDesktop.
+ *<p>
+ * It is a SplitPane with bug workarounds and a custom UI (in fact : no UI painting at all,
+ * by default).
+ *
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
  */
@@ -64,10 +73,7 @@ public class SplitContainer extends JSplitPane implements DockDropReceiver {
 		}
 	}
 
-	/**
-	 * Returns a suitable name for when this container is the main child of a
-	 * Tab (TabbedDockableContainer)
-	 */
+	/** Returns a suitable name for when this container is the main child of a Tab (TabbedDockableContainer) */
 	public String getTabName() {
 		Component left = getLeftComponent();
 		if(left instanceof SingleDockableContainer) {
@@ -102,9 +108,9 @@ public class SplitContainer extends JSplitPane implements DockDropReceiver {
 			return;
 		}
 
-		/*
-		 * Dock is available : - on borders of the two components - on the
-		 * center of the 2 components (meaning : tab'em)
+		/*   Dock is available :
+		 *    - on borders of the two components
+		 *    - on the center of the 2 components (meaning : tab'em)
 		 */
 		Point p = event.getMouseEvent().getPoint();
 		Rectangle compBounds = getLeftComponent().getBounds();
@@ -131,7 +137,7 @@ public class SplitContainer extends JSplitPane implements DockDropReceiver {
 	private boolean hasProportionalLocation;
 	private double proportionalLocation;
 
-	/** Overriden for a bug workaround */
+	/** Overriden for a bug workaround*/
 	public void setDividerLocation(double proportionalLocation) {
 		if(! isPainted) {
 			hasProportionalLocation = true;
@@ -175,11 +181,12 @@ public class SplitContainer extends JSplitPane implements DockDropReceiver {
 		super.paint(g);
 	}
 
-	/**
-	 * Resest recursively the left and right components to their preferred size
-	 * if possible. (same contract as JSplitPane's). <p> If contained components
-	 * are SplitContainers, their are also reset to their preferredSize.
-	 * */
+	/** Resest recursively the left and right components to their preferred size
+	 * if possible. (same contract as JSplitPane's).
+	 * <p>
+	 * If contained components are SplitContainers, their are also reset to their
+	 * preferredSize.
+	 *  */
 	public void resetToPreferredSizes() {
 		super.resetToPreferredSizes();
 		if(getLeftComponent() instanceof SplitContainer) {
@@ -191,24 +198,20 @@ public class SplitContainer extends JSplitPane implements DockDropReceiver {
 
 	}
 
-	/**
-	 * Replaces the child component by a sub-split pane.
-	 * 
+	/** Replaces the child component by a sub-split pane.
 	 * @param child one or the two components of this split pane
 	 * @param newComp the new component to add
-	 * @param position where to put comp / child (i.e if SPLIT_TOP, a vertical
-	 *            splitpane will be created and comp will be on top of it (and
-	 *            child at bottom).
+	 * @param position where to put comp / child (i.e if SPLIT_TOP,
+	 * a vertical splitpane will be created and comp will be on top of it
+	 * (and child at bottom).
 	 */
 	public void split(Component newComp, Component child, DockingConstants.Split position) {
 
 		SplitContainer split;
 		if(position == DockingConstants.SPLIT_TOP || position == DockingConstants.SPLIT_BOTTOM) {
 			split = new SplitContainer(JSplitPane.VERTICAL_SPLIT);
-		} else /*
-				 * if (position == DockingConstants.SPLIT_LEFT || position ==
-				 * DockingConstants.SPLIT_RIGHT)
-				 */{
+		} else /*if (position == DockingConstants.SPLIT_LEFT
+				|| position == DockingConstants.SPLIT_RIGHT)*/{
 			split = new SplitContainer(JSplitPane.HORIZONTAL_SPLIT);
 		}
 
@@ -305,12 +308,11 @@ public class SplitContainer extends JSplitPane implements DockDropReceiver {
 
 }
 
-/*
- * Utility class, resizes a splitcontainer after its size is known (needs an
- * invokelater after having added it). allows us to avoid the nasty resizing of
- * a splitpane when a component is added on the right/bottom (it will then take
- * most of the split surface, which is not good when we add a small dockable to
- * the right of a big dockable
+/* Utility class, resizes a splitcontainer after its size is known (needs an invokelater after
+ * having added it).
+ * allows us to avoid the nasty resizing of a splitpane when a component
+ * is added on the right/bottom (it will then take most of the split surface,
+ * which is not good when we add a small dockable to the right of a big dockable
  */
 class SplitResizer implements Runnable {
 

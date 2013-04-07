@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -18,11 +26,10 @@ import java.awt.Rectangle;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
-/**
- * A DockView suitable for detached dockables (in their own window).
- * 
+/** A DockView suitable for detached dockables (in their own window).
+ *
  * @see DockView
- * 
+ *
  * @author Lilian Chamontin, VLSolutions
  * @since 2.0
  */
@@ -35,19 +42,14 @@ public class DetachedDockView extends DockView {
 		super(dockable);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @since 2.0
-	 */
+	/** {@inheritDoc}
+	* @since 2.0
+	*/
 	public String getUIClassID() {
 		return uiClassID;
 	}
 
-	/*
-	 * common method for drag && drop, overriden from DockView to only allow
-	 * tabbed drops
-	 */
+	/* common method for drag && drop, overriden from DockView to only allow tabbed drops */
 	protected void scanDrop(DockEvent event, boolean drop) {
 		if(getParent() instanceof TabbedDockableContainer) {
 			// cannot nest DockTabbedPanes
@@ -123,8 +125,7 @@ public class DetachedDockView extends DockView {
 
 	}
 
-	/**
-	 * {@inheritDoc}
+	/** {@inheritDoc}
 	 */
 	public String toString() {
 		return "DetachedDockView of " + dockable.getDockKey();

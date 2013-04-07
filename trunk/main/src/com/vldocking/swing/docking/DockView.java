@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -18,30 +26,35 @@ import javax.swing.*;
 
 import com.vldocking.swing.docking.event.*;
 
-/**
- * DefaultImplementation of the SingleDockableContainer. <p> A Dockview is the
- * component responsible for displaying a single user component inside a
- * DockingPanel. <p> The DockView contains a DockViewTitleBar, used as a header
- * to display useful information and optional controls
- * (close/maximize/hide/float) <p> UI : The user component is displayed with
- * decorations provided by a {@link com.vldocking.swing.docking.ui.DockViewUI}
- * delegate. <p> Here is an example (VLDocking 1.1 "shadow" style) : <ul> <li> A
- * gadient for the title bar and a set of icons for the buttons. <li> A shadowed
- * border for enhanced visibility. <br> </ul> <p align="center"><img
- * src="doc-files/dockview.gif" alt="Sample DockView" ></p>
- * 
- * <p> Note : multiple user-components are not displayable by the dockview : the
- * default implementation of TabbedDockableContainer is the
- * {@link DockTabbedPane}.
- * 
+/** DefaultImplementation of the SingleDockableContainer.
+ *<p>
+ * A Dockview is the component responsible for displaying a single user
+ * component inside a DockingPanel.
+ * <p>
+ * The DockView contains a DockViewTitleBar, used as a header to display useful information
+ * and optional controls (close/maximize/hide/float)
+ * <p>
+ * UI : The user component is displayed with decorations provided by a
+ * {@link com.vldocking.swing.docking.ui.DockViewUI} delegate.
+ * <p>
+ * Here is an example (VLDocking 1.1 "shadow" style) :
+ * <ul>
+ * <li> A gadient for the title bar and a set of icons for the buttons.
+ * <li> A shadowed border for enhanced visibility. <br>
+ * </ul>
+ * <p align="center"><img src="doc-files/dockview.gif" alt="Sample DockView" ></p>
+ *
+ * <p>
+ * Note : multiple user-components are not displayable by the dockview :
+ * the default implementation of TabbedDockableContainer is the {@link DockTabbedPane}.
+ *
  * @see DockViewTitleBar
- * 
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
- * @update 2005/12/09 Lilian Chamontin : added NPE safety check around
- *         uninstallDocking as sometimes uninstalling is done twice.
- * @update 2007/01/08 Lilian Chamontin : delegated the creation of the titlebar
- *         to allow easy override.
+ * @update 2005/12/09 Lilian Chamontin : added NPE safety check around uninstallDocking as sometimes
+ * uninstalling is done twice.
+ * @update 2007/01/08 Lilian Chamontin : delegated the creation of the titlebar to allow easy override.
  */
 public class DockView extends JPanel implements DockDropReceiver, SingleDockableContainer {
 
@@ -51,16 +64,13 @@ public class DockView extends JPanel implements DockDropReceiver, SingleDockable
 
 	protected DockViewTitleBar title = getTitleBar();
 
-	/** the desktop managing this view */
+	/** the desktop managing this view  */
 	protected DockingDesktop desktop;
 
-	/** the dockable managed by this view */
+	/** the dockable managed by this view  */
 	protected Dockable dockable; //user component
 
-	/**
-	 * remember the last drop position to cache the shape used for showing the
-	 * drop position
-	 */
+	/** remember the last drop position to cache the shape used for showing the drop position */
 	protected Shape lastDropShape, lastDropGeneralPath;
 
 	/** listen to the titlebar actions */
@@ -88,30 +98,28 @@ public class DockView extends JPanel implements DockDropReceiver, SingleDockable
 		}
 	};
 
-	/**
-	 * Constructs an empty DockView. <p> A {@link #setDockable(Dockable)} call
-	 * is requiered for this constructor to be usefull.
-	 * */
+	/** Constructs an empty DockView.
+	 * <p>
+	 * A {@link #setDockable(Dockable)} call is requiered for this constructor to be usefull.
+	 *   */
 	public DockView() {
 		super(new BorderLayout());
 		add(title, BorderLayout.NORTH);
 	}
 
-	/**
-	 * Constructs a new DockView for the given dockable.
-	 * 
+	/** Constructs a new DockView for the given dockable.
+	 *
 	 * @param dockable the dockable to show
-	 * */
+	 *  */
 	public DockView(Dockable dockable) {
 		this();
 		setDockable(dockable);
 	}
 
-	/**
-	 * Constructs a new DockView for the given dockable.
-	 * 
+	/** Constructs a new DockView for the given dockable.
+	 *
 	 * @param dockable the dockable to show
-	 * */
+	 *  */
 	public DockView(Dockable dockable, boolean showTitle) {
 		super(new BorderLayout());
 		add(title, BorderLayout.NORTH);
@@ -121,19 +129,17 @@ public class DockView extends JPanel implements DockDropReceiver, SingleDockable
 		setDockable(dockable);
 	}
 
-	/**
-	 * Returns the contained component
-	 * 
+	/** Returns the contained component
+	 *
 	 * {@inheritDoc}
 	 * */
 	public Dockable getDockable() {
 		return dockable;
 	}
 
-	/**
-	 * Adds the dockable's component to this DockView.
-	 * 
-	 * 
+	/** Adds the dockable's component to this DockView.
+	 *
+	 *
 	 * @param dockable the user dockable
 	 */
 	public void setDockable(Dockable dockable) {
@@ -150,32 +156,28 @@ public class DockView extends JPanel implements DockDropReceiver, SingleDockable
 
 	}
 
-	/**
-	 * {@inheritDoc}
+	/** {@inheritDoc}
 	 */
 	public String toString() {
 		return "DockView of " + dockable.getDockKey();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
+	/** {@inheritDoc}
 	 * @since 2.0
 	 */
 	public String getUIClassID() {
 		return uiClassID;
 	}
 
-	/**
-	 * {@inheritDoc}.
+	/** {@inheritDoc}.
 	 */
 	public void processDockableDrag(DockDragEvent event) {
 		scanDrop(event, false);
 	}
 
-	/**
-	 * {@inheritDoc} <p> Please note that a drag into a DockView can also lead to
-	 * create a DockTabbedPane.
+	/**  {@inheritDoc}
+	 * <p>
+	 * Please note that a drag into a DockView can also lead to create a DockTabbedPane.
 	 */
 	public void processDockableDrop(DockDropEvent event) {
 		scanDrop(event, true);
@@ -261,14 +263,11 @@ public class DockView extends JPanel implements DockDropReceiver, SingleDockable
 			if(drop) {
 				event.setDockingAction(new DockingActionCreateTabEvent(event.getDesktop(), d, dockableLocation, viewLocation, dockable, 0));
 
-				/*
-				 * if (dockable.getDockKey().getLocation() ==
-				 * DockableState.STATE_FLOATING){ ((DockDropEvent)
-				 * event).acceptDrop(false); // don't remove a floating dockable
-				 * from its hierarchy yet } else {
-				 */
+				/*if (dockable.getDockKey().getLocation() == DockableState.STATE_FLOATING){
+				  ((DockDropEvent) event).acceptDrop(false); // don't remove a floating dockable from its hierarchy yet
+				} else {*/
 				((DockDropEvent) event).acceptDrop();
-				/* } */
+				/*} */
 				desktop.createTab(dockable, event.getDragSource().getDockable(), 0, true);
 			} else {
 				event.setDockingAction(new DockingActionCreateTabEvent(event.getDesktop(), d, dockableLocation, viewLocation, dockable, 0));
@@ -291,7 +290,7 @@ public class DockView extends JPanel implements DockDropReceiver, SingleDockable
 
 	}
 
-	/** Create a path used to display the drag shape of a tab container */
+	/** Create a path used to display the drag shape of a tab container  */
 	protected GeneralPath buildPathForTab(Rectangle bounds) {
 		GeneralPath path = new GeneralPath();
 		int tabPlacement = UIManager.getInt("TabbedDockableContainer.tabPlacement");
@@ -350,7 +349,7 @@ public class DockView extends JPanel implements DockDropReceiver, SingleDockable
 
 	}
 
-	/** Returns (or creates) the title bar of this dockview */
+	/** Returns (or creates) the title bar of this dockview  */
 	public DockViewTitleBar getTitleBar() {
 		if(title == null) {
 			title = DockableContainerFactory.getFactory().createTitleBar();//2007/01/08

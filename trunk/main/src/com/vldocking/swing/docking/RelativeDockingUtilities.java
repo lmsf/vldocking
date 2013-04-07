@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -16,31 +24,30 @@ import com.vldocking.swing.docking.event.DockingActionSplitComponentEvent;
 import java.awt.*;
 import javax.swing.*;
 
-/**
- * This class provides an algorithm for finding (and then inserting) the most
- * suitable place to show a dockable, based on a relative positionning.
- * 
+/** This class provides an algorithm for finding (and then inserting) the most suitable place to
+ * show a dockable, based on a relative positionning.
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
- * @update 2005/10/10 Lilian Chamontin : improved heuristics of resizing (best
- *         matching of the appropriate SplitContainer)
+ * @update 2005/10/10 Lilian Chamontin : improved heuristics of resizing  (best matching of the appropriate SplitContainer)
  * @update 2005/10/10 Lilian Chamontin : improved again heuristics of resizing
  */
+@SuppressWarnings("unused")
 class RelativeDockingUtilities {
 
 	/* package class */
 
-	/*
-	 * This class is an extraction of DockingDesktop - we will enhance (and
-	 * complexify) the algorithm later, and should not mess up with
-	 * DockingDesktop source code.
+	/* This class is an extraction of DockingDesktop - we will enhance (and complexify)
+	 * the algorithm later,
+	 * and should not mess up with DockingDesktop source code.
+	 *
+	 *
 	 */
 
 	private RelativeDockingUtilities() {}
 
-	/**
-	 * try to find the best suitable SplitContainer from where insertion will be
-	 * done.
+	/** try to find the best suitable SplitContainer from where insertion will
+	 * be done.
 	 * */
 	private static SplitContainer findBestContainer(Container ancestorContainer, RelativeDockablePosition position) {
 
@@ -76,15 +83,21 @@ class RelativeDockingUtilities {
 		}
 
 		if(splitComp instanceof SplitContainer) { //2006/09/12
-			/*
-			 * Try to find a larger splitcontainer that still fits well with the
-			 * position. for example : [1|___2_____] [1|[3|[4|5]]] if we remove
-			 * "2", what remains is [1|[3|[4|5]]] and on restoring, the selected
-			 * split is [4|5], although [3|[4|5]] would be a much better choice.
-			 * to do that, we try to find the parent with the best "width" and
-			 * "height"
+			/* Try to find a larger splitcontainer that still fits well
+			 * with the position.
+			 * for example :
+			 *
+			 * [1|___2_____]
+			 * [1|[3|[4|5]]]
+			 *
+			 * if we remove "2", what remains is [1|[3|[4|5]]]
+			 * and on restoring, the selected split is [4|5], although [3|[4|5]] would be
+			 * a much better choice.
+			 *
+			 * to do that, we try to find the parent with the best "width" and "height"
+			 *
 			 */
-			//float EPSILON = 0.05f;
+			float EPSILON = 0.05f;
 			found = true;
 			while(found && splitComp.getParent() instanceof SplitContainer) {
 				found = false;
@@ -133,11 +146,10 @@ class RelativeDockingUtilities {
 
 		}
 
-		/*
-		 * while (splitComp != null && splitComp != ancestorContainer && !
-		 * (splitComp instanceof SplitContainer)) { splitComp =
-		 * splitComp.getParent(); }
-		 */
+		/*while (splitComp != null && splitComp != ancestorContainer
+		    && ! (splitComp instanceof SplitContainer)) {
+		  splitComp = splitComp.getParent();
+		}*/
 
 		if(splitComp instanceof SplitContainer) {
 			// try to enhance the selection when there are global anchors //2005/10/10
@@ -148,12 +160,10 @@ class RelativeDockingUtilities {
 			//          boolean anchoredLeft =Math.abs(x - dockingPanel.getX()) < 5;
 			//          boolean anchoredBottom = Math.abs(y + h - dockingPanel.getY() - dockingPanel.getHeight()) < 5;
 			//          boolean anchoredRight = Math.abs(x + w - dockingPanel.getX() - dockingPanel.getWidth()) < 5;
-			/*
-			 * boolean anchoredTop = y < 5; //2005/11/08 enhanced ! boolean
-			 * anchoredLeft = x < 5; boolean anchoredBottom = Math.abs(y + h -
-			 * ancestorContainer.getHeight()) < 5; boolean anchoredRight =
-			 * Math.abs(x + w - ancestorContainer.getWidth()) < 5;
-			 */
+			/*boolean anchoredTop = y < 5; //2005/11/08 enhanced !
+			boolean anchoredLeft = x < 5;
+			boolean anchoredBottom = Math.abs(y + h - ancestorContainer.getHeight()) < 5;
+			boolean anchoredRight = Math.abs(x + w - ancestorContainer.getWidth()) < 5;*/
 
 			int anchors = position.getAnchors();
 			boolean anchoredTop = (anchors & AnchorConstraints.ANCHOR_TOP) > 0;
@@ -168,20 +178,15 @@ class RelativeDockingUtilities {
 		}
 	}
 
-	/**
-	 * try to find a SplitContainer up in the hierarchy, satisfying the global
-	 * anchors
-	 */
+	/** try to find a SplitContainer up in the hierarchy, satisfying the global anchors */
 	private static SplitContainer findBetterContainer(SplitContainer split, Container dockingPanel, boolean anchoredTop, boolean anchoredLeft, boolean anchoredBottom, boolean anchoredRight) {
 		// we already have found a splitContainer, but it can be subOptimal in some cases
 		// for instance when we want to anchor a component at the bottom of the container (full width),
 		// and there are two horizontal splits there, we might return the internal split (not full width),
 		// and not the external (full width) one.
 		// this method will try to find a splitcontainer upper in the hierarchy, with better anchors
-		/*
-		 * System.out.println("global anchors " + anchoredTop + " " +
-		 * anchoredLeft + " " + anchoredBottom + " " + anchoredRight);
-		 */
+		/*System.out.println("global anchors " + anchoredTop + " "
+		       + anchoredLeft + " " + anchoredBottom + " " + anchoredRight);*/
 		boolean[] globalAnchors = {anchoredTop, anchoredLeft, anchoredBottom, anchoredRight};
 		int globalCount = 0; // number of anchors to be found (at least)
 		for(int i = 0; i < 4; i++) {
@@ -190,7 +195,7 @@ class RelativeDockingUtilities {
 			}
 		}
 
-		//SplitContainer betterSplit = split;
+		SplitContainer betterSplit = split;
 		boolean[] splitAnchors = new boolean[4];
 		while(true) {
 			int contacts = findAnchors(split, dockingPanel);
@@ -216,24 +221,27 @@ class RelativeDockingUtilities {
 		}
 	}
 
-	/**
-	 * builds an array used to find anchors of a component relative to its
-	 * ancestor container
-	 */
-	/*
-	 * private static boolean [] findAnchors(Component comp, Container
-	 * container){ Rectangle r = SwingUtilities.convertRectangle(comp, new
-	 * Rectangle(0, 0, comp.getWidth(), comp.getHeight()), container); int x =
-	 * container.getX(); int y = container.getY(); int w = container.getWidth();
-	 * int h = container.getHeight(); boolean [] anchors = new boolean [4];
-	 * anchors[0] = Math.abs( y - r.y) < 5; anchors[1] = Math.abs(x - r.x) < 5;
-	 * anchors[2] = Math.abs(y + h - r.y - r.height) < 30; anchors[3] =
-	 * Math.abs(x + w - r.x - r.width) < 5; return anchors; }
+	/** builds an array used to find anchors of a component relative to its ancestor container */
+	/*  private static boolean [] findAnchors(Component comp, Container container){
+	    Rectangle r = SwingUtilities.convertRectangle(comp,
+	        new Rectangle(0, 0, comp.getWidth(), comp.getHeight()),
+	        container);
+	    int x = container.getX();
+	    int y = container.getY();
+	    int w = container.getWidth();
+	    int h = container.getHeight();
+	    boolean [] anchors = new boolean [4];
+	    anchors[0] = Math.abs( y - r.y) < 5;
+	    anchors[1] = Math.abs(x - r.x) < 5;
+	    anchors[2] = Math.abs(y + h - r.y - r.height) < 30;
+	    anchors[3] = Math.abs(x + w - r.x - r.width) < 5;
+	    return anchors;
+	 
+	  }
 	 */
 
-	/**
-	 * Horizontally divide split and resize the new split
-	 * 
+	/** Horizontally divide split and resize the new split
+	 *
 	 * @since 2004/04/24
 	 * */
 	private static void hSplitAndResize(Component base, Component left, Component right, double proportion) {
@@ -245,9 +253,8 @@ class RelativeDockingUtilities {
 		SwingUtilities.invokeLater(new SplitResizer(newSplit, proportion));
 	}
 
-	/**
-	 * Vertically divide split and resize the new split
-	 * 
+	/** Vertically divide split and resize the new split
+	 *
 	 * @since 2004/04/24
 	 * */
 	private static void vSplitAndResize(Component base, Component top, Component bottom, double proportion) {
@@ -259,11 +266,10 @@ class RelativeDockingUtilities {
 		SwingUtilities.invokeLater(new SplitResizer(newSplit, proportion));
 	}
 
-	/**
-	 * look up the split hierarchy to find which borders a component is touching
-	 * 
-	 * @param base the component to find anchors for
-	 * @param ancestorContainer the top level ancestor used to stop searching
+	/** look up the split hierarchy to find which borders a component is touching
+	 *
+	 * @param base                the component to find anchors for
+	 * @param ancestorContainer   the top level ancestor used to stop searching
 	 */
 	public static int findAnchors(Component base, Container ancestorContainer) {
 		int contact = AnchorConstraints.ANCHOR_TOP | AnchorConstraints.ANCHOR_LEFT | AnchorConstraints.ANCHOR_BOTTOM | AnchorConstraints.ANCHOR_RIGHT;
@@ -293,11 +299,8 @@ class RelativeDockingUtilities {
 		return contact;
 	}
 
-	/**
-	 * Tries to find the best position to insert an hidden dockable, and insert
-	 * it
-	 * 
-	 * @deprecated use getInsertionDockingAction / applyDockingAction instead
+	/** Tries to find the best position to insert an hidden dockable, and insert it
+	 * @deprecated  use getInsertionDockingAction / applyDockingAction instead
 	 */
 	public static SingleDockableContainer insertDockable(Container relativeAncestorContainer, Dockable dockable, RelativeDockablePosition position) {
 
@@ -329,11 +332,9 @@ class RelativeDockingUtilities {
 			SplitContainer split = findBestContainer(relativeAncestorContainer, position);
 			if(split != null) {
 				// ok we've found one
-				/*
-				 * Rectangle splitRect = SwingUtilities.convertRectangle(split,
-				 * new Rectangle(0, 0, split.getWidth(), split.getHeight()),
-				 * relativeAncestorContainer);
-				 */
+				/*Rectangle splitRect = SwingUtilities.convertRectangle(split,
+				    new Rectangle(0, 0, split.getWidth(), split.getHeight()),
+				    relativeAncestorContainer);*/
 				//int contacts = findAnchors(split, relativeAncestorContainer);
 
 				int contacts = position.getAnchors(); // we use the anchors that
@@ -341,13 +342,10 @@ class RelativeDockingUtilities {
 
 				// heuristics : try to find an anchor, and which component(left/right)
 				// is nearer of center
-				/*
-				 * boolean anchoredTop = Math.abs( y - splitRect.y) < 5; boolean
-				 * anchoredLeft = Math.abs(x - splitRect.x) < 5; boolean
-				 * anchoredBottom = Math.abs(y + h - splitRect.y -
-				 * splitRect.height) < 30; boolean anchoredRight = Math.abs(x +
-				 * w - splitRect.x - splitRect.width) < 5;
-				 */
+				/*boolean anchoredTop = Math.abs( y - splitRect.y) < 5;
+				boolean anchoredLeft = Math.abs(x - splitRect.x) < 5;
+				boolean anchoredBottom = Math.abs(y + h - splitRect.y - splitRect.height) < 30;
+				boolean anchoredRight = Math.abs(x + w - splitRect.x - splitRect.width) < 5;*/
 
 				boolean anchoredTop = (contacts & AnchorConstraints.ANCHOR_TOP) > 0;
 				boolean anchoredLeft = (contacts & AnchorConstraints.ANCHOR_LEFT) > 0;
@@ -375,17 +373,15 @@ class RelativeDockingUtilities {
 				}
 
 				//2006/09/12
-				/*
-				 * If the split matches the size of the component, then we'll
-				 * have to split it (and not split one of its children)
+				/* If the split matches the size of the component, then
+				 * we'll have to split it (and not split one of its children)
 				 */
 				float splitWidthRatio = Math.abs(1 - split.getWidth() / (float) w);
-				//float splitHeightRatio = Math.abs(1 - split.getHeight() / (float)h);
+				float splitHeightRatio = Math.abs(1 - split.getHeight() / (float) h);
 
-				/**
-				 * this will happen only when anchors are not too strict (like
-				 * top+right) for wider anchors (left-top-right) this ration is
-				 * not used as superflous
+				/** this will happen only when anchors are not too strict (like top+right)
+				 * for wider anchors (left-top-right) this ration is not used as
+				 * superflous
 				 */
 
 				if(split.getOrientation() == JSplitPane.VERTICAL_SPLIT) {
@@ -524,7 +520,7 @@ class RelativeDockingUtilities {
 							// in between
 							int yTop = y;
 							int yBottom = split.getHeight() - y - h;
-							//int splitTop = top.getHeight();
+							int splitTop = top.getHeight();
 							int splitBottom = bottom.getHeight();
 
 							SplitContainer newSplit = new SplitContainer(JSplitPane.VERTICAL_SPLIT);
@@ -652,7 +648,7 @@ class RelativeDockingUtilities {
 							// we have to adjust the width on both sides
 							int xLeft = x;
 							int xRight = split.getWidth() - x - w;
-							//int splitLeft = left.getWidth();
+							int splitLeft = left.getWidth();
 							int splitRight = right.getWidth();
 
 							SplitContainer newSplit = new SplitContainer(JSplitPane.HORIZONTAL_SPLIT);
@@ -924,9 +920,8 @@ class RelativeDockingUtilities {
 
 	}
 
-	/**
-	 * returns a docking action event corresponding to the insertion point and
-	 * method of the dockable.
+	/** returns a docking action event corresponding to the insertion point and method
+	 * of the dockable.
 	 */
 	public static DockingActionEvent getInsertionDockingAction(Container relativeAncestorContainer, Dockable dockable, DockableState dockableState, DockableState newState) {
 		RelativeDockablePosition position = dockableState.getPosition();
@@ -939,7 +934,7 @@ class RelativeDockingUtilities {
 			position = new RelativeDockablePosition(0, 0.8, 0.5, 0.2);
 		}
 
-		//SingleDockableContainer dockableContainer = null;
+		SingleDockableContainer dockableContainer = null;
 		if(relativeAncestorContainer.getComponentCount() == 0) { // empty docking panel
 			return new DockingActionAddDockableEvent(desktop, dockable, initialState, nextState, relativeAncestorContainer);
 		} else {
@@ -949,7 +944,7 @@ class RelativeDockingUtilities {
 			int y = (int) (position.getY() * relativeAncestorContainer.getHeight());
 			int w = (int) (position.getWidth() * relativeAncestorContainer.getWidth());
 			int h = (int) (position.getHeight() * relativeAncestorContainer.getHeight());
-			//int centerX = x + w / 2;
+			int centerX = x + w / 2;
 			int centerY = y + h / 2;
 
 			SplitContainer split = findBestContainer(relativeAncestorContainer, position);
@@ -961,7 +956,7 @@ class RelativeDockingUtilities {
 				// is nearer of center
 				boolean anchoredTop = Math.abs(y - splitRect.y) < 5;
 				boolean anchoredLeft = Math.abs(x - splitRect.x) < 5;
-				boolean anchoredBottom = Math.abs(y + h - splitRect.y - splitRect.height) < 30/* 5 */;
+				boolean anchoredBottom = Math.abs(y + h - splitRect.y - splitRect.height) < 30/*5*/;
 				boolean anchoredRight = Math.abs(x + w - splitRect.x - splitRect.width) < 5;
 
 				Component left = split.getLeftComponent();
@@ -1039,15 +1034,12 @@ class RelativeDockingUtilities {
 							// in between
 							int yTop = y;
 							int yBottom = split.getHeight() - y - h;
-							//int splitTop = top.getHeight();
+							int splitTop = top.getHeight();
 							int splitBottom = bottom.getHeight();
 
-							/*
-							 * SplitContainer newSplit = new
-							 * SplitContainer(JSplitPane. VERTICAL_SPLIT);
-							 * DockingUtilities.replaceChild(split, bestComp,
-							 * newSplit);
-							 */
+							/*SplitContainer newSplit = new SplitContainer(JSplitPane.
+							    VERTICAL_SPLIT);
+							DockingUtilities.replaceChild(split, bestComp, newSplit);*/
 
 							if(bestComp == top) {
 								float hParent = (split.getHeight() - yBottom) / (float) split.getHeight();
@@ -1113,15 +1105,12 @@ class RelativeDockingUtilities {
 							// we have to adjust the width on both sides
 							int xLeft = x;
 							int xRight = split.getWidth() - x - w;
-							//int splitLeft = left.getWidth();
+							int splitLeft = left.getWidth();
 							int splitRight = right.getWidth();
 
-							/*
-							 * SplitContainer newSplit = new
-							 * SplitContainer(JSplitPane. HORIZONTAL_SPLIT);
-							 * DockingUtilities.replaceChild(split, bestComp,
-							 * newSplit);
-							 */
+							/*SplitContainer newSplit = new SplitContainer(JSplitPane.
+							    HORIZONTAL_SPLIT);
+							DockingUtilities.replaceChild(split, bestComp, newSplit);*/
 
 							if(bestComp == left) {
 								float parentW = (split.getWidth() - xRight) / (float) split.getWidth();
@@ -1154,12 +1143,9 @@ class RelativeDockingUtilities {
 					} else if(anchoredRight) {
 						return new DockingActionSplitComponentEvent(desktop, dockable, initialState, nextState, right, DockingConstants.SPLIT_RIGHT, 1 - proportionRightW);
 					} else { // not anchored at all, split verticaly and add
-						/*
-						 * SplitContainer newSplit = new
-						 * SplitContainer(JSplitPane. VERTICAL_SPLIT);
-						 * DockingUtilities.replaceChild(split, bestComp,
-						 * newSplit);
-						 */
+						/*SplitContainer newSplit = new SplitContainer(JSplitPane.
+						    VERTICAL_SPLIT);
+						DockingUtilities.replaceChild(split, bestComp, newSplit);*/
 						if(bestCenter.y < centerY) {
 							return new DockingActionSplitComponentEvent(desktop, dockable, initialState, nextState, bestComp, DockingConstants.SPLIT_BOTTOM, 1 - proportionH);
 						} else {

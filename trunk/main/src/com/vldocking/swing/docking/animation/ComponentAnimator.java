@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking.animation;
 
@@ -15,15 +23,16 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-/**
- * Utility class used to perform move/resize animation for awt/swing components.
- * <p> This class moves/resizes a Component given a start and end Rectangle and
- * a duration. <p> Movements and listeners notifications are processed in the
- * Swing Event Thread.
- * 
+/** Utility class used to perform move/resize animation for awt/swing components.
+ * <p>
+ * This class moves/resizes a Component given a start and end Rectangle and
+ * a duration.
+ * <p>
+ * Movements and listeners notifications are processed in the Swing Event Thread.
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
- * */
+ */
 public class ComponentAnimator {
 
 	/** The animated component */
@@ -48,15 +57,14 @@ public class ComponentAnimator {
 
 	private ArrayList<AnimationListener> listeners = new ArrayList<AnimationListener>(3);
 
-	/**
-	 * Single-shot animator (use another ComponentAnimator for a new animation).
-	 * 
-	 * 
-	 * @param comp the component to animate
-	 * @param startBounds initial bounds of the component
-	 * @param endBounds end bounds of the component
-	 * @param duration duration of animation, expressed in seconds
-	 * @param listener single listener used for animation notification
+	/** Single-shot animator (use another ComponentAnimator for a new animation).
+	 *
+	 *
+	 * @param comp     the component to animate
+	 * @param startBounds  initial bounds of the component
+	 * @param endBounds    end bounds of the component
+	 * @param duration     duration of animation, expressed in seconds
+	 * @param listener     single listener used for animation notification
 	 */
 	public ComponentAnimator(Component comp, Rectangle startBounds, Rectangle endBounds, float duration, AnimationListener listener) {
 		this.comp = comp;
@@ -68,9 +76,8 @@ public class ComponentAnimator {
 
 	}
 
-	/**
-	 * Reusable component animator. To start an animation, don't forget to call
-	 * the {@link #start() start() }method.
+	/** Reusable component animator.
+	 * To start an animation, don't forget to call the {@link #start() start() }method.
 	 * */
 	public ComponentAnimator(Component comp, Rectangle startBounds, Rectangle endBounds, float duration) {
 		this.comp = comp;
@@ -79,11 +86,10 @@ public class ComponentAnimator {
 		this.duration = duration;
 	}
 
-	/**
-	 * Starts the animation. <P> The component is <code>setBounds</code>ed to
-	 * startBounds and made visible, than a Swing timer is started to process
-	 * the animation (refresh rate is 100 ms). <P> the ANIMATION_START event is
-	 * then fired to all listeners.
+	/** Starts the animation.
+	 * <P> The component is <code>setBounds</code>ed to startBounds and made visible,
+	 * than a Swing timer is started to process the animation (refresh rate is 100 ms).
+	 * <P> the ANIMATION_START event is then fired to all listeners.
 	 */
 	public void start() {
 		if(duration == 0) { // heavy weight == no animation
@@ -105,19 +111,13 @@ public class ComponentAnimator {
 		}
 	}
 
-	/**
-	 * Cancels the animation (the component is not reset to its initial
-	 * location/size)
-	 */
+	/** Cancels the animation (the component is not reset to its initial location/size) */
 	public void cancel() {
 		timer.stop();
 	}
 
-	/**
-	 * Adds a new listener to the animator
-	 * 
-	 * @param listener the listener
-	 */
+	/** Adds a new listener to the animator
+	 * @param listener  the listener  */
 	public void addAnimationListener(AnimationListener listener) {
 		if(listener != null && ! listeners.contains(listener)) {
 			listeners.add(listener);
@@ -131,58 +131,50 @@ public class ComponentAnimator {
 		}
 	}
 
-	/**
-	 * Returns the duration of the animation
-	 * 
+	/** Returns the duration of the animation
+	 *
 	 * @return the duration of the animation, in seconds
 	 */
 	public float getDuration() {
 		return duration;
 	}
 
-	/**
-	 * Sets the duration of the animation. <P> Warning : do not change this
-	 * value during an animation
-	 * 
+	/** Sets the duration of the animation.
+	 * <P> Warning : do not change this value during an animation
+	 *
 	 * @param duration the new duration in seconds
 	 */
 	public void setDuration(float duration) {
 		this.duration = duration;
 	}
 
-	/**
-	 * Returns the end bounds of the components.
-	 * 
+	/** Returns the end bounds of the components.
+	 *
 	 * @return the end bounds of the components.
 	 */
 	public Rectangle getEndBounds() {
 		return endBounds;
 	}
 
-	/**
-	 * Sets the end bounds of the component. <P>Warning : do not change end
-	 * bounds during an animation.
-	 * 
+	/** Sets the end bounds of the component.
+	 * <P>Warning : do not change end bounds during an animation.
+	 *
 	 * @param endBounds
 	 */
 	public void setEndBounds(Rectangle endBounds) {
 		this.endBounds = endBounds;
 	}
 
-	/**
-	 * Returns the start bounds of the component.
-	 * 
-	 * @return the start bounds of the component (those of when animation
-	 *         starts).
+	/** Returns the start bounds of the component.
+	 *
+	 * @return the start bounds of the component (those of when animation starts).
 	 */
 	public Rectangle getStartBounds() {
 		return startBounds;
 	}
 
-	/**
-	 * Sets the start bounds of the component for animation. <P> Warning :do not
-	 * change start bounds during an animation
-	 * 
+	/** Sets the start bounds of the component for animation.
+	 * <P> Warning :do not change start bounds during an animation
 	 * @param startBounds the start bounds of the component.
 	 */
 	public void setStartBounds(Rectangle startBounds) {

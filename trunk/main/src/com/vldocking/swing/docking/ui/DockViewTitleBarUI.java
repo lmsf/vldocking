@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking.ui;
 
@@ -41,24 +49,22 @@ import javax.swing.event.AncestorListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.PanelUI;
 
-/**
- * A UI for the {@link com.vldocking.swing.docking.DockViewTitleBar}.
- * 
+/** A UI for the {@link com.vldocking.swing.docking.DockViewTitleBar}.
+ *
  * @author Lilian Chamontin, VLSolutions
  * @since 2.0
- * @update 2006/12/01 Lilian Chamontin : added client property support for
- *         dockKey, and react to visibleTitleBar
- * @update 2007/01/08 Lilian Chamontin : added support for autohide/dock
- *         disabled when hidden
+ * @update 2006/12/01 Lilian Chamontin : added client property support for dockKey, and react to visibleTitleBar
+ * @update 2007/01/08 Lilian Chamontin : added support for autohide/dock disabled when hidden
  */
 public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListener {
 
-	/* hack to use custom painting except on mac os (ugly opacity effects) */
+	/* hack to use custom painting except on mac os (ugly opacity effects)  */
 	private static boolean useCustomPaint = System.getProperty("os.name").toLowerCase().indexOf("mac os") < 0;
 
 	private static Color panelColor = UIManager.getColor("Panel.background");
 	private static Color highlight = UIManager.getColor("VLDocking.highlight");
-	//private static Color shadow = UIManager.getColor("VLDocking.shadow");
+	@SuppressWarnings("unused")
+	private static Color shadow = UIManager.getColor("VLDocking.shadow");
 
 	private static Icon closeIcon = UIManager.getIcon("DockViewTitleBar.close");
 	private static Icon closeIconRollover = UIManager.getIcon("DockViewTitleBar.close.rollover");
@@ -114,13 +120,11 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 
 	protected DockViewTitleBar titleBar;
 
-	/*
-	 * This ancestor listener is required as buttons may change according to
-	 * container hierarchy. The first example is when a dockable is added to a
-	 * floating + compund dockable, the attach button (which usually becomes
-	 * visible as the dockable is in the floating state) has to be hidden (tech
-	 * choice : we don't want to allow attaching a single child of a compound
-	 * dockable)
+	/* This ancestor listener is required as buttons may change according to container hierarchy.
+	 * The first example is when a dockable is added to a floating + compund dockable, the attach
+	 * button (which usually becomes visible as the dockable is in the floating state) has to be hidden
+	 * (tech choice : we don't want to allow attaching a single child of a compound dockable)
+	 *
 	 */
 	private AncestorListener ancestorListener = new AncestorListener() {
 
@@ -195,7 +199,7 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 		}
 	}
 
-	/** Installs default on the titlebar label */
+	/**  Installs default on the titlebar label */
 	protected void installLabel() {
 		JLabel titleLabel = titleBar.getTitleLabel();
 		Font f = UIManager.getFont("DockViewTitleBar.titleFont");
@@ -256,7 +260,7 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 
 	}
 
-	/** Listen to property changes in the DockKey or the title bar */
+	/** Listen to property changes in the DockKey or the title bar  */
 	public void propertyChange(PropertyChangeEvent e) {
 		String pName = e.getPropertyName();
 		//System.out.println("property change " + pName);
@@ -348,9 +352,8 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 		}
 	}
 
-	/**
-	 * Update the buttons to track state changes (for example, the maximize
-	 * button can become "restore" when the view is maximized.
+	/** Update the buttons to track state changes (for example, the maximize button can become "restore"
+	 * when the view is maximized.
 	 */
 	protected void configureButtons(DockViewTitleBar tb) {
 		layoutTitleBar();
@@ -484,8 +487,7 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 		btn.setToolTipText(MAXIMIZE_TEXT);
 	}
 
-	/**
-	 * installs the icons and tooltip suitable for a restore button.
+	/** installs the icons and tooltip suitable for a restore button.
 	 */
 	protected void configureRestoreButton(JButton btn) {
 		btn.setIcon(restoreIcon);
@@ -543,9 +545,8 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 		c.setBorder(null);
 	}
 
-	/**
-	 * Custom title bar painting : uses a gradient from the background color to
-	 * the control highlight color.
+	/**  Custom title bar painting : uses a gradient from the background color
+	 * to the control highlight color.
 	 */
 	public void paint(Graphics g, JComponent c) {
 

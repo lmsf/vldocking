@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking.ws;
 
@@ -27,61 +35,71 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 
-/**
- * A desktop part of a workspace. <p> Use this object to define the layout of a
- * DockingDesktop. This layout can be applied later to that desktop through the
- * Workspace.apply(DockingContext ctx) method. <p> The API is a subset of the
- * one of DockingDesktop : limited to layout building. you can addDockable(),
- * split(), createTab(), addHiddenDockable(), addFloatingDockable(), see these
- * method description for further information. <p> Node : WSDesktop doens't
- * support layout updates : you should use it to build a layout, but not to move
- * dockables around. (if you add a dockable somewhere, don't add it elsewhere
- * later as removal isn't fully implemented). <p> In a WSDesktop, dockables are
- * identified by a WSDockKey (a limited version of DockKey) : this is to allow
- * you to create workspaces with dockables that haven't been constructed yet
- * (lazy loading). <p> Example : <pre> Workspace w = new Workspace(); WSDesktop
- * desk = w.getDesktop(0); // gets the default (single) desktop // define some
- * dockable keys WSDockKey editorKey = new WSDockKey("editor"); WSDockKey
- * treeKey, tableKey, imgToolKey // other dockable keys
- * 
- * // now define a workspace layout desk.addDockable(editorKey); // initial
- * dockable desk.split(editorKey, treeKey, DockingConstants.SPLIT_LEFT, 0.5); //
- * splitted desk.split(treeKey, tableKey, DockingConstants.SPLIT_TOP, 0.7); //
- * tree is also splitted
- * 
- * desk.createTab(tableKey, imgToolsKey, 0); // tableKey is transformed into a
- * tabbed container // and that's it // ... // later // DockingContext ctx = ...
- * // your real desktop w.apply(ctx); // applies the workspace to this desktop
- * // now the dektops are loaded as specified in the 'w' workspace </pre>
- * 
+/** A desktop part of a workspace.
+ *<p>
+ * Use this object to define the layout of a DockingDesktop. This layout can be applied later
+ * to that desktop through the Workspace.apply(DockingContext ctx) method.
+ *<p>
+ * The API is a subset of the one of DockingDesktop  : limited to layout building.
+ * you can addDockable(), split(), createTab(), addHiddenDockable(), addFloatingDockable(), see these
+ * method description for further information.
+ *<p>
+ * Node : WSDesktop doens't support layout updates : you should use it to build a layout, but not to
+ * move dockables around. (if you add a dockable somewhere, don't add it elsewhere later as removal isn't
+ * fully implemented).
+ *<p>
+ * In a WSDesktop, dockables are identified by a WSDockKey (a limited version of DockKey) : this is to allow
+ * you to create workspaces with dockables that haven't been constructed yet (lazy loading).
+ * <p>
+ *Example :
+ *<pre>
+ *  Workspace w = new Workspace();
+ *  WSDesktop desk = w.getDesktop(0); // gets the default (single) desktop
+ * // define some dockable keys
+ *  WSDockKey editorKey = new WSDockKey("editor");
+ *  WSDockKey treeKey, tableKey, imgToolKey // other dockable keys
+ *
+ * // now define a workspace layout
+ *  desk.addDockable(editorKey); // initial dockable
+ *  desk.split(editorKey, treeKey, DockingConstants.SPLIT_LEFT, 0.5);  // splitted
+ *  desk.split(treeKey, tableKey, DockingConstants.SPLIT_TOP, 0.7);  // tree is also splitted
+ *
+ *  desk.createTab(tableKey, imgToolsKey, 0);  // tableKey is transformed into a tabbed container
+ * // and that's it
+ * // ...
+ * // later
+ * //
+ * DockingContext ctx = ... // your real desktop
+ * w.apply(ctx); // applies the workspace to this desktop
+ * // now the dektops are loaded as specified in the 'w' workspace
+ *</pre>
+ *
  * @author Lilian Chamontin, VLSolutions
  * @since 2.1.2
  */
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class WSDesktop {
 
-	/**
-	 * The name of this desktop (which must match the name of a real desktop if
-	 * more than one desktops are used )
+	/** The name of this desktop (which must match the name of a real desktop if more than one desktops are used )
 	 */
 	private String desktopName;
 
 	/** root node for desktop (<=> DockingPanel) */
 	private TopLevelNode mainNode = new TopLevelNode();
 
-	/** Map of Nodes (key : WSDockKey, value : Node) */
-	private HashMap<WSDockKey, Node> nodesByKey = new HashMap<WSDockKey, Node>();
+	/** Map of Nodes (key : WSDockKey, value : Node)*/
+	private HashMap<WSDockKey, Node> nodesByKey = new HashMap();
 
 	/** 4 borders of this desktop */
-	@SuppressWarnings("rawtypes")
 	private ArrayList[] borders = new ArrayList[4];
 
-	/** <=> floating windows */
-	private ArrayList<FloatingNode> floatingNodes = new ArrayList<FloatingNode>();
+	/** <=> floating windows  */
+	private ArrayList floatingNodes = new ArrayList();
 
 	private WSDockKey maximizedDockable = null;
 
-	/** groups of tabs (used to re-tab autohidden dockable) */
-	protected HashMap<WSDockKey, LinkedList<WSDockKey>> tabbedGroups = new HashMap<WSDockKey, LinkedList<WSDockKey>>(); // <Dockable>/<LinkedList<Dockable>
+	/** groups of tabs (used to re-tab autohidden dockable)*/
+	protected HashMap<WSDockKey, LinkedList<WSDockKey>> tabbedGroups = new HashMap(); // <Dockable>/<LinkedList<Dockable>
 
 	/** Constructs a WSDesktop with "default" as name */
 	public WSDesktop() {
@@ -92,12 +110,11 @@ public class WSDesktop {
 	public WSDesktop(String desktopName) {
 		this.desktopName = desktopName;
 		for(int i = 0; i < borders.length; i++) {
-			borders[i] = new ArrayList<Object>();
+			borders[i] = new ArrayList();
 		}
 	}
 
-	/**
-	 * removes all information stored into this desktop, which becomes ready to
+	/** removes all information stored into this desktop, which becomes ready to
 	 * be reused.
 	 */
 	public void clear() {
@@ -110,10 +127,7 @@ public class WSDesktop {
 		maximizedDockable = null;
 	}
 
-	/**
-	 * Adds the first dockable to this desktop. This method will fail if called
-	 * more than once
-	 */
+	/** Adds the first dockable to this desktop. This method will fail if called more than once */
 	public void addDockable(WSDockKey key) {
 		if(mainNode.child != null) {
 			throw new IllegalArgumentException("this workspace isn't empty");
@@ -121,12 +135,11 @@ public class WSDesktop {
 		mainNode.setChild(new SingleDockableNode(key));
 	}
 
-	/**
-	 * Sets the maximized dockable of this desktop, (or null if no dockable
-	 * maximized). <p> Don't forget that this dockable MUST ALSO BE in the
-	 * DOCKED state (added to the desktop in a split, tab or compound node)
-	 * otherwise the missing restore information will cause unwanted behaviour,
-	 * or exceptions.
+	/** Sets the maximized dockable of this desktop, (or null if no dockable maximized).
+	 *<p>
+	 * Don't forget that this dockable MUST ALSO BE in the DOCKED state (added to the desktop
+	 * in a split, tab or compound node) otherwise the missing restore information will cause
+	 * unwanted behaviour, or exceptions.
 	 */
 	public void setMaximizedDockable(WSDockKey max) {
 		this.maximizedDockable = max;
@@ -136,16 +149,14 @@ public class WSDesktop {
 		return (SingleDockableNode) nodesByKey.get(key);
 	}
 
-	/**
-	 * Splits a dockable (with a given split location)
-	 * 
-	 * @param base the dockable to be splitted
-	 * @param newDockable the new dockable
-	 * @param split the orientation of split
-	 * @param splitLocation where the split divisor is (always relative from the
-	 *            top/left dockable, so split(a, b, SPLIT_TOP, 0.1f) and
-	 *            split(a, b, SPLIT_BOTTOM, 0.1f) have the same dividor location
-	 *            (somewhere near the top of the split).
+	/** Splits a dockable (with a given split location)
+	 *
+	 * @param base          the dockable to be splitted
+	 * @param newDockable   the new dockable
+	 * @param split         the orientation of split
+	 * @param splitLocation where the split divisor is (always relative from the top/left dockable, so
+	 *  split(a, b, SPLIT_TOP, 0.1f) and split(a, b, SPLIT_BOTTOM, 0.1f) have the same dividor location (somewhere near
+	 *  the top of the split).
 	 */
 	public void split(WSDockKey base, WSDockKey newDockable, DockingConstants.Split split, double splitLocation) {
 		Node baseNode = getNode(base);
@@ -181,9 +192,8 @@ public class WSDesktop {
 		splitNode.location = splitLocation;
 	}
 
-	/**
-	 * Creates a tab containing baseTab and newTab (if baseTab is already into a
-	 * Tab, then newTab will just be added at the "order" position.
+	/** Creates a tab containing baseTab and newTab (if baseTab is already into a Tab, then
+	 * newTab will just be added at the "order" position.
 	 */
 	public void createTab(WSDockKey baseTab, WSDockKey newTab, int order) {
 		SingleDockableNode baseTabNode = getNode(baseTab);
@@ -222,31 +232,24 @@ public class WSDesktop {
 			zone = dockable.getAutoHideBorder().value();
 		}
 
-		@SuppressWarnings("unchecked")
-		ArrayList<HiddenNode> border = borders[zone];
+		ArrayList border = borders[zone];
 		border.add(new HiddenNode(new SingleDockableNode(dockable), dockedPosition));
 
 	}
 
-	/**
-	 * Adds a new floating dockable
-	 * 
-	 * @param dockable the dockable to add as floating
-	 * @param windowRect rectangle defining the window (relative to screen) of
-	 *            the floating dockable
-	 * @param returnPosition where to put the dockable when returning to the
-	 *            desktop
-	 * 
+	/** Adds a new floating dockable
+	 *
+	 * @param dockable  the dockable to add as floating
+	 * @param windowRect rectangle defining the window (relative to screen) of the floating dockable
+	 * @param returnPosition  where to put the dockable when returning to the desktop
+	 *
 	 */
 	public void setFloating(WSDockKey dockable, Rectangle windowRect, RelativeDockablePosition returnPosition) {
 		FloatingNode f = new FloatingNode(new SingleDockableNode(dockable), windowRect, returnPosition);
 		floatingNodes.add(f);
 	}
 
-	/**
-	 * Returns the name of this desktop (which must match the name of a real
-	 * desktop if more than one desktops are used )
-	 */
+	/** Returns the name of this desktop (which must match the name of a real desktop if more than one desktops are used ) */
 	public String getDesktopName() {
 		return desktopName;
 	}
@@ -276,7 +279,7 @@ public class WSDesktop {
 
 		// finish with the floating dockables
 		for(int i = 0; i < floatingNodes.size(); i++) {
-			FloatingNode f = floatingNodes.get(i);
+			FloatingNode f = (FloatingNode) floatingNodes.get(i);
 			xmlWriteFloating(f, out);
 		}
 
@@ -338,7 +341,7 @@ public class WSDesktop {
 		out.println("</Dockable>");
 	}
 
-	private void xmlWriteBorder(int zone, ArrayList<?> border, PrintWriter out) {
+	private void xmlWriteBorder(int zone, ArrayList border, PrintWriter out) {
 		if(border.size() > 0) {
 			out.println("<Border zone=\"" + zone + "\">");
 			for(int i = 0; i < border.size(); i++) {
@@ -465,8 +468,8 @@ public class WSDesktop {
 	}
 
 	private void xmlWriteTabGroups(PrintWriter out) {
-		ArrayList<LinkedList<WSDockKey>> uniqueGroups = new ArrayList<LinkedList<WSDockKey>>();
-		ArrayList<WSDockKey> processedDockables = new ArrayList<WSDockKey>();
+		ArrayList uniqueGroups = new ArrayList();
+		ArrayList processedDockables = new ArrayList();
 		Iterator<WSDockKey> it = tabbedGroups.keySet().iterator();
 		while(it.hasNext()) {
 			WSDockKey d = it.next();
@@ -487,8 +490,8 @@ public class WSDesktop {
 		out.println("<TabGroups>");
 		for(int i = 0; i < uniqueGroups.size(); i++) {
 			out.println("<TabGroup>");
-			LinkedList<?> group = uniqueGroups.get(i);
-			Iterator<?> listIt = group.iterator();
+			LinkedList group = (LinkedList) uniqueGroups.get(i);
+			Iterator listIt = group.iterator();
 			while(listIt.hasNext()) {
 				WSDockKey d = (WSDockKey) listIt.next();
 				xmlWriteDockableTab(d, out);
@@ -537,11 +540,9 @@ public class WSDesktop {
 				NodeList children = elt.getElementsByTagName("Dockable");
 				xmlBuildFloatingNode(children, new Rectangle(x, y, width, height)); //2005/10/10
 
-				/*
-				 * for (int i = 0, len = children.getLength(); i < len; i++) {
-				 * xmlBuildFloatingNode((Element)children.item(i), new
-				 * Rectangle(x, y, width, height)); }
-				 */
+				/*        for (int i = 0, len = children.getLength(); i < len; i++) {
+				          xmlBuildFloatingNode((Element)children.item(i), new Rectangle(x, y, width, height));
+				        }*/
 			} else if(name.equals("TabGroups")) {
 				NodeList children = elt.getElementsByTagName("TabGroup");
 				xmlBuildTabGroup(children); //2005/10/10
@@ -604,7 +605,7 @@ public class WSDesktop {
 	}
 
 	private void xmlBuildCompoundDockable(CompoundDockableNode cdn, Element elt, DockableState.Location dockableLocation) throws SAXException {
-		/* a compound dockable can hold a sub dockable (or split/tabs) */
+		/*  a compound dockable can hold a sub dockable (or split/tabs) */
 		NodeList children = elt.getChildNodes();
 		for(int i = 0, len = children.getLength(); i < len; i++) {
 			org.w3c.dom.Node node = children.item(i);
@@ -670,7 +671,6 @@ public class WSDesktop {
 		return tdc;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void xmlBuildAutoHideNode(int zone, Element dockableElt) throws SAXException {
 		Element hideElt = (Element) dockableElt.getElementsByTagName("RelativePosition").item(0);
 		float x = Float.parseFloat(hideElt.getAttribute("x"));
@@ -712,9 +712,9 @@ public class WSDesktop {
 				floatingNodes.add(floating);
 			}
 
-			//Element previousState = (Element)dockableElt.getElementsByTagName("PreviousState").item(0);
-			//int istate = Integer.parseInt(previousState.getAttribute("state"));
-			// TODO: see how to manage this value
+			Element previousState = (Element) dockableElt.getElementsByTagName("PreviousState").item(0);
+			int istate = Integer.parseInt(previousState.getAttribute("state"));
+			// @todo : see how to manage this value
 
 			if(i > 0) {
 				createTab(baseDockable.key, dockable.key, i);
@@ -745,28 +745,23 @@ public class WSDesktop {
 		}
 	}
 
-	/**
-	 * Registers a dockable as belonging to a tab group. <p> It is used to have
-	 * a memory of grouped (tabbed) dockables in order to keep the group
-	 * together when dockable are restored from auto-hide mode. <p> This method
-	 * is generally called by the tabbed container management, and not directly
-	 * by the developper.
-	 * 
-	 * <p> However, there is a case where calling this method can be usefull :
-	 * when, at startup, a desktop is built with multiple hidden dockables, and
-	 * the developper wants them to be grouped in a tab container when they are
-	 * restored to the desktop.
-	 * 
-	 * @param base an already tabbed dockable
-	 * @param newTab a dockable to add to the tab group
-	 * 
-	 * @since 1.1.2
-	 */
+	/** Registers a dockable as belonging to a tab group.
+	* <p> It is used to have a memory of grouped (tabbed) dockables in order to keep the
+	* group together when dockable are restored from auto-hide mode.
+	* <p> This method is generally called by the tabbed container management, and not directly
+	* by the developper.
+	*
+	* <p> However, there is a case where calling this method can be usefull :
+	*  when, at startup, a desktop is built with multiple hidden dockables, and the developper wants
+	* them to be grouped in a tab container when they are restored to the desktop.
+	*
+	* @param base   an already tabbed dockable
+	* @param newTab a dockable to add to the tab group
+	*
+	*@since 1.1.2
+	*/
 	public void addToTabbedGroup(WSDockKey base, WSDockKey newTab) {
-		/*
-		 * this method is called when a dockable is added to a
-		 * dockableTabbedContainer
-		 */
+		/* this method is called when a dockable is added to a dockableTabbedContainer */
 		LinkedList<WSDockKey> group = tabbedGroups.get(base);
 		if(group == null) {
 			group = new LinkedList<WSDockKey>();
@@ -788,10 +783,10 @@ public class WSDesktop {
 	/** a node describing a tab */
 	private class TabNode extends Node {
 
-		ArrayList<SingleDockableNode> tabs = new ArrayList<SingleDockableNode>();
+		ArrayList tabs = new ArrayList();
 
 		SingleDockableNode getTab(int index) {
-			return tabs.get(index);
+			return (SingleDockableNode) tabs.get(index);
 		}
 
 		void addTab(int index, SingleDockableNode tab) {
@@ -805,7 +800,7 @@ public class WSDesktop {
 		}
 	}
 
-	/** a node containing a single dockable */
+	/** a node containing a single dockable  */
 	private class SingleDockableNode extends Node {
 
 		WSDockKey key;
@@ -831,7 +826,7 @@ public class WSDesktop {
 		}
 	}
 
-	/** a node that represents a split */
+	/** a node that represents a split  */
 	private class SplitNode extends Node {
 
 		void setTop(Node node) {
@@ -854,12 +849,10 @@ public class WSDesktop {
 			node.parent = this;
 		}
 
-		@SuppressWarnings("unused")
 		Node getTop() {
 			return left;
 		}
 
-		@SuppressWarnings("unused")
 		Node getBottom() {
 			return right;
 		}
