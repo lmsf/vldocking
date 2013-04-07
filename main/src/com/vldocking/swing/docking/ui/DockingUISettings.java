@@ -301,7 +301,7 @@ public class DockingUISettings {
 	/** installs the tabbed pane related properties */
 	public void installTabbedContainerSettings() {
 		@SuppressWarnings("unused")
-		final String prefix = "/com/vlsolutions/swing/docking/";
+		final String prefix = "/com/vldocking/swing/docking/";
 		UIManager.put("TabbedDockableContainer.tabPlacement", new Integer(SwingConstants.TOP));
 
 		UIManager.put("DockTabbedPane.closeButtonText", UIManager.getString("InternalFrameTitlePane.closeButtonText"));
@@ -331,7 +331,7 @@ public class DockingUISettings {
 	/** installs icons used by the framework */
 	@SuppressWarnings("unused")
 	public void installIcons() {
-		final String prefix = "/com/vlsolutions/swing/docking/";
+		final String prefix = "/com/vldocking/swing/docking/";
 		Icon closeIcon = new ImageIcon(getClass().getResource(prefix + "close16v2.png"));
 		Icon closeRolloverIcon = new ImageIcon(getClass().getResource(prefix + "close16v2rollover.png"));
 		Icon closePressedIcon = new ImageIcon(getClass().getResource(prefix + "close16v2pressed.png"));
@@ -431,13 +431,13 @@ public class DockingUISettings {
 	public void installDesktopSettings() {
 		UIManager.put("DockingDesktop.notificationColor", Color.ORANGE);
 		UIManager.put("DockingDesktop.notificationBlinkCount", new Integer(5));
-		UIManager.put("DragControler.stopDragCursor", new ImageIcon(getClass().getResource("/com/vlsolutions/swing/docking/stopdragcursor.gif")).getImage());
+		UIManager.put("DragControler.stopDragCursor", new ImageIcon(getClass().getResource("/com/vldocking/swing/docking/stopdragcursor.gif")).getImage());
 
-		UIManager.put("DragControler.detachCursor", new ImageIcon(getClass().getResource("/com/vlsolutions/swing/docking/detachCursor.png")).getImage());
+		UIManager.put("DragControler.detachCursor", new ImageIcon(getClass().getResource("/com/vldocking/swing/docking/detachCursor.png")).getImage());
 
-		UIManager.put("DragControler.dragCursor", new ImageIcon(getClass().getResource("/com/vlsolutions/swing/docking/dragcursor.gif")).getImage());
+		UIManager.put("DragControler.dragCursor", new ImageIcon(getClass().getResource("/com/vldocking/swing/docking/dragcursor.gif")).getImage());
 
-		UIManager.put("DragControler.swapDragCursor", new ImageIcon(getClass().getResource("/com/vlsolutions/swing/docking/swapdragcursor.gif")).getImage());
+		UIManager.put("DragControler.swapDragCursor", new ImageIcon(getClass().getResource("/com/vldocking/swing/docking/swapdragcursor.gif")).getImage());
 
 		UIManager.put("DragControler.isDragAndDropEnabled", Boolean.TRUE);
 
