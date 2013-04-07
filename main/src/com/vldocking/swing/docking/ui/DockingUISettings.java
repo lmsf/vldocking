@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking.ui;
 
@@ -22,195 +30,121 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
-/**
- * Central class to manage Look and feel settings for the docking framework. <p>
- * There are two ways of modifying the look and feel of the docking framework :
- * <ul> <li> provide a subclass of DockingUISettings and override the installXXX
- * methods <li> directly put UI properties (UIManager.put(key,value)) awaited by
- * the desktop UI delegates. Those are described below. </ul> <table
- * border="1"><tr><th>UI property</th> <th>type</th> <th>effect</th></tr>
- * <tr><td>DockView.singleDockableBorder</td> <td>Border</td> <td>border used
- * when the DockView is docked alone (not in a tab)</td></tr>
- * <tr><td>DockView.tabbedDockableBorder</td> <td>Border</td> <td>border used
- * when the DockView is contained in a tabbed pane</td></tr>
- * <tr><td>DockView.maximizedDockableBorder</td> <td>Border</td> <td>border used
- * when the DockView is maxmized</td></tr> <tr> <td>AutoHideButtonUI</td>
- * <td>class name</td> <td>UI delegate for the AutoHideButton</td></tr> <tr>
- * <td>AutoHideButtonPanelUI</td> <td>class name</td> <td>UI delegate for the
- * AutoHideButtonPanel</td></tr> <tr> <td>AutoHideExpandPanelUI</td> <td>class
- * name</td> <td>UI delegate for the AutoHideExpandPanel</td></tr> <tr>
- * <td>AutoHideButton.expandBorderTop</td> <td>Border</td> <td>Border of the
- * autohide button when it is on top of the desktop</td></tr> <tr>
- * <td>AutoHideButton.expandBorderBottom</td> <td>Border</td> <td>Border of the
- * autohide button when it is at bottom of the desktop</td></tr> <tr>
- * <td>AutoHideButton.expandBorderLeft</td> <td>Border</td> <td>Border of the
- * autohide button when it is on the left of the desktop</td></tr> <tr>
- * <td>AutoHideButton.expandBorderRight</td> <td>Border</td> <td>Border of the
- * autohide button when it is on the right of the desktop</td></tr> <tr>
- * <td>AutoHideButtonPanel.topBorder</td> <td>Border</td> <td>Border of the
- * AutoHideButtonPanel when it is on top of the desktop</td></tr> <tr>
- * <td>AutoHideButtonPanel.bottomBorder</td> <td>Border</td> <td>Border of the
- * AutoHideButtonPanel when it is at bottom of the desktop</td></tr> <tr>
- * <td>AutoHideButtonPanel.leftBorder</td> <td>Border</td> <td>Border of the
- * AutoHideButtonPanel when it is on the left of the desktop</td></tr> <tr>
- * <td>AutoHideButtonPanel.rightBorder</td> <td>Border</td> <td>Border of the
- * AutoHideButtonPanel when it is on the right of the desktop</td></tr> <tr>
- * <td>DockViewUI</td> <td>class name</td> <td>UI delegate for
- * DockView</td></tr> <tr> <td>DetachedDockViewUI</td> <td>class name</td>
- * <td>UI delegate for DetachedDockView</td></tr> <tr>
- * <td>DockViewTitleBarUI</td> <td>class name</td> <td>UI delegate for
- * DockViewTitleBar</td></tr> <tr> <td>DockViewTitleBar.height</td> <td>int</td>
- * <td>Height of the title bars. If set to 0, then every title bar will compute
- * its preferred size (based on fonts and icons)</td></tr> <tr>
- * <td>DockViewTitleBar.closeButtonText</td> <td>String</td> <td>Text of the
- * close button</td></tr> <tr> <td>DockViewTitleBar.minimizeButtonText</td>
- * <td>String</td> <td>Text of the minimize (hide) button</td></tr> <tr>
- * <td>DockViewTitleBar.maximizeButtonText</td> <td>String</td> <td>Text of the
- * maximize button</td></tr> <tr> <td>DockViewTitleBar.restoreButtonText</td>
- * <td>String</td> <td>Text of the restore button(opposite of
- * maximize)</td></tr> <tr> <td>DockViewTitleBar.floatButtonText</td>
- * <td>String</td> <td>Text of the float button (detach)</td></tr> <tr>
- * <td>DockViewTitleBar.attachButtonText</td> <td>String</td> <td>Text of the
- * attach button(opposite of float)</td></tr> <tr>
- * <td>DockViewTitleBar.titleFont</td> <td>Font</td> <td>Font used by the title
- * bar</td></tr> <tr> <td>DockViewTitleBar.isCloseButtonDisplayed</td>
- * <td>boolean</td> <td>display or not the close button in the title bar (still
- * accessible from pop-up menu)</td></tr> <tr>
- * <td>DockViewTitleBar.isHideButtonDisplayed</td> <td>boolean</td> <td>display
- * or not the hide button in the title bar</td></tr> <tr>
- * <td>DockViewTitleBar.isDockButtonDisplayed</td> <td>boolean</td> <td>display
- * or not the dock button in the title bar</td></tr> <tr>
- * <td>DockViewTitleBar.isMaximizeButtonDisplayed</td> <td>boolean</td>
- * <td>display or not the maximize button in the title bar</td></tr> <tr>
- * <td>DockViewTitleBar.isRestoreButtonDisplayed</td> <td>boolean</td>
- * <td>display or not the restore button in the title bar</td></tr> <tr>
- * <td>DockViewTitleBar.isFloatButtonDisplayed</td> <td>boolean</td> <td>display
- * or not the float button in the title bar</td></tr> <tr>
- * <td>DockViewTitleBar.isAttachButtonDisplayed</td> <td>boolean</td>
- * <td>display or not the attach button in the title bar</td></tr> <tr>
- * <td>DockViewTitleBar.border</td> <td>Border</td> <td>Border of the title
- * bar</td></tr> <tr> <td>DockingSplitPaneUI</td> <td>class name</td> <td>UI
- * delegate for SplitContainer component</td></tr> <tr>
- * <td>SplitContainer.dividerSize</td> <td>int</td> <td>Divider size of the
- * split panes</td></tr> <tr> <td>TabbedDockableContainer.tabPlacement</td>
- * <td>int (SwingConstants.TOP / BOTTOM)</td> <td>Global tab style</td></tr>
- * <tr> <td>DockTabbedPane.closeButtonText</td> <td>String</td> <td>Text for the
- * close button in tab</td></tr> <tr> <td>DockTabbedPane.minimizeButtonText</td>
- * <td>String</td> <td>Text for the minimize button in tab</td></tr> <tr>
- * <td>DockTabbedPane.restoreButtonText</td> <td>String</td> <td>Text for the
- * restore button in tab</td></tr> <tr>
- * <td>DockTabbedPane.maximizeButtonText</td> <td>String</td> <td>Text for the
- * maximize button in tab</td></tr> <tr> <td>DockTabbedPane.floatButtonText</td>
- * <td>String</td> <td>Text for the float button in tab</td></tr> <tr>
- * <td>DockTabbedPane.attachButtonText</td> <td>String</td> <td>Text for the
- * attach button in tab (when floating)</td></tr> <tr>
- * <td>TabbedContainer.requestFocusOnTabSelection</td> <td>boolean</td>
- * <td>Automatically puts focus on the selected tabbed component (default
- * false)</td></tr> <tr> <td>TabbedPane.otherIconsGap</td> <td>int</td> <td>Gap
- * between text and close icon in closeable tab</td></tr> <tr>
- * <td>TabbedPane.inBetweenOtherIconsGap</td> <td>int</td> <td>Gap between two
- * icons</td></tr> <tr> <td>DockViewTitleBar.close</td> <td>Icon</td> <td>Icon
- * for the close button</td></tr> <tr> <td>DockViewTitleBar.close.rollover</td>
- * <td>Icon</td> <td>Icon for the close button</td></tr> <tr>
- * <td>DockViewTitleBar.close.pressed</td> <td>Icon</td> <td>Icon for the close
- * button</td></tr> <tr> <td>DockViewTitleBar.dock</td> <td>Icon</td> <td>Icon
- * for the dock button</td></tr> <tr> <td>DockViewTitleBar.dock.rollover</td>
- * <td>Icon</td> <td>Icon for the dock button</td></tr> <tr>
- * <td>DockViewTitleBar.dock.pressed</td> <td>Icon</td> <td>Icon for the dock
- * button</td></tr> <tr> <td>DockViewTitleBar.hide</td> <td>Icon</td> <td>Icon
- * for the hide button</td></tr> <tr> <td>DockViewTitleBar.hide.rollover</td>
- * <td>Icon</td> <td>Icon for the hide button</td></tr> <tr>
- * <td>DockViewTitleBar.hide.pressed</td> <td>Icon</td> <td>Icon for the hide
- * button</td></tr> <tr> <td>DockViewTitleBar.maximize</td> <td>Icon</td>
- * <td>Icon for the maximize button</td></tr> <tr>
- * <td>DockViewTitleBar.maximize.rollover</td> <td>Icon</td> <td>Icon for the
- * maximize button</td></tr> <tr> <td>DockViewTitleBar.maximize.pressed</td>
- * <td>Icon</td> <td>Icon for the maximize button</td></tr> <tr>
- * <td>DockViewTitleBar.restore</td> <td>Icon</td> <td>Icon for the restore
- * button</td></tr> <tr> <td>DockViewTitleBar.restore.rollover</td>
- * <td>Icon</td> <td>Icon for the restore button</td></tr> <tr>
- * <td>DockViewTitleBar.restore.pressed</td> <td>Icon</td> <td>Icon for the
- * restore button</td></tr> <tr> <td>DockViewTitleBar.float</td> <td>Icon</td>
- * <td>Icon for the float button</td></tr> <tr>
- * <td>DockViewTitleBar.float.rollover</td> <td>Icon</td> <td>Icon for the float
- * button</td></tr> <tr> <td>DockViewTitleBar.float.pressed</td> <td>Icon</td>
- * <td>Icon for the float button</td></tr> <tr> <td>DockViewTitleBar.attach</td>
- * <td>Icon</td> <td>Icon for the attach button</td></tr> <tr>
- * <td>DockViewTitleBar.attach.rollover</td> <td>Icon</td> <td>Icon for the
- * attach button</td></tr> <tr> <td>DockViewTitleBar.attach.pressed</td>
- * <td>Icon</td> <td>Icon for the attach button</td></tr> <tr>
- * <td>DockViewTitleBar.menu.close</td> <td>Icon </td> <td>Icon for the close
- * button, in pop-up menu</td></tr> <tr> <td>DockViewTitleBar.menu.hide</td>
- * <td>Icon </td> <td>Icon for the hide button, in pop-up menu</td></tr> <tr>
- * <td>DockViewTitleBar.menu.maximize</td> <td>Icon </td> <td>Icon for the
- * maximize button, in pop-up menu</td></tr> <tr>
- * <td>DockViewTitleBar.menu.restore</td> <td>Icon </td> <td>Icon for the
- * restore button, in pop-up menu</td></tr> <tr>
- * <td>DockViewTitleBar.menu.dock</td> <td>Icon </td> <td>Icon for the dock
- * button, in pop-up menu</td></tr> <tr> <td>DockViewTitleBar.menu.float</td>
- * <td>Icon </td> <td>Icon for the float button, in pop-up menu</td></tr> <tr>
- * <td>DockViewTitleBar.menu.attach</td> <td>Icon </td> <td>Icon for the attach
- * button, in pop-up menu</td></tr> <tr> <td>DockTabbedPane.close</td> <td>Icon
- * </td> <td>Icon for the close button, in tabs</td></tr> <tr>
- * <td>DockTabbedPane.close.rollover</td> <td>Icon </td> <td>Icon for the close
- * button, in tabs</td></tr> <tr> <td>DockTabbedPane.close.pressed</td> <td>Icon
- * </td> <td>Icon for the close button, in tabs</td></tr> <tr>
- * <td>DockTabbedPane.menu.close</td> <td>Icon </td> <td>Icon for the close
- * button, in tab pop-up menu</td></tr> <tr> <td>DockTabbedPane.menu.hide</td>
- * <td>Icon </td> <td>Icon for the hide button, in tab pop-up menu</td></tr>
- * <tr> <td>DockTabbedPane.menu.maximize</td> <td>Icon </td> <td>Icon for the
- * maximize button, in tab pop-up menu</td></tr> <tr>
- * <td>DockTabbedPane.menu.float</td> <td>Icon </td> <td>Icon for the float
- * button, in tab pop-up menu</td></tr> <tr> <td>DockTabbedPane.menu.attach</td>
- * <td>Icon </td> <td>Icon for the attach button, in tab pop-up menu (when
- * floating)</td></tr> <tr> <td>DockTabbedPane.menu.closeAll</td> <td>Icon </td>
- * <td>Icon for the "close all" button, in tab pop-up menu</td></tr> <tr>
- * <td>DockTabbedPane.menu.closeAllOther</td> <td>Icon </td> <td>Icon for the
- * "close all other" button, in tab pop-up menu</td></tr> <tr>
- * <td>DockingDesktop.closeActionAccelerator</td> <td>KeyStroke</td>
- * <td>KeyStroke for close action (on selected dockable)</td></tr> <tr>
- * <td>DockingDesktop.maximizeActionAccelerator</td> <td>KeyStroke</td>
- * <td>KeyStroke for maximize/restore action (on selected dockable)</td></tr>
- * <tr> <td>DockingDesktop.dockActionAccelerator</td> <td>KeyStroke</td>
- * <td>KeyStroke for hide/dock action (on selected dockable)</td></tr> <tr>
- * <td>DockingDesktop.floatActionAccelerator</td> <td>KeyStroke</td>
- * <td>KeyStroke for float/attach action (on selected dockable)</td></tr> <tr>
- * <td>DockingDesktop.notificationColor</td> <td>Color</td> <td>blinking color
- * for notifications</td></tr> <tr>
- * <td>DockingDesktop.notificationBlinkCount</td> <td>int</td> <td>maximum
- * number of blinking for notifications </td></tr> <tr>
- * <td>DragControler.stopDragCursor"</td> <td>Image</td><td>Cursor image used
- * when a drag and drop move is not allowed</td></tr> <tr>
- * <td>DragControler.detachCursor"</td> <td>Image</td><td>Cursor image used when
- * a drag and drop move will detach the dockable</td></tr> <tr>
- * <td>DragControler.dragCursor"</td> <td>Image</td><td>Cursor image used when a
- * drag and drop move is allowed(not leading to a detached dockable)</td></tr>
- * <tr> <td>DragControler.swapDragCursor</td> <td>Image</td><td>Cursor image
- * used when doing a drag and drop with Ctrl key (hot swap) </td></tr> <tr>
- * <td>DragControler.isDragAndDropEnabled</td><td>Boolean</td><td>Global switch
- * to turn on/off drag and drop support in vldocking (default set to
- * true)</td></tr> <tr>
- * <td>DragControler.paintBackgroundUnderDragRect</td><td>Boolean</td><td>Global
- * switch to turn on/off background painting under drag shapes (which can be
- * slow on some linux distributions) (default set to true)</td></tr> <tr>
- * <td>ToolBarGripperUI</td> <td>class name</td> <td>UI delegate for the toolbar
- * "gripper"</td></tr> <tr> <td>ToolBarPanel.topBorder</td> <td>Border</td>
- * <td>Border used when a toolbar in on the top of a container</td></tr> <tr>
- * <td>ToolBarPanel.leftBorder</td> <td>Border</td> <td>Border used when a
- * toolbar in on the left of a container</td></tr> <tr>
- * <td>ToolBarPanel.bottomBorder</td> <td>Border</td> <td>Border used when a
- * toolbar in at the bottom of a container</td></tr> <tr>
- * <td>ToolBarPanel.rightBorder</td> <td>Border</td> <td>Border used when a
- * toolbar in on the right of a container</td></tr> <tr>
- * <td>FloatingDialog.dialogBorder</td> <td>Border</td> <td>Border used for the
- * FloatingDialog</td></tr> <tr> <td>FloatingDialog.titleBorder</td>
- * <td>Border</td> <td>Border used for the title (drag header) of the
- * FloatingDialog</td></tr> <tr> <td>FloatingContainer.followParentWindow</td>
- * <td>Boolean</td> <td>if true, the floating dialogs will follow the movements
- * of their parent window on screen</td></tr> <tr>
- * <td>FloatingContainer.paintDragShape </td> <td>Boolean</td> <td>if true, a
- * drag outline shape will follow the mouse when dragging </td></tr> </table>
- * 
+/** Central class to manage Look and feel settings for the docking framework.
+ *<p> 
+ * There are two ways of modifying the look and feel of the docking framework : 
+ *<ul>
+ *<li> provide a subclass of DockingUISettings and override the installXXX methods
+ *<li> directly put UI properties (UIManager.put(key,value)) awaited by the desktop UI delegates.
+ *  Those are described below.
+ *</ul>
+ *<table border="1"><tr><th>UI property</th> <th>type</th> <th>effect</th></tr>
+ *<tr><td>DockView.singleDockableBorder</td> <td>Border</td> <td>border used when the DockView is docked alone (not in a tab)</td></tr>
+ *<tr><td>DockView.tabbedDockableBorder</td> <td>Border</td> <td>border used when the DockView is contained in a tabbed pane</td></tr>
+ *<tr><td>DockView.maximizedDockableBorder</td> <td>Border</td> <td>border used when the DockView is maxmized</td></tr>
+ *<tr> <td>AutoHideButtonUI</td> <td>class name</td> <td>UI delegate for the AutoHideButton</td></tr>
+ *<tr> <td>AutoHideButtonPanelUI</td> <td>class name</td> <td>UI delegate for the AutoHideButtonPanel</td></tr>
+ *<tr> <td>AutoHideExpandPanelUI</td> <td>class name</td> <td>UI delegate for the AutoHideExpandPanel</td></tr>
+ *<tr> <td>AutoHideButton.expandBorderTop</td> <td>Border</td> <td>Border of the autohide button when it is on top of the desktop</td></tr>
+ *<tr> <td>AutoHideButton.expandBorderBottom</td> <td>Border</td> <td>Border of the autohide button when it is at bottom of the desktop</td></tr>
+ *<tr> <td>AutoHideButton.expandBorderLeft</td> <td>Border</td> <td>Border of the autohide button when it is on the left of the desktop</td></tr>
+ *<tr> <td>AutoHideButton.expandBorderRight</td> <td>Border</td> <td>Border of the autohide button when it is on the right of the desktop</td></tr>
+ *<tr> <td>AutoHideButtonPanel.topBorder</td> <td>Border</td> <td>Border of the AutoHideButtonPanel when it is on top of the desktop</td></tr>
+ *<tr> <td>AutoHideButtonPanel.bottomBorder</td> <td>Border</td> <td>Border of the AutoHideButtonPanel when it is at bottom of the desktop</td></tr>
+ *<tr> <td>AutoHideButtonPanel.leftBorder</td> <td>Border</td> <td>Border of the AutoHideButtonPanel when it is on the left of the desktop</td></tr>
+ *<tr> <td>AutoHideButtonPanel.rightBorder</td> <td>Border</td> <td>Border of the AutoHideButtonPanel when it is on the right of the desktop</td></tr>
+ *<tr> <td>DockViewUI</td> <td>class name</td> <td>UI delegate for DockView</td></tr>
+ *<tr> <td>DetachedDockViewUI</td> <td>class name</td> <td>UI delegate for DetachedDockView</td></tr>
+ *<tr> <td>DockViewTitleBarUI</td> <td>class name</td> <td>UI delegate for DockViewTitleBar</td></tr>
+ *<tr> <td>DockViewTitleBar.height</td> <td>int</td> <td>Height of the title bars. If set to 0, then every title bar will compute its preferred size (based on fonts and icons)</td></tr>
+ *<tr> <td>DockViewTitleBar.closeButtonText</td> <td>String</td> <td>Text of the close button</td></tr>
+ *<tr> <td>DockViewTitleBar.minimizeButtonText</td> <td>String</td> <td>Text of the minimize (hide) button</td></tr>
+ *<tr> <td>DockViewTitleBar.maximizeButtonText</td> <td>String</td> <td>Text of the maximize button</td></tr>
+ *<tr> <td>DockViewTitleBar.restoreButtonText</td> <td>String</td> <td>Text of the restore button(opposite of maximize)</td></tr>
+ *<tr> <td>DockViewTitleBar.floatButtonText</td> <td>String</td> <td>Text of the float button (detach)</td></tr>
+ *<tr> <td>DockViewTitleBar.attachButtonText</td> <td>String</td> <td>Text of the attach button(opposite of float)</td></tr>
+ *<tr> <td>DockViewTitleBar.titleFont</td> <td>Font</td> <td>Font used by the title bar</td></tr>
+ *<tr> <td>DockViewTitleBar.isCloseButtonDisplayed</td> <td>boolean</td> <td>display or not the close button in the title bar (still accessible from pop-up menu)</td></tr>
+ *<tr> <td>DockViewTitleBar.isHideButtonDisplayed</td> <td>boolean</td> <td>display or not the hide button in the title bar</td></tr>
+ *<tr> <td>DockViewTitleBar.isDockButtonDisplayed</td> <td>boolean</td> <td>display or not the dock button in the title bar</td></tr>
+ *<tr> <td>DockViewTitleBar.isMaximizeButtonDisplayed</td> <td>boolean</td> <td>display or not the maximize button in the title bar</td></tr>
+ *<tr> <td>DockViewTitleBar.isRestoreButtonDisplayed</td> <td>boolean</td> <td>display or not the restore button in the title bar</td></tr>
+ *<tr> <td>DockViewTitleBar.isFloatButtonDisplayed</td> <td>boolean</td> <td>display or not the float button in the title bar</td></tr>
+ *<tr> <td>DockViewTitleBar.isAttachButtonDisplayed</td> <td>boolean</td> <td>display or not the attach button in the title bar</td></tr>
+ *<tr> <td>DockViewTitleBar.border</td> <td>Border</td> <td>Border of the title bar</td></tr>
+ *<tr> <td>DockingSplitPaneUI</td> <td>class name</td> <td>UI delegate for SplitContainer component</td></tr>
+ *<tr> <td>SplitContainer.dividerSize</td> <td>int</td> <td>Divider size of the split panes</td></tr>
+ *<tr> <td>TabbedDockableContainer.tabPlacement</td> <td>int (SwingConstants.TOP / BOTTOM)</td> <td>Global tab style</td></tr>
+ *<tr> <td>DockTabbedPane.closeButtonText</td> <td>String</td> <td>Text for the close button in tab</td></tr>
+ *<tr> <td>DockTabbedPane.minimizeButtonText</td> <td>String</td> <td>Text for the minimize button in tab</td></tr>
+ *<tr> <td>DockTabbedPane.restoreButtonText</td> <td>String</td> <td>Text for the restore button in tab</td></tr>
+ *<tr> <td>DockTabbedPane.maximizeButtonText</td> <td>String</td> <td>Text for the maximize button in tab</td></tr>
+ *<tr> <td>DockTabbedPane.floatButtonText</td> <td>String</td> <td>Text for the float button in tab</td></tr>
+ *<tr> <td>DockTabbedPane.attachButtonText</td> <td>String</td> <td>Text for the attach button in tab (when floating)</td></tr>
+ *<tr> <td>TabbedContainer.requestFocusOnTabSelection</td> <td>boolean</td> <td>Automatically puts focus on the selected tabbed component (default false)</td></tr>
+ *<tr> <td>TabbedPane.otherIconsGap</td> <td>int</td> <td>Gap between text and close icon in closeable tab</td></tr>
+ *<tr> <td>TabbedPane.inBetweenOtherIconsGap</td> <td>int</td> <td>Gap between two icons</td></tr>
+ *<tr> <td>DockViewTitleBar.close</td> <td>Icon</td> <td>Icon for the close button</td></tr>
+ *<tr> <td>DockViewTitleBar.close.rollover</td> <td>Icon</td> <td>Icon for the close button</td></tr>
+ *<tr> <td>DockViewTitleBar.close.pressed</td> <td>Icon</td> <td>Icon for the close button</td></tr>
+ *<tr> <td>DockViewTitleBar.dock</td> <td>Icon</td> <td>Icon for the dock button</td></tr>
+ *<tr> <td>DockViewTitleBar.dock.rollover</td> <td>Icon</td> <td>Icon for the dock button</td></tr>
+ *<tr> <td>DockViewTitleBar.dock.pressed</td> <td>Icon</td> <td>Icon for the dock button</td></tr>
+ *<tr> <td>DockViewTitleBar.hide</td> <td>Icon</td> <td>Icon for the hide button</td></tr>
+ *<tr> <td>DockViewTitleBar.hide.rollover</td> <td>Icon</td> <td>Icon for the hide button</td></tr>
+ *<tr> <td>DockViewTitleBar.hide.pressed</td> <td>Icon</td> <td>Icon for the hide button</td></tr>
+ *<tr> <td>DockViewTitleBar.maximize</td> <td>Icon</td> <td>Icon for the maximize button</td></tr>
+ *<tr> <td>DockViewTitleBar.maximize.rollover</td> <td>Icon</td> <td>Icon for the maximize button</td></tr>
+ *<tr> <td>DockViewTitleBar.maximize.pressed</td> <td>Icon</td> <td>Icon for the maximize button</td></tr>
+ *<tr> <td>DockViewTitleBar.restore</td> <td>Icon</td> <td>Icon for the restore button</td></tr>
+ *<tr> <td>DockViewTitleBar.restore.rollover</td> <td>Icon</td> <td>Icon for the restore button</td></tr>
+ *<tr> <td>DockViewTitleBar.restore.pressed</td> <td>Icon</td> <td>Icon for the restore button</td></tr>
+ *<tr> <td>DockViewTitleBar.float</td> <td>Icon</td> <td>Icon for the float button</td></tr>
+ *<tr> <td>DockViewTitleBar.float.rollover</td> <td>Icon</td> <td>Icon for the float button</td></tr>
+ *<tr> <td>DockViewTitleBar.float.pressed</td> <td>Icon</td> <td>Icon for the float button</td></tr>
+ *<tr> <td>DockViewTitleBar.attach</td> <td>Icon</td> <td>Icon for the attach button</td></tr>
+ *<tr> <td>DockViewTitleBar.attach.rollover</td> <td>Icon</td> <td>Icon for the attach button</td></tr>
+ *<tr> <td>DockViewTitleBar.attach.pressed</td> <td>Icon</td> <td>Icon for the attach button</td></tr>
+ *<tr> <td>DockViewTitleBar.menu.close</td> <td>Icon </td> <td>Icon for the close button, in pop-up menu</td></tr>
+ *<tr> <td>DockViewTitleBar.menu.hide</td> <td>Icon </td> <td>Icon for the hide button, in pop-up menu</td></tr>
+ *<tr> <td>DockViewTitleBar.menu.maximize</td> <td>Icon </td> <td>Icon for the maximize button, in pop-up menu</td></tr>
+ *<tr> <td>DockViewTitleBar.menu.restore</td> <td>Icon </td> <td>Icon for the restore button, in pop-up menu</td></tr>
+ *<tr> <td>DockViewTitleBar.menu.dock</td> <td>Icon </td> <td>Icon for the dock button, in pop-up menu</td></tr>
+ *<tr> <td>DockViewTitleBar.menu.float</td> <td>Icon </td> <td>Icon for the float button, in pop-up menu</td></tr>
+ *<tr> <td>DockViewTitleBar.menu.attach</td> <td>Icon </td> <td>Icon for the attach button, in pop-up menu</td></tr>
+ *<tr> <td>DockTabbedPane.close</td> <td>Icon </td> <td>Icon for the close button, in tabs</td></tr>
+ *<tr> <td>DockTabbedPane.close.rollover</td> <td>Icon </td> <td>Icon for the close button, in tabs</td></tr>
+ *<tr> <td>DockTabbedPane.close.pressed</td> <td>Icon </td> <td>Icon for the close button, in tabs</td></tr>
+ *<tr> <td>DockTabbedPane.menu.close</td> <td>Icon </td> <td>Icon for the close button, in tab pop-up menu</td></tr>
+ *<tr> <td>DockTabbedPane.menu.hide</td> <td>Icon </td> <td>Icon for the hide button, in tab pop-up menu</td></tr>
+ *<tr> <td>DockTabbedPane.menu.maximize</td> <td>Icon </td> <td>Icon for the maximize button, in tab pop-up menu</td></tr>
+ *<tr> <td>DockTabbedPane.menu.float</td> <td>Icon </td> <td>Icon for the float button, in tab pop-up menu</td></tr>
+ *<tr> <td>DockTabbedPane.menu.attach</td> <td>Icon </td> <td>Icon for the attach button, in tab pop-up menu (when floating)</td></tr>
+ *<tr> <td>DockTabbedPane.menu.closeAll</td> <td>Icon </td> <td>Icon for the "close all" button, in tab pop-up menu</td></tr>
+ *<tr> <td>DockTabbedPane.menu.closeAllOther</td> <td>Icon </td> <td>Icon for the "close all other" button, in tab pop-up menu</td></tr>
+ *<tr> <td>DockingDesktop.closeActionAccelerator</td> <td>KeyStroke</td> <td>KeyStroke for close action (on selected dockable)</td></tr>
+ *<tr> <td>DockingDesktop.maximizeActionAccelerator</td> <td>KeyStroke</td> <td>KeyStroke for maximize/restore action (on selected dockable)</td></tr>
+ *<tr> <td>DockingDesktop.dockActionAccelerator</td> <td>KeyStroke</td> <td>KeyStroke for hide/dock action (on selected dockable)</td></tr>
+ *<tr> <td>DockingDesktop.floatActionAccelerator</td> <td>KeyStroke</td> <td>KeyStroke for float/attach action (on selected dockable)</td></tr>
+ *<tr> <td>DockingDesktop.notificationColor</td> <td>Color</td> <td>blinking color for notifications</td></tr>
+ *<tr> <td>DockingDesktop.notificationBlinkCount</td> <td>int</td> <td>maximum number of blinking for notifications </td></tr>
+ *<tr> <td>DragControler.stopDragCursor"</td> <td>Image</td><td>Cursor image used when a drag and drop move is not allowed</td></tr>
+ *<tr> <td>DragControler.detachCursor"</td> <td>Image</td><td>Cursor image used when a drag and drop move will detach the dockable</td></tr>
+ *<tr> <td>DragControler.dragCursor"</td> <td>Image</td><td>Cursor image used when a drag and drop move is allowed(not leading to a detached dockable)</td></tr>
+ *<tr> <td>DragControler.swapDragCursor</td> <td>Image</td><td>Cursor image used when doing a drag and drop with Ctrl key (hot swap) </td></tr>
+ *<tr> <td>DragControler.isDragAndDropEnabled</td><td>Boolean</td><td>Global switch to turn on/off drag and drop support in vldocking (default set to true)</td></tr>
+ *<tr> <td>DragControler.paintBackgroundUnderDragRect</td><td>Boolean</td><td>Global switch to turn on/off background painting under drag shapes (which can be slow on some linux distributions) (default set to true)</td></tr>
+ *<tr> <td>ToolBarGripperUI</td> <td>class name</td> <td>UI delegate for the toolbar "gripper"</td></tr>
+ *<tr> <td>ToolBarPanel.topBorder</td> <td>Border</td> <td>Border used when a toolbar in on the top of a container</td></tr>
+ *<tr> <td>ToolBarPanel.leftBorder</td> <td>Border</td> <td>Border used when a toolbar in on the left of a container</td></tr>
+ *<tr> <td>ToolBarPanel.bottomBorder</td> <td>Border</td> <td>Border used when a toolbar in at the bottom of a container</td></tr>
+ *<tr> <td>ToolBarPanel.rightBorder</td> <td>Border</td> <td>Border used when a toolbar in on the right of a container</td></tr>
+ *<tr> <td>FloatingDialog.dialogBorder</td> <td>Border</td> <td>Border used for the FloatingDialog</td></tr>
+ *<tr> <td>FloatingDialog.titleBorder</td> <td>Border</td> <td>Border used for the title (drag header) of the FloatingDialog</td></tr>
+ *<tr> <td>FloatingContainer.followParentWindow</td> <td>Boolean</td> <td>if true, the floating dialogs will follow the movements of their parent window on screen</td></tr>
+ *<tr> <td>FloatingContainer.paintDragShape </td> <td>Boolean</td> <td>if true, a drag outline shape will follow the mouse when dragging </td></tr>
+ * </table>
+ *
  * @author Lilian Chamontin, VLSolutions
  */
 public class DockingUISettings {
@@ -223,14 +157,12 @@ public class DockingUISettings {
 	private Color shadow = UIManager.getColor("controlShadow");
 	private Color highlight = UIManager.getColor("controlLtHighlight");
 
-	//private Color darkShadow = UIManager.getColor("controlDkShadow");
+	@SuppressWarnings("unused")
+	private Color darkShadow = UIManager.getColor("controlDkShadow");
 
 	public DockingUISettings() {}
 
-	/**
-	 * returns the singleton instance used to store and install UI settings for
-	 * the framework
-	 */
+	/** returns the singleton instance used to store and install UI settings for the framework  */
 	public static DockingUISettings getInstance() {
 		// give a chance to subclassers to install their own subclass instance
 		if(instance == null) {
@@ -239,20 +171,18 @@ public class DockingUISettings {
 		return instance;
 	}
 
-	/**
-	 * Allows replacement of the settings instance (used to override global look
-	 * and feel settings of the framework. <p> This method must be called before
-	 * DockingDesktop is referenced, as the settings are statically installed at
-	 * that moment.
+	/** Allows replacement of the settings instance (used to override global look and feel 
+	 * settings of the framework.
+	 *<p>
+	 * This method must be called before DockingDesktop is referenced, as the settings are statically 
+	 * installed at that moment.
 	 */
 	public static void setInstance(DockingUISettings newInstance) {
 		instance = newInstance;
 	}
 
-	/**
-	 * Installs the UI settings. This is executed only once, and automatically
-	 * called at DockingDesktop class loading in case it was not called by the
-	 * application.
+	/** Installs the UI settings. This is executed only once, and automatically called 
+	 * at DockingDesktop class loading in case it was not called by the application.
 	 */
 	public void installUI() {
 		if(! isSettingsInstalled) {
@@ -273,14 +203,15 @@ public class DockingUISettings {
 		}
 	}
 
-	/**
-	 * Allows updating of the ui after a look and feel change. <p> The Docking
-	 * framework uses references of UI elements from this class to install its
-	 * UI according to the look and feel. When Laf is changed, and before
-	 * calling SwingUtilities.updateComponentTreeUI(topLevelComponent), invoke
-	 * updateUI() in order to reset everything. <p> Calling this method after
-	 * SwingUtilities.updateComponentTreeUI(topLevelComponent) is unspecified
-	 * (some things will be updated, others not).
+	/** Allows updating of the ui after a look and feel change.
+	 * <p>
+	 *  The Docking framework uses references of UI elements from this class to 
+	 *  install its UI according to the look and feel. When Laf is changed, and before
+	 *  calling SwingUtilities.updateComponentTreeUI(topLevelComponent), invoke updateUI() in 
+	 *  order to reset everything.
+	 * <p> 
+	 *  Calling this method after SwingUtilities.updateComponentTreeUI(topLevelComponent) is 
+	 *  unspecified (some things will be updated, others not).
 	 */
 	public void updateUI() {
 		isSettingsInstalled = false;
@@ -363,13 +294,14 @@ public class DockingUISettings {
 	public void installSplitContainerSettings() {
 		UIManager.put("DockingSplitPaneUI", "com.vldocking.swing.docking.ui.DockingSplitPaneUI");
 		UIManager.put("SplitContainer.dividerSize", new Integer(4));
-		UIManager.put("SplitContainer.isResizingEnabled", Boolean.TRUE); //2007/08/11
+		UIManager.put("SplitContainer.isResizingEnabled", Boolean.TRUE);    //2007/08/11
 
 	}
 
 	/** installs the tabbed pane related properties */
 	public void installTabbedContainerSettings() {
-		//final String prefix = "/resources/";
+		@SuppressWarnings("unused")
+		final String prefix = "/com/vlsolutions/swing/docking/";
 		UIManager.put("TabbedDockableContainer.tabPlacement", new Integer(SwingConstants.TOP));
 
 		UIManager.put("DockTabbedPane.closeButtonText", UIManager.getString("InternalFrameTitlePane.closeButtonText"));
@@ -397,16 +329,16 @@ public class DockingUISettings {
 	}
 
 	/** installs icons used by the framework */
+	@SuppressWarnings("unused")
 	public void installIcons() {
-		//final String prefix = "/resources/";
-		final String prefix = "/resources/";
+		final String prefix = "/com/vlsolutions/swing/docking/";
 		Icon closeIcon = new ImageIcon(getClass().getResource(prefix + "close16v2.png"));
 		Icon closeRolloverIcon = new ImageIcon(getClass().getResource(prefix + "close16v2rollover.png"));
 		Icon closePressedIcon = new ImageIcon(getClass().getResource(prefix + "close16v2pressed.png"));
 
-		//Icon closeTabIcon = new ImageIcon(getClass().getResource(prefix + "close16tab.png"));
-		//Icon closeTabRolloverIcon = new ImageIcon(getClass().getResource(prefix + "close16tabRollover.png"));
-		//Icon closeTabPressedIcon = new ImageIcon(getClass().getResource(prefix + "close16tabPressed.png"));
+		Icon closeTabIcon = new ImageIcon(getClass().getResource(prefix + "close16tab.png"));
+		Icon closeTabRolloverIcon = new ImageIcon(getClass().getResource(prefix + "close16tabRollover.png"));
+		Icon closeTabPressedIcon = new ImageIcon(getClass().getResource(prefix + "close16tabPressed.png"));
 
 		Icon hideIcon = new ImageIcon(getClass().getResource(prefix + "hide16v2.png"));
 		Icon hideRolloverIcon = new ImageIcon(getClass().getResource(prefix + "hide16v2rollover.png"));
@@ -464,7 +396,7 @@ public class DockingUISettings {
 		UIManager.put("DockTabbedPane.close.rollover", closeRolloverIcon);
 		UIManager.put("DockTabbedPane.close.pressed", closePressedIcon);
 
-		UIManager.put("DockTabbedPane.unselected_close", null); //2005/11/14
+		UIManager.put("DockTabbedPane.unselected_close", null);    //2005/11/14
 		UIManager.put("DockTabbedPane.unselected_close.rollover", closeRolloverIcon);
 		UIManager.put("DockTabbedPane.unselected_close.pressed", closePressedIcon);
 
@@ -474,7 +406,7 @@ public class DockingUISettings {
 		UIManager.put("DockTabbedPane.menu.float", floatRolloverIcon);
 		UIManager.put("DockTabbedPane.closeAll", new ImageIcon(getClass().getResource(prefix + "closeAll16.png")));
 		UIManager.put("DockTabbedPane.closeAllOther", new ImageIcon(getClass().getResource(prefix + "closeAllOther16.png")));
-		UIManager.put("DockTabbedPane.menu.attach", attachRolloverIcon); //2005/10/07
+		UIManager.put("DockTabbedPane.menu.attach", attachRolloverIcon);     //2005/10/07
 
 	}
 
@@ -499,13 +431,13 @@ public class DockingUISettings {
 	public void installDesktopSettings() {
 		UIManager.put("DockingDesktop.notificationColor", Color.ORANGE);
 		UIManager.put("DockingDesktop.notificationBlinkCount", new Integer(5));
-		UIManager.put("DragControler.stopDragCursor", new ImageIcon(getClass().getResource("/resources/stopdragcursor.gif")).getImage());
+		UIManager.put("DragControler.stopDragCursor", new ImageIcon(getClass().getResource("/com/vlsolutions/swing/docking/stopdragcursor.gif")).getImage());
 
-		UIManager.put("DragControler.detachCursor", new ImageIcon(getClass().getResource("/resources/detachCursor.png")).getImage());
+		UIManager.put("DragControler.detachCursor", new ImageIcon(getClass().getResource("/com/vlsolutions/swing/docking/detachCursor.png")).getImage());
 
-		UIManager.put("DragControler.dragCursor", new ImageIcon(getClass().getResource("/resources/dragcursor.gif")).getImage());
+		UIManager.put("DragControler.dragCursor", new ImageIcon(getClass().getResource("/com/vlsolutions/swing/docking/dragcursor.gif")).getImage());
 
-		UIManager.put("DragControler.swapDragCursor", new ImageIcon(getClass().getResource("/resources/swapdragcursor.gif")).getImage());
+		UIManager.put("DragControler.swapDragCursor", new ImageIcon(getClass().getResource("/com/vlsolutions/swing/docking/swapdragcursor.gif")).getImage());
 
 		UIManager.put("DragControler.isDragAndDropEnabled", Boolean.TRUE);
 

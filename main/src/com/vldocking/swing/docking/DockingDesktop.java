@@ -1,19 +1,26 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
 import java.beans.*;
 import java.io.*;
 import java.util.*;
-
 import javax.xml.parsers.*;
 
 import java.awt.*;
@@ -30,42 +37,38 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * The DockingDesktop is the main class of the VLDocking Framework. <P> It is
- * the equivalent of what is JDesktopPane for JInternalWindow : a JLayeredPane
- * customized to include : <UL> <LI> Four auto-hide borders used to show
- * Dockable iconified as buttons. <LI> A nested containment hierarchy (made of
- * JSplitPanes) with drag and drop (dock) capabilities. <LI> An extensive API to
- * programmatically change its contents. <LI> An XML encoder/decoder to create /
- * save / reload workspaces (sets of dockable components) <LI> An abstraction of
- * the Dockable notion, with factories to allow different implementations or
- * customization of the Dockable containers. <LI> An event model to track
- * changes and react to them. </UL>
- * 
+ * The DockingDesktop is the main class of the VLDocking Framework.
+ * <P> It is the equivalent of what is JDesktopPane for JInternalWindow :
+ *  a JLayeredPane customized to include :
+ * <UL>
+ * <LI> Four auto-hide borders used to show Dockable iconified as buttons.
+ * <LI> A nested containment hierarchy (made of JSplitPanes) with drag and drop (dock)
+ * capabilities.
+ * <LI> An extensive API to programmatically change its contents.
+ * <LI> An XML encoder/decoder to create / save / reload workspaces (sets of dockable components)
+ * <LI> An abstraction of the Dockable notion, with factories to allow different implementations
+ * or customization of the Dockable containers.
+ * <LI> An event model to track changes and react to them.
+ * </UL>
+ *
  * @author Lilian Chamontin, VLSolutions.
  * @version 2.0
- * 
+ *
  * @update 2005/10/06 Lilian Chamontin : added support for dnd to floatables
  * @update 2005/10/07 Lilian Chamontin : cancel drag operation with ESCAPE key
- * @update 2005/11/08 Lilian Chamontin : added support for global width/height
- *         drop (in split method)
+ * @update 2005/11/08 Lilian Chamontin : added support for global width/height drop (in split method)
  * @update 2005/11/14 Lilian Chamontin : reworked setFloating methods.
- * @update 2005/12/08 Lilian Chamontin : fixed a bug related to multiple desktop
- *         usage (when moving a window after the desktop has been removed from
- *         hierarchy, the listeners were still invoked and caused a NPE in
- *         moveFloatingWindows).
- * 
- * @update 2006/12/01 Lilian Chamontin : fixed a NPE when closing a window with
- *         some floating children remaining
- * @update 2006/12/19 Lilian Chamontin : fixed a memory leak issue due to
- *         keyboard focus manager handling
- * @update 2007/03/19 reformulate addHiddenDockable tests to support closed
- *         dockables.
- * @update 2007/08/11 added safety check to avoid creating tabs on a maximized
- *         component
- * @update 2008/07/05 fixed a NPE occuring when saving workspace and a tabbed
- *         component was still maximized
+ * @update 2005/12/08 Lilian Chamontin : fixed a bug related to multiple desktop usage (when moving a window after
+ *    the desktop has been removed from hierarchy, the listeners were still invoked and caused a NPE in moveFloatingWindows).
+ *
+ * @update 2006/12/01 Lilian Chamontin : fixed a NPE when closing a window with some floating children remaining
+ * @update 2006/12/19 Lilian Chamontin : fixed a memory leak issue  due to keyboard focus manager handling
+ * @update 2007/03/19 reformulate addHiddenDockable tests to support closed dockables.
+ * @update 2007/08/11 added safety check to avoid creating tabs on a maximized component
+ * @update 2008/07/05 fixed a NPE occuring when saving workspace and a tabbed component was still maximized
  */
 
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class DockingDesktop extends JLayeredPane {
 
 	private static final long serialVersionUID = 1L;
@@ -101,20 +104,18 @@ public class DockingDesktop extends JLayeredPane {
 	/** array containing the border panes */
 	protected AutoHideButtonPanel[] borderPanes = {topBorderPane, leftBorderPane, bottomBorderPane, rightBorderPane};
 
-	private HashMap<DockKey, AutoHideButton> autoHideButtons = new HashMap<DockKey, AutoHideButton>(); // key : DockKey / value : AutoHideButton
+	private HashMap<DockKey, AutoHideButton> autoHideButtons = new HashMap(); // key : DockKey / value : AutoHideButton
 
 	private DragControler dragControler;
 
-	/** a component used to track position of the current maximized component */
+	/**  a component used to track position of the current maximized component */
 	private MaximizedComponentReplacer dummyMaximedReplacer = new MaximizedComponentReplacer();// 2007/01/18
 	//new JLabel();
 
 	/** the current maximized component */
 	private Component maximizedComponent;
-	/**
-	 * a flag set when adding a maximized component : true is this one is
-	 * heavyweight Only used with heavyweight support AND
-	 * singleHeavyWeightComponent
+	/** a flag set when adding a maximized component : true is this one is heavyweight
+	 * Only used with heavyweight support AND singleHeavyWeightComponent
 	 */
 	private boolean currentMaximizedComponentIsHeavyWeight = false;
 
@@ -125,10 +126,7 @@ public class DockingDesktop extends JLayeredPane {
 		// only visible (and active) when expansion panel is visible
 	};
 
-	/**
-	 * this timer is only used when the java version is < 1.5 (version>=1.5 uses
-	 * the MouseInfo component)
-	 */
+	/** this timer is only used when the java version is < 1.5 (version>=1.5 uses the MouseInfo component)*/
 	private javax.swing.Timer mouseOutOfExpandedPanelTimer = new javax.swing.Timer(1000, new ActionListener() {
 
 		// timer used to hide the expanded panel when mouse is out too long
@@ -141,18 +139,15 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	});
 
-	/** groups of tabs (used to re-tab autohidden dockable) */
-	protected HashMap<Dockable, LinkedList<Dockable>> tabbedGroups = new HashMap<Dockable, LinkedList<Dockable>>(); // <Dockable>/<LinkedList<Dockable>
+	/** groups of tabs (used to re-tab autohidden dockable)*/
+	protected HashMap<Dockable, LinkedList<Dockable>> tabbedGroups = new HashMap(); // <Dockable>/<LinkedList<Dockable>
 
 	private FocusHandler focusHandler = new FocusHandler();
 
 	/** return state for floating dockables */
-	protected HashMap<Dockable, DockableState> previousFloatingDockableStates = new HashMap<Dockable, DockableState>(); // key dockable / value dockable state
+	protected HashMap<Dockable, DockableState> previousFloatingDockableStates = new HashMap(); // key dockable / value dockable state
 
-	/**
-	 * Unique name for this desktop : used since 2.1 to support multiple
-	 * desktops
-	 */
+	/** Unique name for this desktop : used since 2.1 to support multiple desktops*/
 	private String desktopName;
 
 	// 2005/10/10 added support for moving the floating dialogs with the frame
@@ -260,26 +255,21 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	};
 
-	/**
-	 * Constructs a DockingDesktop with a default name (suitable for
-	 * single-desktop applications).
+	/** Constructs a DockingDesktop with a default name (suitable for single-desktop applications).
 	 */
 	public DockingDesktop() {
 		this("", null);
 	}
 
-	/**
-	 * Constructs a DockingDesktop with a given name (suitable for
-	 * multiple-desktop applications). <p> This also constructs a new Docking
-	 * Context, that can be shared with other Desktops.
+	/** Constructs a DockingDesktop with a given name (suitable for multiple-desktop applications).
+	 *  <p>
+	 * This also constructs a new Docking Context, that can be shared with other Desktops.
 	 */
 	public DockingDesktop(String desktopName) {
 		this(desktopName, null);
 	}
 
-	/**
-	 * Constructs a DockingDesktop with a given name (suitable for
-	 * multiple-desktop applications).
+	/** Constructs a DockingDesktop with a given name (suitable for multiple-desktop applications).
 	 */
 	public DockingDesktop(String desktopName, DockingContext context) {
 		setDesktopName(desktopName);
@@ -398,11 +388,8 @@ public class DockingDesktop extends JLayeredPane {
 
 		mouseOutOfExpandedPanelTimer.setRepeats(false); // avoid loops
 
-		/*
-		 * KeyboardFocusManager.getCurrentKeyboardFocusManager().
-		 * addPropertyChangeListener( "focusOwner", focusHandler); //2006/08/21
-		 * : back to life (was in comments in 2.1.0)
-		 */
+		/*KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(
+		    "focusOwner", focusHandler); //2006/08/21 : back to life (was in comments in 2.1.0)*/
 
 		installKeyboardBindings();
 
@@ -445,11 +432,10 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Registers listeners for notable keyboard events (CLOSE, DOCK/HIDE,
-	 * MAXIMIZE/RESTORE, float/attach). KeyStroke bindings can be defined and
-	 * overriden this UIManager properties (see DockingUISettings for details).
-	 * 
+	/** Registers listeners for notable keyboard events (CLOSE, DOCK/HIDE, MAXIMIZE/RESTORE, float/attach).
+	 * KeyStroke bindings can be defined and overriden this UIManager properties (see DockingUISettings for
+	 * details).
+	 *
 	 */
 	private void installKeyboardBindings() {
 
@@ -480,21 +466,21 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Returns the currently selected dockable, or null if none is selected. <p>
-	 * A selected dockable is a dockable whose component contains the keyboard
-	 * focus.
+	/** Returns the currently selected dockable, or null if none is selected.
+	 *<p>
+	 * A selected dockable is a dockable whose component contains the keyboard focus.
 	 */
 	public Dockable getSelectedDockable() {
 		return focusHandler.currentDockable;
 	}
 
-	/**
-	 * Set the desktop contents to be opaque or transparent. <p> Transparent
-	 * contents allow adding background images/information when no dockable is
-	 * visible (everything closed or autohidden). <p> Default value is true
-	 * (opaque).
-	 * 
+	/** Set the desktop contents to be opaque or transparent.
+	 * <p>
+	 * Transparent contents allow adding background images/information when no dockable is visible (everything closed
+	 * or autohidden).
+	 * <p>
+	 * Default value is true (opaque).
+	 *
 	 * @since 2.0.4
 	 */
 	public void setOpaqueContents(boolean opaque) {
@@ -502,10 +488,10 @@ public class DockingDesktop extends JLayeredPane {
 		dockingPanel.setOpaque(opaque);
 	}
 
-	/**
-	 * Returns whether this desktop's contents are opaque or not. <p> Default
-	 * value is true (opaque).
-	 * 
+	/** Returns whether this desktop's contents are opaque or not.
+	 * <p>
+	 * Default value is true (opaque).
+	 *
 	 * @see #setOpaqueContents(boolean).
 	 * @since 2.0.4
 	 */
@@ -513,103 +499,94 @@ public class DockingDesktop extends JLayeredPane {
 		return contentPane.isOpaque();
 	}
 
-	/**
-	 * Returns the docking panel used by this desktop.
+	/** Returns the docking panel used by this desktop.
 	 * 
-	 * Usage of this method should be limited to VLDocking extensions (simple
-	 * users shouldn't rely on the underlying DockingPanel existence)
+	 * Usage of this method should be limited to VLDocking extensions (simple users
+	 * shouldn't rely on the underlying DockingPanel existence)
 	 */
 	DockingPanel getDockingPanel() {
 		/* package protected method */
 		return dockingPanel;
 	}
 
-	/**
-	 * Every dockable must be registered in order to be shown in the
-	 * DockingDesktop.
-	 * 
-	 * <P> Registration is automatic for shown dockables : methods
-	 * setCentralDockable(), split(), createTab(), hide()... leading to have the
-	 * dockable visible call registerDockable() ) <P> for not shown dockable (in
-	 * order to read a configuration from an XML stream, or to list the dockable
-	 * in DockingSelectorDialog ), this method must be called manually. <p> As
-	 * of version 2.1, this method call is forwarded to the DockingContext
+	/** Every dockable must be registered in order to be shown in the DockingDesktop.
+	 *
+	 * <P> Registration is automatic for shown dockables :
+	 *   methods setCentralDockable(), split(), createTab(), hide()... leading to have the dockable
+	 * visible call registerDockable() )
+	 * <P> for not shown dockable (in order to read a configuration from an XML stream, or to list
+	 * the dockable in DockingSelectorDialog ), this method must be called manually.
+	 * <p>
+	 * As of version 2.1, this method call is forwarded to the DockingContext
 	 * */
 	public void registerDockable(Dockable dockable) {
 		context.registerDockable(dockable);
 	}
 
-	/**
-	 * Unregisters the dockable, which can be garbage collected (no longer used
-	 * by the docking desktop. <p> As of version 2.1, this method call is
-	 * forwarded to the DockingContext
-	 * */
+	/** Unregisters the dockable, which can be garbage collected (no longer used
+	 * by the docking desktop.
+	 * <p>
+	 * As of version 2.1, this method call is forwarded to the DockingContext
+	 *  */
 	public void unregisterDockable(Dockable dockable) {
 		//context.registerDockable(dockable); // 2006/09/06
 		context.unregisterDockable(dockable); // 2006/09/06
 	}
 
-	/**
-	 * Returns a String containing the version of the docking framework in the
-	 * format M.m.r where M is the major , m the minor and r the release.
-	 * 
-	 * @since 2.0
+	/** Returns a String containing the version of the docking framework in the format M.m.r
+	 * where M is the major , m the minor and r the release.
+	 *@since 2.0
 	 */
 	public static String getDockingFrameworkVersion() {
 		return CURRENT_VERSION_NUMBER;
 	}
 
-	/**
-	 * Returns a String containing the release date of the current version.
-	 * 
-	 * @since 2.0
+	/** Returns a String containing the release date of the current version.
+	 *@since 2.0
 	 */
 	public static String getDockingFrameworkBuildDate() {
 		return BUILD_DATE;
 	}
 
-	/**
-	 * Adds a view in a tab, or create it if it doesn't exist.
-	 * 
-	 * @param base the reference dockable
-	 * @param dockable a dockable to add at the same position than
-	 *            <code>base</code>. if base is not already child of a
-	 *            tabbedpane, a new tabbedpane will be created and inserted at
-	 *            base's location.
+	/** Adds a view in a tab, or create it if it doesn't exist.
+	 *
+	 * @param base     the reference dockable
+	 * @param dockable  a dockable to add at the same position than <code>base</code>.
+	 * if base is not already child of a tabbedpane, a new tabbedpane will be created and inserted
+	 * at base's location.
 	 * @param order the tab order of view in its tabbed pane.
-	 * 
+	 *
 	 */
 	public void createTab(Dockable base, Dockable dockable, int order) {
 		createTab(base, dockable, order, false);
 	}
 
-	/**
-	 * Add a view in a tab, or create it if it doesn't exist. <P> Optional added
-	 * tab selection.
-	 * 
-	 * @param base an existing dockable, either displayed in a DockableContainer
-	 *            or in a TabbedDockableContainer. <P>If base is displayed by a
-	 *            DockableContainer, this container will be replaced by a
-	 *            TabbedDockableContainer.
-	 * @param dockable the dockable to add
-	 * @param order the tab order of view in its tabbed pane.
-	 * @param select if true, will select the added tab (make it appear at
-	 *            front)
-	 * 
+	/** Add a view in a tab, or create it if it doesn't exist.
+	 * <P> Optional added tab selection.
+	 *
+	 * @param base  an existing dockable, either displayed in a DockableContainer or
+	 * in a TabbedDockableContainer.
+	 * <P>If base is displayed by a DockableContainer, this container will be replaced
+	 * by a TabbedDockableContainer.
+	 * @param dockable     the dockable to add
+	 * @param order    the tab order of view in its tabbed pane.
+	 * @param select   if true, will select the added tab (make it appear at front)
+	 *
 	 */
 	public void createTab(Dockable base, Dockable dockable, int order, boolean select) {
 		createTab(base, dockable, order, select, true);
 	}
 
-	/**
-	 * private implementation wich allows for triggering state change event or
-	 * not (depending on the caller).
+	/** private implementation wich allows for triggering state change event or not
+	 * (depending on the caller).
 	 */
 	private void createTab(Dockable base, Dockable dockable, int order, boolean select, boolean triggerEvents) {
-		/*
-		 * createTab() is called by : - DockView/DetachedDockView during DnD -
-		 * DockTabbedPane during DnD - show() which is called by -
-		 * setFloating(false) - setAutoHide(false)
+		/* createTab() is called by :
+		 *  - DockView/DetachedDockView during DnD
+		 *  - DockTabbedPane during DnD
+		 *  - show() which is called by
+		 *    - setFloating(false)
+		 *    - setAutoHide(false)
 		 */
 
 		if(base == null)
@@ -726,34 +703,31 @@ public class DockingDesktop extends JLayeredPane {
 		DockingUtilities.updateResizeWeights(dockingPanel);
 	}
 
-	/**
-	 * Splits a Dockable in 2 parts, if possible. <p> The base dockable is the
-	 * reference, the second newDockable will be added according to the position
-	 * parameter. <p> If base is contained in a non splitable container (like a
-	 * tab of DockTabbedPane) then, a splitable ancestor will be searched (until
-	 * the root desktop pane is reached) to apply splitting.
-	 * 
-	 * @param base an already docked Dockable
-	 * @param newDockable the added dockable
-	 * @param position position of newDockable relative to base
-	 * @param proportion proportion of the initial dockable space taken by the
-	 *            new dockable a negative proportion, like -1, will be ignored
-	 *            (and split will be based on component preferred sizes and
-	 *            weights). This parameter is an alternative to
-	 *            DockingDesktop.setDockableHeight() and setDockableWidth()
-	 *            methods
-	 * @see DockingDesktop#setDockableHeight(com.vldocking.swing.docking.Dockable,
-	 *      double)
-	 * @see DockingDesktop#setDockableWidth(com.vldocking.swing.docking.Dockable,
-	 *      double)
+	/** Splits a Dockable in 2 parts, if possible.
+	 * <p>
+	 *  The base dockable is the reference, the second newDockable will be
+	 * added according to the position parameter.
+	 * <p>
+	 *  If base is contained in a non splitable container (like a tab of DockTabbedPane)
+	 * then, a splitable ancestor will be searched (until the root desktop pane is reached)
+	 * to apply splitting.
+	 *
+	 * @param base   an already docked Dockable
+	 * @param newDockable   the added dockable
+	 * @param position  position of newDockable relative to base
+	 * @param proportion proportion of the initial dockable space taken by the new dockable
+	 * a negative proportion, like -1, will be ignored (and split will be based on component preferred
+	 *  sizes and weights). This parameter is an alternative to DockingDesktop.setDockableHeight()
+	 * and setDockableWidth() methods
+	 * @see DockingDesktop#setDockableHeight(com.vldocking.swing.docking.Dockable, double)
+	 * @see DockingDesktop#setDockableWidth(com.vldocking.swing.docking.Dockable, double)
 	 */
 	public void split(Dockable base, Dockable newDockable, DockingConstants.Split position, double proportion) {
-		/*
-		 * split() is used internally by the framework in the following cases :
-		 * - from a move() API invocation - from a DnD on DockTabbedPane
-		 * (overriding BorderSplitter) but only when the dockable is not
-		 * floating => we can safely assume that the future state of the
-		 * dockable will be "Docked"
+		/* split() is used internally by the framework in the following cases :
+		 *  - from a move() API invocation
+		 *  - from a DnD on DockTabbedPane (overriding BorderSplitter) but only when the dockable is not floating
+		 *
+		 * => we can safely assume that the future state of the dockable will be "Docked"
 		 */
 		if(base == null)
 			throw new NullPointerException("base must not be null");
@@ -763,7 +737,7 @@ public class DockingDesktop extends JLayeredPane {
 		DockableState currentState = getDockableState(newDockable);
 		DockableState.Location currentLocation = getLocation(currentState);
 
-		//boolean stateChange = currentState == null || !currentState.isDocked();
+		boolean stateChange = currentState == null || ! currentState.isDocked();
 		// todo : new state should be DOCKED *OR* FLOATING
 		DockableState newState = new DockableState(this, newDockable, DockableState.Location.DOCKED);
 		DockingActionEvent dae = new DockingActionSplitDockableEvent(this, newDockable, currentLocation, newState.getLocation(), base, position, 0.5f);
@@ -783,10 +757,8 @@ public class DockingDesktop extends JLayeredPane {
 		SplitContainer split;
 		if(position == DockingConstants.SPLIT_TOP || position == DockingConstants.SPLIT_BOTTOM) {
 			split = new SplitContainer(JSplitPane.VERTICAL_SPLIT);
-		} else /*
-				 * if (position == DockingConstants.SPLIT_LEFT || position ==
-				 * DockingConstants.SPLIT_RIGHT)
-				 */{
+		} else /*if (position == DockingConstants.SPLIT_LEFT
+				|| position == DockingConstants.SPLIT_RIGHT)*/{
 			split = new SplitContainer(JSplitPane.HORIZONTAL_SPLIT);
 		}
 
@@ -844,44 +816,43 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Splits a Dockable in 2 parts, if possible. <p> The base dockable is the
-	 * reference, the second newDockable will be added according to the position
-	 * parameter. <p> If base is contained in a non splitable container (like a
-	 * tab of DockTabbedPane) then, a splitable ancestor will be searched (until
-	 * the root desktop pane is reached) to apply splitting.
-	 * 
-	 * @param base an already docked Dockable
-	 * @param newDockable the added dockable
-	 * @param position position of newDockable relative to base
+	/** Splits a Dockable in 2 parts, if possible.
+	 * <p>
+	 *  The base dockable is the reference, the second newDockable will be
+	 * added according to the position parameter.
+	 * <p>
+	 *  If base is contained in a non splitable container (like a tab of DockTabbedPane)
+	 * then, a splitable ancestor will be searched (until the root desktop pane is reached)
+	 * to apply splitting.
+	 *
+	 * @param base   an already docked Dockable
+	 * @param newDockable   the added dockable
+	 * @param position  position of newDockable relative to base
 	 */
 	public void split(Dockable base, Dockable newDockable, DockingConstants.Split position) {
 		split(base, newDockable, position, - 1);
 	}
 
-	/**
-	 * Replaces the base component by a split pane oriented according to
-	 * position, and put dockable at position. <p> <b>Note : </b> This method is
-	 * for DockableContainers. API users should use the
-	 * {@link #split(Dockable,Dockable,DockingConstants.Split) split} method.
-	 * 
-	 * @param base the reference component (a dockablecontainer or a split
-	 *            container)
-	 * @param dockable the dockable to add
-	 * @param position the position of <code>dockable</code>.
-	 * 
+	/** Replaces the base component by a split pane oriented according to position,
+	 * and put dockable at position.
+	 * <p>
+	 * <b>Note : </b> This method is for DockableContainers. API users should
+	 * use the {@link #split(Dockable,Dockable,DockingConstants.Split) split} method.
+	 *
+	 * @param base      the reference component (a dockablecontainer or a split container)
+	 * @param dockable  the dockable to add
+	 * @param position  the position of <code>dockable</code>.
+	 *
 	 * */
 	public void splitComponent(Component base, Dockable dockable, DockingConstants.Split position) {
-		/*
-		 * splitComponent() is called from SplitContainer and BorderSplitter
-		 * BorderSplitter is used by : - DockView (not floating, as the
-		 * DetachedDockView child overrides the scanDrop method and doesn't use
-		 * the BorderSplitter - DockTabbedPane (only when not floating)
-		 * SplitContainer is used for DnD operations that can occur from
-		 * Hide/Docked/Floating elements=> The future state will be DOCKED, but
-		 * we cannot guess the current state (HIDE/FLOAT/DOCKED)=> as of 2.1 :
-		 * the future state can be DOCKED or FLOATING (with the help of compound
-		 * dockable)
+		/* splitComponent() is called from SplitContainer and BorderSplitter
+		 *  BorderSplitter is used by :
+		 *    - DockView (not floating, as the DetachedDockView child overrides the scanDrop method and doesn't use the BorderSplitter
+		 *    - DockTabbedPane (only when not floating)
+		 * SplitContainer is used for DnD operations that can occur from Hide/Docked/Floating elements
+		 *
+		 *=> The future state will be DOCKED, but we cannot guess the current state (HIDE/FLOAT/DOCKED)
+		 *=> as of 2.1 : the future state can be DOCKED or FLOATING (with the help of compound dockable)
 		 */
 
 		if(base == null)
@@ -893,10 +864,9 @@ public class DockingDesktop extends JLayeredPane {
 
 		//int futureState = DockableState.DOCKED;
 		DockableState.Location futureLocation = DockingUtilities.getDockableLocationFromHierarchy(base);
-		/*
-		 * if (!dockingPanel.isAncestorOf(base)){ futureState =
-		 * DockableState.FLOATING; }
-		 */
+		/*if (!dockingPanel.isAncestorOf(base)){
+		  futureState = DockableState.FLOATING;
+		}*/
 
 		DockableState currentState = getDockableState(dockable);
 		DockableState.Location currentLocation = getLocation(currentState);
@@ -940,10 +910,8 @@ public class DockingDesktop extends JLayeredPane {
 		SplitContainer split;
 		if(position == DockingConstants.SPLIT_TOP || position == DockingConstants.SPLIT_BOTTOM) {
 			split = new SplitContainer(JSplitPane.VERTICAL_SPLIT);
-		} else /*
-				 * if (position == DockingConstants.SPLIT_LEFT || position ==
-				 * DockingConstants.SPLIT_RIGHT)
-				 */{
+		} else /*if (position == DockingConstants.SPLIT_LEFT
+				|| position == DockingConstants.SPLIT_RIGHT)*/{
 			split = new SplitContainer(JSplitPane.HORIZONTAL_SPLIT);
 		}
 
@@ -1008,17 +976,16 @@ public class DockingDesktop extends JLayeredPane {
 		DockingUtilities.updateResizeWeights(dockingPanel);
 	}
 
-	/**
-	 * Replaces the base component by a split pane oriented according to
-	 * position, and put the dockablesContainer at position. <p> <b>Note : </b>
-	 * This method is for DockableContainers. API users should use the
-	 * {@link #split(Dockable,Dockable,DockingConstants.Split) split} method.
-	 * 
-	 * @param base the reference component (a dockablecontainer or a split
-	 *            container)
-	 * @param dockablesContainer the dockable container
-	 * @param position the position of <code>dockable</code>.
-	 * 
+	/** Replaces the base component by a split pane oriented according to position,
+	 * and put the dockablesContainer at position.
+	 * <p>
+	 * <b>Note : </b> This method is for DockableContainers. API users should
+	 * use the {@link #split(Dockable,Dockable,DockingConstants.Split) split} method.
+	 *
+	 * @param base      the reference component (a dockablecontainer or a split container)
+	 * @param dockablesContainer  the dockable container
+	 * @param position  the position of <code>dockable</code>.
+	 *
 	 * */
 	public void splitComponent(Component base, Container dockablesContainer, DockingConstants.Split position) {
 		if(dockablesContainer instanceof SingleDockableContainer) {
@@ -1049,10 +1016,10 @@ public class DockingDesktop extends JLayeredPane {
 		if(oldContainer != null) {
 			oldWidth = oldContainer.getWidth();
 			oldHeight = oldContainer.getHeight();
-		}/*
-		 * else { oldWidth = base.getWidth() / 2; oldHeight =
-		 * base.getHeight()/2; }
-		 */
+		} else {
+			oldWidth = base.getWidth() / 2;
+			oldHeight = base.getHeight() / 2;
+		}
 
 		DockableContainer dockableContainer = tdc;
 
@@ -1060,10 +1027,8 @@ public class DockingDesktop extends JLayeredPane {
 		SplitContainer split;
 		if(position == DockingConstants.SPLIT_TOP || position == DockingConstants.SPLIT_BOTTOM) {
 			split = new SplitContainer(JSplitPane.VERTICAL_SPLIT);
-		} else /*
-				 * if (position == DockingConstants.SPLIT_LEFT || position ==
-				 * DockingConstants.SPLIT_RIGHT)
-				 */{
+		} else /*if (position == DockingConstants.SPLIT_LEFT
+				|| position == DockingConstants.SPLIT_RIGHT)*/{
 			split = new SplitContainer(JSplitPane.HORIZONTAL_SPLIT);
 		}
 
@@ -1134,13 +1099,12 @@ public class DockingDesktop extends JLayeredPane {
 		//    DockingUtilities.updateResizeWeights(dockingPanel);
 	}
 
-	/**
-	 * Moves a dockable to another position (relative to a destination dockable)
-	 * 
-	 * 
-	 * @param dockable must be a registered Dockable
-	 * @param base must be a visible Dockable
-	 * @param position relative positionning
+	/** Moves a dockable to another position (relative to a destination dockable)
+	 *
+	 *
+	 * @param dockable  must be a registered Dockable
+	 * @param base  must be a visible Dockable
+	 * @param position  relative positionning
 	 */
 	public void move(Dockable base, Dockable dockable, DockingConstants.Split position) {
 		if(base == null)
@@ -1157,10 +1121,10 @@ public class DockingDesktop extends JLayeredPane {
 		split(base, dockable, position);
 	}
 
-	/**
-	 * Shows again a dockable (if previously hidden, floating or closed). <p>
-	 * The dockable is inserted in the docking desktop where it was before, if
-	 * possible. if not, an approximated place will be looked for.
+	/** Shows again a dockable (if previously hidden, floating or closed).
+	 * <p>
+	 * The dockable is inserted in the docking desktop where it was before, if possible.
+	 * if not, an approximated place will be looked for.
 	 * */
 	private void show(Dockable dockable, DockingActionEvent action) {
 		if(dockable == null)
@@ -1175,11 +1139,11 @@ public class DockingDesktop extends JLayeredPane {
 			throw new NullPointerException("trying to show a view that was not hidden");
 		}
 
-		LinkedList<?> group = tabbedGroups.get(dockable); //2005/07/13...
+		LinkedList group = tabbedGroups.get(dockable); //2005/07/13...
 		boolean tabbed = false;
 		if(group != null) {
 			// look for a still visible dockable in the group
-			Iterator<?> it = group.iterator();
+			Iterator it = group.iterator();
 			while(it.hasNext() && ! tabbed) {
 				Dockable d = (Dockable) it.next();
 				if(d != dockable && getDockableState(d).isDocked()) {
@@ -1198,17 +1162,18 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Removes a visible dockable from the containment hierarchy (including
-	 * autohide border buttons). <p> This method shouldn't be used by user
-	 * applications (only by the framework). <p> To poperly remove a component
-	 * from the desktop, use the close(Dockable) method instead <p> If the
-	 * dockable is not visible, an error will occur <p> This method does not
-	 * unregister the dockable.
-	 * 
-	 * @throws IllegalArgumentException if the dockable is not visible (docked
-	 *             or auto-hide)
-	 * */
+	/** Removes a visible dockable from the containment hierarchy (including autohide border buttons).
+	 * <p>
+	 * This method shouldn't be used by user applications (only by the framework).
+	 * <p>
+	 * To poperly remove a component from the desktop, use the close(Dockable) method instead
+	 * <p>
+	 * If the dockable is not visible, an error will occur
+	 * <p>
+	 * This method does not unregister the dockable.
+	 *
+	 * @throws IllegalArgumentException if the dockable is not visible (docked or auto-hide)
+	 *  */
 	public void remove(Dockable dockable) {
 		// TODO : check this : split this method in two (removeImpl() should be used form inside the framework, and
 		// remove should trigger CLOSE state change events
@@ -1264,19 +1229,19 @@ public class DockingDesktop extends JLayeredPane {
 			}
 
 			revalidate();
-			/*
-			 * } else if (state.isFloating()){ Window w =
-			 * SwingUtilities.getWindowAncestor(dockable.getComponent());
-			 * w.dispose(); } else { // well, it's not shown, and not hidden...
-			 * // nop }
-			 */
+			/*      } else if (state.isFloating()){
+			 
+			        Window w = SwingUtilities.getWindowAncestor(dockable.getComponent());
+			        w.dispose();
+			      } else { // well, it's not shown, and not hidden...
+			        // nop
+			      }*/
 		}
 	}
 
-	/**
-	 * Removes a visible dockable : called from a drag and drop operation. <p>
-	 * Don't call this method directly, as it is meant to be used only by the
-	 * drag and drop event components.
+	/** Removes a visible dockable : called from a drag and drop operation.
+	 *<p> Don't call this method directly, as it is meant to be used only by the drag and drop
+	 *  event components.
 	 */
 	public void dropRemove(DockableDragSource dragSource) {
 		// before removing the dockable, we update its state to store its new relative position
@@ -1298,13 +1263,12 @@ public class DockingDesktop extends JLayeredPane {
 		// for example : when removing from a tab to create a floating tab (we have to keep the old attachment)
 	}
 
-	/**
-	 * Removes a whole tab container (which is beeing moved to somewhere else)
-	 * <p> This operation is done only during a drag and drop process.
-	 * 
-	 * @throws IllegalArgumentException if the dockable is not visible (docked
-	 *             or auto-hide)
-	 * 
+	/** Removes a whole tab container (which is beeing moved to somewhere else)
+	 *<p>
+	 * This operation is done only during a drag and drop process.
+	 *
+	 * @throws IllegalArgumentException if the dockable is not visible (docked or auto-hide)
+	 *
 	 */
 	private void remove(TabbedDockableContainer tdc) {
 
@@ -1357,12 +1321,12 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Extends the size of this dockable to fill the docking panel. <p> The
-	 * component must be docked before beeing maximized, otherwise an
-	 * IllegalArgumentException will be thrown. <p> The opposite method of
-	 * maximize is restore(Dockable).
-	 * 
+	/** Extends the size of this dockable to fill the docking panel.
+	 *<p>
+	 *  The component must be docked before beeing maximized, otherwise an IllegalArgumentException will
+	 *  be thrown.
+	 *<p>
+	 * The opposite method of maximize is restore(Dockable).
 	 * @see #restore(Dockable)
 	 * */
 	public void maximize(Dockable dockable) {
@@ -1372,7 +1336,7 @@ public class DockingDesktop extends JLayeredPane {
 		}
 
 		DockableState currentState = getDockableState(dockable);
-		//boolean stateChange = currentState == null || !currentState.isMaximized();
+		boolean stateChange = currentState == null || ! currentState.isMaximized();
 
 		DockableState newState = new DockableState(this, dockable, DockableState.Location.MAXIMIZED);
 
@@ -1446,11 +1410,10 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Restore the dockable to the docking position it was before beeing
-	 * maximized. <p> The dockable must be already maximized (otherwise an
-	 * IllegalArgumentException will be thrown)
-	 * 
+	/** Restore the dockable to the docking position it was before beeing maximized.
+	 *<p>
+	 * The dockable must be already maximized (otherwise an IllegalArgumentException will be thrown)
+	 *
 	 * @see #maximize(Dockable)
 	 * */
 	public void restore(final Dockable dockable) {
@@ -1460,7 +1423,8 @@ public class DockingDesktop extends JLayeredPane {
 		}
 
 		DockableState currentState = getDockableState(dockable);
-		//boolean stateChange = currentState != null || currentState.isMaximized();
+		@SuppressWarnings("null")
+		boolean stateChange = currentState != null || currentState.isMaximized();
 		DockableState newState = new DockableState(this, dockable, DockableState.Location.DOCKED);
 		DockableState.Location currentLocation = getLocation(currentState);
 
@@ -1509,16 +1473,15 @@ public class DockingDesktop extends JLayeredPane {
 		repaint();
 	}
 
-	/**
-	 * Detach or attach the dockable from/to the desktop. <p> When detached, the
-	 * dockable is centered on the desktop.
+	/** Detach or attach the dockable from/to the desktop.
+	 * <p>
+	 * When detached, the dockable is centered on the desktop.
 	 */
 	public void setFloating(final Dockable dockable, boolean floating) {
 		setFloating(dockable, floating, null);
 	}
 
-	/**
-	 * Used only with DOCKED dockables : returns the nearest ancestor container
+	/** Used only with DOCKED dockables : returns the nearest ancestor container
 	 * (can be a CompoundDockingPanel if nested, or the DockingPanel).
 	 */
 	private Container getRelativeAncestorContainer(Dockable dockable) {
@@ -1530,10 +1493,10 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Detach or attach the dockable from/to the desktop. <p> show the dockable
-	 * at sceenPosition (when not null) or centered (if screenPosition is null)
-	 * 
+	/** Detach or attach the dockable from/to the desktop.
+	 *<p>
+	 * show the dockable at sceenPosition (when not null) or centered (if screenPosition is null)
+	 *
 	 */
 	public void setFloating(final Dockable dockable, boolean floating, Point screenPosition) {
 		if(dockable == null)
@@ -1719,17 +1682,13 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Detach or attach a whole tabbed dockable container from/to the desktop.
-	 * <p> displays the component at sceenPosition (when not null) or centered
-	 * (if screenPosition is null)
-	 * 
+	/** Detach or attach a whole tabbed dockable container from/to the desktop.
+	 *<p>
+	 * displays the component at sceenPosition (when not null) or centered (if screenPosition is null)
+	 *
 	 */
 	void setFloating(final TabbedDockableContainer tdc, Point screenPosition) {
-		/*
-		 * package protected, used by OldDragControler to detach a
-		 * tabbedcontainer
-		 */
+		/* package protected, used by OldDragControler to detach a tabbedcontainer */
 
 		Dockable firstDockable = tdc.getDockableAt(0);
 		// all dockables have the same state, as they are in the same tabpane
@@ -1814,22 +1773,20 @@ public class DockingDesktop extends JLayeredPane {
 		return first;
 	}
 
-	/**
-	 * Returns the previous state of a hidden or floating dockable (when that
-	 * dockable was in the DOCKED state.
-	 * 
-	 * @since 2.0.4
-	 * 
+	/** Returns the previous state of a hidden or floating dockable (when that dockable
+	 * was in the DOCKED state.
+	 *@since 2.0.4
+	 *
 	 */
 	public DockableState getPreviousDockableState(Dockable dockable) {
-		/* method mostly used internally */
+		/* method  mostly used internally */
 		return previousFloatingDockableStates.get(dockable);
 	}
 
 	private DockableState removePreviousFloatingState(Dockable dockable) {
 		if(dockable instanceof CompoundDockable) {
 			// we also need to clear states of the compound children
-			ArrayList<?> children = DockingUtilities.findCompoundDockableChildren((CompoundDockable) dockable);
+			ArrayList children = DockingUtilities.findCompoundDockableChildren((CompoundDockable) dockable);
 			for(int i = 0; i < children.size(); i++) {
 				Dockable d = (Dockable) children.get(i);
 				previousFloatingDockableStates.remove(d);
@@ -1857,7 +1814,7 @@ public class DockingDesktop extends JLayeredPane {
 		if(dockable instanceof CompoundDockable) {
 			// more to do : the compund dockable may have children : they will share the
 			// same return position
-			ArrayList<?> children = DockingUtilities.findCompoundDockableChildren((CompoundDockable) dockable);
+			ArrayList children = DockingUtilities.findCompoundDockableChildren((CompoundDockable) dockable);
 			for(int i = 0; i < children.size(); i++) {
 				Dockable d = (Dockable) children.get(i);
 				previousFloatingDockableStates.put(d, new DockableState(this, d, state.getLocation(), state.getPosition()));
@@ -1865,10 +1822,7 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * simplified auto-hide version used when the dockable was previously in
-	 * FLOATING state
-	 */
+	/** simplified auto-hide version used when the dockable was previously in FLOATING state */
 	private void floatingToHide(Dockable dockable, RelativeDockablePosition position) {
 		// doesn't trigger change event as it is managed by setFloatin(false)
 		DockKey k = dockable.getDockKey();
@@ -1918,12 +1872,14 @@ public class DockingDesktop extends JLayeredPane {
 		lastWindowLocation = newLocation;
 	}
 
-	/**
-	 * Creates a floating JDialog to be used with this dockable. <p> This method
-	 * is protected to give access to implementors wanting to customize its look
-	 * and feel (for example : removing the title bar by setting it to
-	 * "undecorated"). <p> The old API has been removed (it returned a JDialog)
-	 * as the DockingDesktop can only work with FloatingDockableContainers.
+	/** Creates a floating JDialog to be used with this dockable.
+	 * <p>
+	 * This method is protected to give access to implementors wanting to
+	 * customize its look and feel (for example : removing the title bar by
+	 * setting it to "undecorated").
+	 * <p>
+	 * The old API has been removed (it returned a JDialog) as the DockingDesktop can only
+	 * work with FloatingDockableContainers.
 	 */
 	protected FloatingDockableContainer createFloatingDockableContainer(final Dockable dockable) {
 		Window ownerWindow = SwingUtilities.getWindowAncestor(this);
@@ -1950,12 +1906,13 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Creates a floating JDialog to be used for a whole
-	 * TabbedDockableContainer. <p> This method is protected to give access to
-	 * implementors wanting to customize its look and feel (for example :
-	 * removing the title bar by setting it to "undecorated"). <p> The old API
-	 * has been removed (it returned a JDialog) as the DockingDesktop can only
+	/** Creates a floating JDialog to be used for a whole TabbedDockableContainer.
+	 * <p>
+	 * This method is protected to give access to implementors wanting to
+	 * customize its look and feel (for example : removing the title bar by
+	 * setting it to "undecorated").
+	 * <p>
+	 * The old API has been removed (it returned a JDialog) as the DockingDesktop can only
 	 * work with FloatingDockableContainers.
 	 */
 	protected FloatingDockableContainer createFloatingDockableContainer(TabbedDockableContainer tdc) {
@@ -1986,10 +1943,8 @@ public class DockingDesktop extends JLayeredPane {
 	/** Removes a dockable container. */
 	protected void removeContainer(SingleDockableContainer dc) {
 
-		/*
-		 * to be improved : this method supposes a direct ancestor link between
-		 * DockableContainer and TabbedDockableContainer
-		 */
+		/* to be improved : this method supposes a direct ancestor link
+		 between DockableContainer and TabbedDockableContainer */
 		dc.uninstallDocking(this);
 
 		boolean invalidateDesktop = true; // always, except for floating dockables
@@ -2018,7 +1973,7 @@ public class DockingDesktop extends JLayeredPane {
 					if(tparent.getTabCount() == 1) { // no more use for tabs
 						Dockable last = tparent.getDockableAt(0);
 						remove(last);
-						/* tparent.removeDockable(last); //2007/11/14 */
+						/*tparent.removeDockable(last); //2007/11/14*/
 						tparent.uninstallDocking(this);
 						((JTabbedPane) tparent).removeChangeListener(focusHandler);
 
@@ -2054,32 +2009,34 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Returns the current state of a dockable (CLOSED, HIDDEN, DOCKED,
-	 * MAXIMIZED, FLOATING)
-	 */
+	/** Returns the current state of a dockable (CLOSED, HIDDEN, DOCKED, MAXIMIZED, FLOATING) */
 	public DockableState getDockableState(Dockable dockable) {
 		return context.getDockableState(dockable);
 	}
 
-	/**
-	 * Disposes the dockable container of this dockable. <P> If the dockable is
-	 * not currently displayed (or auto-hidden), this method will do nothing.
-	 * <P> the dockable remains registered and can later be shown again at the
-	 * same location, using addDockable(Dockable, RelativeDockablePosition). <p>
-	 * To have access to the RelativeDockablePosition at closing time, one has
-	 * to install a DockableEventListener like this : <pre>
-	 * desk.addDockingActionListener(new DockingActionListener() { public
-	 * boolean acceptDockingAction(DockingActionEvent event) { return true; }
-	 * public void dockingActionPerformed(DockingActionEvent event) { if
-	 * (event.getActionType() == DockingActionEvent.ACTION_CLOSE){
-	 * closedDockable = ((DockingActionCloseEvent)event).getDockable(); <b>
-	 * RelativeDockablePostion position</b> =
-	 * desk.getLocation(closedDockable).getPosition(); // we now have a position
-	 * we'll be able to reuse in addDockable() } } });
-	 * 
+	/** Disposes the dockable container of this dockable.
+	 * <P> If the dockable is not currently displayed (or auto-hidden), this method will do nothing.
+	 * <P> the dockable remains registered and can later be shown again at the same
+	 * location, using addDockable(Dockable, RelativeDockablePosition).
+	 * <p>
+	 * To have access to the RelativeDockablePosition at closing time, one has to
+	 * install a DockableEventListener like this :
+	 * <pre>
+	 * desk.addDockingActionListener(new DockingActionListener() {
+	 *     public boolean acceptDockingAction(DockingActionEvent event) {
+	 *       return true;
+	 *     }
+	 *     public void dockingActionPerformed(DockingActionEvent event) {
+	 *       if (event.getActionType() == DockingActionEvent.ACTION_CLOSE){
+	 *         closedDockable = ((DockingActionCloseEvent)event).getDockable();
+	 *         <b> RelativeDockablePostion position</b> = desk.getLocation(closedDockable).getPosition();
+	 *          // we now have a position we'll be able to reuse in addDockable()
+	 *       }
+	 *     }
+	 *   });
+	 *
 	 * </pre>
-	 * */
+	 *  */
 	public void close(Dockable dockable) {
 		// keep track of where the dockable was
 		DockableState currentState = getDockableState(dockable);
@@ -2147,12 +2104,11 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Iterates through this compound children and properly close them (without
-	 * removing them from their parent container)
+	/** Iterates through this compound children and properly close them
+	 * (without removing them from their parent container)
 	 */
 	private void updateCompoundChildrenState(CompoundDockable cDockable, DockableState.Location state) {
-		ArrayList<?> children = DockingUtilities.findCompoundDockableChildren(cDockable);
+		ArrayList children = DockingUtilities.findCompoundDockableChildren(cDockable);
 		for(int i = 0; i < children.size(); i++) {
 			Dockable d = (Dockable) children.get(i);
 			d.getDockKey().setLocation(state);
@@ -2163,17 +2119,17 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Convenience method to close all dockables of a TabbedDockableContainer
-	 * except one. <p> Note : is a dockable is not allowed to close
-	 * (key.isCloseEnabled() returns false) then it won't be closed by this
-	 * method. <p> If the 'exception' dockable isn't contained in a tab, then
-	 * nothing will happen.
+	/** Convenience method to close all dockables of a TabbedDockableContainer except one.
+	 * <p>
+	 * Note : is a dockable is not allowed to close (key.isCloseEnabled() returns false) then it
+	 * won't be closed by this method.
+	 *<p>
+	 * If the 'exception' dockable isn't contained in a tab, then nothing will happen.
 	 */
 	public void closeAllOtherDockablesInTab(Dockable exception) {
 		TabbedDockableContainer tabContainer = DockingUtilities.findTabbedDockableContainer(exception);
 		if(tabContainer != null) {
-			ArrayList<Dockable> dockables = new ArrayList<Dockable>(tabContainer.getTabCount() - 1);
+			ArrayList dockables = new ArrayList(tabContainer.getTabCount() - 1);
 			for(int i = 0; i < tabContainer.getTabCount(); i++) {
 				if(tabContainer.getDockableAt(i) != exception) {
 					dockables.add(tabContainer.getDockableAt(i));
@@ -2188,19 +2144,21 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Convenience method to close all dockables of the tabbedContainer
-	 * containing "base" (including the base dockable). <p> see also
-	 * {@link #closeAllOtherDockablesInTab(Dockable)}. <p> Note : is a dockable
-	 * is not allowed to close (key.isCloseEnabled() returns false) then it
-	 * won't be closed by this method. <p> If the 'base' dockable isn't
-	 * contained in a tab, then nothing will happen.
-	 * 
+	/**  Convenience method to close all dockables of the tabbedContainer
+	 * containing "base" (including the base dockable).
+	 *<p>
+	 * see also {@link #closeAllOtherDockablesInTab(Dockable)}.
+	 * <p>
+	 * Note : is a dockable is not allowed to close (key.isCloseEnabled() returns false) then it
+	 * won't be closed by this method.
+	 *<p>
+	 * If the 'base' dockable isn't contained in a tab, then nothing will happen.
+	 *
 	 */
 	public void closeAllDockablesInTab(Dockable base) {
 		TabbedDockableContainer tabContainer = DockingUtilities.findTabbedDockableContainer(base);
 		if(tabContainer != null) {
-			ArrayList<Dockable> dockables = new ArrayList<Dockable>(tabContainer.getTabCount());
+			ArrayList dockables = new ArrayList(tabContainer.getTabCount());
 			for(int i = 0; i < tabContainer.getTabCount(); i++) {
 				dockables.add(tabContainer.getDockableAt(i));
 			}
@@ -2213,19 +2171,18 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Toggles the position of a view between hidden (true) and docked (false).
-	 * 
+	/** Toggles the position of a view between hidden (true) and docked (false).
+	 *
 	 */
 	public void setAutoHide(Dockable dockable, boolean hide) {
-		/*
-		 * setAutoHide is called by user applications (or addHidenDockable() )
-		 * and from inside the framework : - Tab actions (only when in the
-		 * DOCKED state) - DockView (listening to DockViewTitleBar property
-		 * change - key events from the desktop - the AutoHideExpandPanel
-		 * listening to DockViewTitleBar changes this method is not used when
-		 * hiding from FLOATING state, the "floatingToHide" method is used
-		 * istead to avoid triggering unused events
+		/* setAutoHide is called by user applications (or addHidenDockable() ) and from inside the framework :
+		 *  - Tab actions (only when in the DOCKED state)
+		 *  - DockView (listening to DockViewTitleBar property change
+		 *  - key events from the desktop
+		 *  - the AutoHideExpandPanel listening to DockViewTitleBar changes
+		 *
+		 * this method is not used when hiding from FLOATING state,
+		 * the "floatingToHide" method is used istead to avoid triggering unused events
 		 */
 		DockKey k = dockable.getDockKey();
 
@@ -2325,7 +2282,7 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/** hide the view (used with autohide features) */
+	/** hide the view (used with autohide features)  */
 	private void hide(Dockable dockable) {
 		if(dockable == null) {
 			throw new NullPointerException("dockable");
@@ -2341,9 +2298,8 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * recalculates and returns the insets taken by autoexpand borders around
-	 * the docking panel.
+	/** recalculates and returns the insets taken by autoexpand
+	 * borders around the docking panel.
 	 * */
 	public Insets getDockingPanelInsets() {
 		// recalculate the location and size of the mouse grabber
@@ -2364,22 +2320,19 @@ public class DockingDesktop extends JLayeredPane {
 		return i;
 	}
 
-	/**
-	 * Creates and returns an array of all registered dockable with their
-	 * current state. <p> Visibility states are [DockableState.CLOSED, DOCKED,
-	 * HIDDEN]
-	 * 
+	/** Creates and returns an array of all registered dockable with their current
+	 * state.
+	 * <p>
+	 * Visibility states are [DockableState.CLOSED, DOCKED, HIDDEN]
 	 * @return an array of DockableState
 	 */
 	public DockableState[] getDockables() {
 		return context.getDockables();
 	}
 
-	/**
-	 * Installs multiple drag sources.
-	 * 
-	 * @see #installDockableDragSource(DockableDragSource)
-	 * 
+	/** Installs multiple drag sources.
+	 * @see  #installDockableDragSource(DockableDragSource)
+	 *
 	 * */
 	public void installDockableDragSources(DockableDragSource[] sources) {
 		if(sources != null) {
@@ -2389,11 +2342,9 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Uninstalls multiple drag sources.
-	 * 
-	 * @see #uninstallDockableDragSource(DockableDragSource)
-	 * 
+	/** Uninstalls multiple drag sources.
+	 *@see #uninstallDockableDragSource(DockableDragSource)
+	 *
 	 * */
 	public void uninstallDockableDragSources(DockableDragSource[] sources) {
 		if(sources != null) {
@@ -2403,24 +2354,22 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * This method is used by DockableContainers in order to register their
-	 * DockableDragSource(s) to the OldDragControler. <p> Adds a MouseListener
-	 * and a MouseMotionListener to the Component-DockableDragSource
-	 * <code>source</code>. These listeners are used to perform
-	 * start-dragging-docking actions over the source component
-	 */
+	/** This method is used by DockableContainers in order to register their
+	 * DockableDragSource(s) to the OldDragControler.
+	 * <p>
+	 * Adds a MouseListener and a MouseMotionListener to the
+	 * Component-DockableDragSource <code>source</code>. These listeners
+	 * are used to perform start-dragging-docking actions over the source component */
 	public void installDockableDragSource(DockableDragSource source) {
 		((Component) source).addMouseListener(dragControler);
 		((Component) source).addMouseMotionListener(dragControler);
 	}
 
-	/**
-	 * This method is used by DockableContainers in order to unregister their
-	 * DockableDragSource(s) to the OldDragControler. <p> Removes the
-	 * MouseListener and MouseMotionListener added on
-	 * installDockableDragSource()
-	 * 
+	/** This method is used by DockableContainers in order to unregister their
+	 * DockableDragSource(s) to the OldDragControler.
+	 * <p>
+	 * Removes the MouseListener and MouseMotionListener added on installDockableDragSource()
+	 *
 	 * @see #installDockableDragSource(DockableDragSource)
 	 * */
 	public void uninstallDockableDragSource(DockableDragSource source) {
@@ -2428,21 +2377,23 @@ public class DockingDesktop extends JLayeredPane {
 		((Component) source).removeMouseMotionListener(dragControler);
 	}
 
-	/**
-	 * Request this desktop to reset it's contained views to their preferred
-	 * size, if possible. <p> This method should be invoked when the component
-	 * is realized (visible) due to Split Panes implementation.
-	 * */
+	/** Request this desktop to reset it's contained views to their preferred size, if
+	 * possible.
+	 * <p>
+	 * This method should be invoked when the component is realized (visible) due
+	 * to Split Panes implementation.
+	 *   */
 	public void resetToPreferredSize() {
 		dockingPanel.resetToPreferredSize();
 	}
 
-	/**
-	 * Saves the current desktop configuration into an XML stream. <p> The
-	 * stream is not closed at the end of the operation. <p> As of version 2.1,
-	 * this method delegates the work to DockingContext.writeXML, which will
-	 * export every dekstop sharing the same context (and not only this one)
-	 * 
+	/** Saves the current desktop configuration into an XML stream.
+	 * <p>
+	 * The stream is not closed at the end of the operation.
+	 *<p>
+	 * As of version 2.1, this method delegates the work to DockingContext.writeXML, which
+	 * will export every dekstop sharing the same context (and not only this one)
+	 *
 	 * @see #readXML(InputStream)
 	 * */
 	public void writeXML(OutputStream stream) throws IOException {
@@ -2500,7 +2451,7 @@ public class DockingDesktop extends JLayeredPane {
 		// there is no list of floating : we have to fetch the dockable states
 
 		// updated : we also need to store grouping information
-		ArrayList<Dockable> processedDockables = new ArrayList<Dockable>();
+		ArrayList processedDockables = new ArrayList();
 
 		Window desktopWindow = SwingUtilities.getWindowAncestor(this);
 		Point windowLocation;
@@ -2598,7 +2549,6 @@ public class DockingDesktop extends JLayeredPane {
 		out.println("</Dockable>");
 	}
 
-	@SuppressWarnings("unused")
 	private void xmlWriteCompoundDockable(CompoundDockable dockable, PrintWriter out) throws IOException {
 		out.println("<Dockable compound=\"true\">");
 		DockKey key = dockable.getDockKey();
@@ -2644,12 +2594,8 @@ public class DockingDesktop extends JLayeredPane {
 		out.println("</Dockable>");
 	}
 
-	@SuppressWarnings("unused")
 	private void xmlWriteCompoundDockableWithRelativePosition(CompoundDockable dockable, PrintWriter out) {
-		/*
-		 * The autohide component is a compound dockable : we'll have to save
-		 * its position then traverse its children
-		 */
+		/* The autohide component is a compound dockable : we'll have to save its position then traverse its children */
 		DockableState state = context.getDockableState(dockable);
 		RelativeDockablePosition position = (RelativeDockablePosition) state.getPosition();
 		DockKey key = dockable.getDockKey();
@@ -2700,22 +2646,21 @@ public class DockingDesktop extends JLayeredPane {
 		out.println("</Split>");
 	}
 
-	/**
-	 * TabGroups are the memory of tabs (even for hidden or floating dockables)
-	 * used to put them back on the right tab when docked again
+	/** TabGroups are the memory of tabs (even for hidden or floating dockables) used to
+	 * put them back on the right tab when docked again
 	 */
 	private void xmlWriteTabGroups(PrintWriter out) throws IOException {
 		// there is redundant information in the tabbedGroups Map... so we have to simplify it
 
-		ArrayList<LinkedList<?>> uniqueGroups = new ArrayList<LinkedList<?>>();
-		ArrayList<Dockable> processedDockables = new ArrayList<Dockable>();
+		ArrayList uniqueGroups = new ArrayList();
+		ArrayList processedDockables = new ArrayList();
 		Iterator<Dockable> it = tabbedGroups.keySet().iterator();
 		while(it.hasNext()) {
 			Dockable d = it.next();
 			if(! processedDockables.contains(d)) {
 				processedDockables.add(d);
-				LinkedList<?> tabList = tabbedGroups.get(d);
-				Iterator<?> listIt = tabList.iterator();
+				LinkedList tabList = tabbedGroups.get(d);
+				Iterator listIt = tabList.iterator();
 				while(listIt.hasNext()) {
 					Dockable d2 = (Dockable) listIt.next();
 					if(! processedDockables.contains(d2)) {
@@ -2729,8 +2674,8 @@ public class DockingDesktop extends JLayeredPane {
 		out.println("<TabGroups>");
 		for(int i = 0; i < uniqueGroups.size(); i++) {
 			out.println("<TabGroup>");
-			LinkedList<?> group = (LinkedList<?>) uniqueGroups.get(i);
-			Iterator<?> listIt = group.iterator();
+			LinkedList group = (LinkedList) uniqueGroups.get(i);
+			Iterator listIt = group.iterator();
 			while(listIt.hasNext()) {
 				Dockable d = (Dockable) listIt.next();
 				xmlWriteDockableTab(d, out);
@@ -2747,23 +2692,25 @@ public class DockingDesktop extends JLayeredPane {
 		out.println("</Dockable>");
 	}
 
-	/**
-	 * Reads an XML encoded stream as the new desktop configuration. <p> When
-	 * the method returns, the desktop is totally reconfigured with posiibly
-	 * different dockable at different positions. <p> <b>Note : </b> The
-	 * <code>DockKey</code>s of the stream must be registered with the
-	 * {@link #registerDockable(Dockable) registerDockable} method, prior
-	 * readXML. <br> This is the case if the desktop is already open and
-	 * dockables laid out, but might not be the case if this method is used at
-	 * application startup to populate an empty desktop.
-	 * 
-	 * <p> Dismisses all visible dockables (docked and auto-hidden), and clear
-	 * their DockableState. <p> The stream is not closed at the end of the
-	 * operation.
-	 * 
+	/** Reads an XML encoded stream as the new desktop configuration.
+	 * <p>
+	 * When the method returns, the desktop is totally reconfigured with posiibly different
+	 * dockable at different positions.
+	 * <p>
+	 * <b>Note : </b> The <code>DockKey</code>s of the stream must be registered with
+	 * the {@link #registerDockable(Dockable) registerDockable} method,
+	 * prior readXML. <br>
+	 * This is the case if the desktop is already open and dockables
+	 * laid out, but might not be the case if this method is used at application startup
+	 * to populate an empty desktop.
+	 *
+	 * <p>
+	 * Dismisses all visible dockables (docked and auto-hidden), and clear their DockableState.
+	 * <p>
+	 * The stream is not closed at the end of the operation.
 	 * @see #writeXML(OutputStream)
 	 * @see #registerDockable(Dockable)
-	 * */
+	 *  */
 	public void readXML(InputStream in) throws ParserConfigurationException, IOException, SAXException {
 		context.readXML(in);
 	}
@@ -2776,13 +2723,13 @@ public class DockingDesktop extends JLayeredPane {
 			borderPanes[i].setVisible(false);
 		}
 
-		//boolean wasHeavyMaximized = false;
+		boolean wasHeavyMaximized = false;
 		if(maximizedComponent != null) { // clean up maximization state
 			if(DockingPreferences.isLightWeightUsageEnabled()) {
-				remove(maximizedComponent); // remove the single dockable container
+				remove(maximizedComponent);          // remove the single dockable container
 			} else {
 				remove(maximizedComponent.getParent()); // remove the awt panel
-				//wasHeavyMaximized = true;
+				wasHeavyMaximized = true;
 			}
 			maximizedComponent = null; // 2006/11/20 ooops !
 		}
@@ -2807,9 +2754,7 @@ public class DockingDesktop extends JLayeredPane {
 
 	/* package protected */
 	void readDesktopNode(Element desktopElement) throws SAXException {
-		/*
-		 * called back by DockingContext to read (and install) a desktop
-		 * configuration from an xml stream
+		/* called back by DockingContext to read (and install) a desktop configuration from an xml stream
 		 */
 
 		NodeList children = desktopElement.getChildNodes();
@@ -2853,11 +2798,9 @@ public class DockingDesktop extends JLayeredPane {
 				NodeList children = elt.getElementsByTagName("Dockable");
 				xmlBuildFloatingNode(children, new Rectangle(x, y, width, height)); //2005/10/10
 
-				/*
-				 * for (int i = 0, len = children.getLength(); i < len; i++) {
-				 * xmlBuildFloatingNode((Element)children.item(i), new
-				 * Rectangle(x, y, width, height)); }
-				 */
+				/*        for (int i = 0, len = children.getLength(); i < len; i++) {
+				          xmlBuildFloatingNode((Element)children.item(i), new Rectangle(x, y, width, height));
+				        }*/
 			} else if(name.equals("TabGroups")) {
 				NodeList children = elt.getElementsByTagName("TabGroup");
 				xmlBuildTabGroup(children); //2005/10/10
@@ -2892,9 +2835,7 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/*
-	 * private void xmlBuildFloatingNode(Element dockableElt, Rectangle bounds)
-	 * {
+	/* private void xmlBuildFloatingNode(Element dockableElt, Rectangle bounds) {
 	 */
 	private void xmlBuildFloatingNode(NodeList dockables, Rectangle bounds) throws SAXException {
 
@@ -3011,7 +2952,7 @@ public class DockingDesktop extends JLayeredPane {
 	}
 
 	private void xmlBuildCompoundDockable(CompoundDockable dockable, Element compoundElt, DockableState.Location dockableLocation) throws SAXException {
-		/* a compound dockable can hold a sub dockable (or split/tabs) */
+		/*  a compound dockable can hold a sub dockable (or split/tabs) */
 		CompoundDockingPanel compoundPanel = (CompoundDockingPanel) dockable.getComponent();
 		compoundPanel.removeAll(); // cleanup the compound at every workspace reloading 2007/01/08
 		NodeList children = compoundElt.getChildNodes();
@@ -3123,56 +3064,56 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Adds a dockable in the docking desktop. <p> This method can be used
-	 * mainly in two situations : <ul> <li> the desktop is empty (when not
-	 * empty, you can use split() or createTab() to add a dockable relatively to
-	 * another) <li> the dockable is currently closed, and it must be shown
-	 * again <li> note that if the desktop is not empty, the dockable will be
-	 * added in the bottom of the desktop (equivalent to addDockable(dockable
-	 * 0,0.8,1,0.2)). </ul>
+	/** Adds a dockable in the docking desktop.
+	 * <p>
+	 *  This method can be used mainly in two situations :
+	 * <ul>
+	 * <li> the desktop is empty (when not empty, you can use split() or createTab() to
+	 * add a dockable relatively to another)
+	 * <li> the dockable is currently closed, and it must be shown again
+	 * <li> note that if the desktop is not empty, the dockable will be added in the bottom
+	 * of the desktop (equivalent to addDockable(dockable 0,0.8,1,0.2)).
+	 * </ul>
 	 */
 	public void addDockable(Dockable dockable) {
-		/*
-		 * addDockable isn't called internally by the API : just for user
-		 * applications
-		 */
+		/* addDockable isn't called internally by the API : just for user applications */
 		addDockable(dockable, new RelativeDockablePosition(0, 0.8, 0.5, 0.2));
 	}
 
-	/**
-	 * Adds a dockable in the docking desktop, and tries to respect the relative
-	 * positionning provided. <p> This method is used to reposition a closed
-	 * dockable at its previous location on the desktop. As it relies on the
-	 * Component.findComponentAt(Point) method , the desktop must already be
-	 * visible.
-	 * 
-	 * <p> The preferred way to obtain a particular visual docking configuration
-	 * is to use a combination of add(), split() and createTab() methods, as
-	 * these methods do not rely on an interpretation (and approximation) of
-	 * constraints.
-	 * 
-	 * <p> Precision of constraints : as the docking management is based on a
-	 * mix of horizontal and vertical splitting zones, it is not always possible
-	 * to respect the constraints given. <p> The current implementation will do
-	 * the following : <ul> <li> find the splitter containing the given center
-	 * (x + width/2, y + height/2) of the dockable <li> try to respect the x and
-	 * y, constraints. <li> try to respect the width and height constraints.
-	 * <li> sub-split the splitter (horizontally or vertically) zone and
-	 * position the Dockable in the most appropriate zone (top, left, bottom,
-	 * right). </ul>
-	 * 
-	 * @param dockable the dockable to add (must not be already visible)
-	 * @param position relative position of the dockable
-	 * 
-	 * @throws IllegalArgumentException if the dockable already belongs to the
-	 *             desktop containment hierarchy.
+	/** Adds a dockable in the docking desktop, and tries to respect the relative
+	 * positionning provided.
+	 * <p>
+	 *  This method is used to reposition a closed dockable at its previous location
+	 * on the desktop. As it relies on the Component.findComponentAt(Point) method ,
+	 *  the desktop must already be visible.
+	 *
+	 * <p>
+	 *  The preferred way to obtain a particular visual docking configuration is to
+	 * use a combination of add(), split() and createTab() methods, as these methods do
+	 * not rely on an interpretation (and approximation) of constraints.
+	 *
+	 * <p>
+	 *  Precision of constraints : as the docking management is based on a mix of
+	 * horizontal and vertical splitting zones, it is not always possible to
+	 * respect the constraints given.
+	 * <p>
+	 *  The current implementation will do the following :
+	 * <ul>
+	 * <li> find the splitter containing the given center (x + width/2, y + height/2) of the dockable
+	 * <li> try to respect the  x and y, constraints.
+	 * <li> try to respect the width and height constraints.
+	 * <li> sub-split the splitter (horizontally or vertically) zone and position
+	 * the Dockable in the most appropriate zone (top, left, bottom, right).
+	 * </ul>
+	 *
+	 * @param dockable   the dockable to add (must not be already visible)
+	 * @param position   relative position of the dockable
+	 *
+	 * @throws IllegalArgumentException if the dockable already belongs to the desktop containment
+	 * hierarchy.
 	 */
 	public void addDockable(Dockable dockable, RelativeDockablePosition position) {
-		/*
-		 * addDockable isn't called internally by the API : just for user
-		 * applications
-		 */
+		/* addDockable isn't called internally by the API : just for user applications */
 		if(this.isAncestorOf(dockable.getComponent())) {
 			throw new IllegalArgumentException("Dockable is already contained in the desktop");
 		}
@@ -3192,7 +3133,7 @@ public class DockingDesktop extends JLayeredPane {
 		DockingActionEvent dae = new DockingActionAddDockableEvent(this, dockable, currentLocation, newState.getLocation(), dockingPanel);
 		if(isDockingActionAccepted(dae, dswe)) {
 			@SuppressWarnings("deprecation")
-			SingleDockableContainer sdc = RelativeDockingUtilities.insertDockable(dockingPanel, dockable, position); //TODO:
+			SingleDockableContainer sdc = RelativeDockingUtilities.insertDockable(dockingPanel, dockable, position);
 			sdc.installDocking(this);
 
 			context.setDockableState(dockable, newState);
@@ -3205,23 +3146,23 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Replaces a dockable by another one. <p> Useful for example to reserve
-	 * some space on a desktop by using a "placeholder' when other dockables
-	 * aren't visible (Multiple Tabbed Document Interface with always a dockable
-	 * visible even when no document is loaded). <p> Implementation note : this
-	 * method assumes only the "base" dockable is visible (the replacer must be
-	 * in the CLOSED state). It also assumes the base dockable isn't a compound
-	 * dockable. These limitations will be removed in a later release.
-	 * 
-	 * <p> There is currently no DnD gesture associated to this action (although
-	 * the "HotSwap" gesture would be a good candidate). So this method
-	 * currently doesn't trigger any event (state change, action), yet it could
-	 * change later.
-	 * 
+	/** Replaces a dockable by another one.
+	 * <p>
+	 * Useful for example to reserve some space on a desktop by using a "placeholder' when
+	 * other dockables aren't visible (Multiple Tabbed Document Interface with always a dockable
+	 * visible even when no document is loaded).
+	 * <p>
+	 * Implementation note : this method assumes only the "base" dockable is visible (the replacer must be
+	 * in the CLOSED state). It also assumes the base dockable isn't a compound dockable. These limitations
+	 * will be removed in a later release.
+	 *
+	 * <p>
+	 * There is currently no DnD gesture associated to this action (although the
+	 * "HotSwap" gesture would be a good candidate). So this method currently doesn't trigger any event
+	 * (state change, action), yet it could change later.
+	 *
 	 * @since 2.1
-	 * @throws IllegalArgumentException when dockables aren't in the appropriate
-	 *             state or hierarchy.
+	 * @throws IllegalArgumentException when dockables aren't in the appropriate state or hierarchy.
 	 */
 	public void replace(Dockable base, Dockable replacer) {
 		DockableState baseState = context.getDockableState(base);
@@ -3285,10 +3226,7 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/*
-	 * small utility method to avoid bloating code everywhere (return a default
-	 * state value if state object is null)
-	 */
+	/* small utility method to avoid bloating code everywhere (return a default state value if state object is null) */
 	private static DockableState.Location getLocation(DockableState state) {
 		if(state == null) {
 			return DockableState.Location.CLOSED;
@@ -3297,13 +3235,13 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Adds a dockable inside a compound dockable. <p> This is the method to
-	 * start a nesting hierarchy inside a compound dockable (once the first
-	 * dockable is added, you add subsequent dockables with standard
-	 * split/createTab methods) <ul> <li> note that if the compound dockable is
-	 * not empty, this method will raise an exception. </ul>
-	 * 
+	/** Adds a dockable inside a compound dockable.
+	 * <p>
+	 *  This is the method to start a nesting hierarchy inside a compound dockable
+	 * (once the first dockable is added, you add subsequent dockables with standard split/createTab methods)
+	 * <ul>
+	 * <li> note that if the compound dockable is not empty, this method will raise an exception.
+	 * </ul>
 	 * @since 2.1
 	 */
 	public void addDockable(CompoundDockable base, Dockable dockable) {
@@ -3333,10 +3271,8 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Evaluates and returns the preferred size of the desktop, according to its
-	 * contents and auto-hide borders.
-	 */
+	/** Evaluates and returns the preferred size of the desktop, according to
+	 * its contents and auto-hide borders.*/
 	public Dimension getPreferredSize() {
 		Insets i = getDockingPanelInsets();
 		Dimension dim = dockingPanel.getPreferredSize();
@@ -3345,98 +3281,90 @@ public class DockingDesktop extends JLayeredPane {
 		return dim;
 	}
 
-	/**
-	 * Adds a new DockableStateChangeListener to this desktop. <p>
+	/** Adds a new DockableStateChangeListener to this desktop.
+	 * <p>
 	 * DockableStateChange Events are triggered after the state change.
-	 * 
-	 * <p> As of version 2.0 of the framework, this method can also be replaced
-	 * by adding a propertychangeListener on the DockKey object (and react to
-	 * its DockableState property).
-	 * 
+	 *
+	 * <p> As of version 2.0 of the framework, this method can also be replaced by
+	 * adding a propertychangeListener on the DockKey object (and react to its DockableState
+	 * property).
+	 *
 	 * */
 	public void addDockableStateChangeListener(DockableStateChangeListener listener) {
 		context.addDockableStateChangeListener(listener);
 	}
 
-	/**
-	 * Removes a DockableStateChangeListener from this desktop.
+	/** Removes a DockableStateChangeListener from this desktop.
 	 * */
 	public void removeDockableStateChangeListener(DockableStateChangeListener listener) {
 		context.removeDockableStateChangeListener(listener);
 	}
 
-	/**
-	 * Adds a new DockableStateWillChangeListener to this desktop. <p>
-	 * DockableStateWillChange Events are triggered <b>before</b> the state
-	 * change, and are vetoable.
+	/** Adds a new DockableStateWillChangeListener to this desktop.
+	 * <p>
+	 * DockableStateWillChange Events are triggered <b>before</b> the state change, and
+	 * are vetoable.
 	 * */
 
 	public void addDockableStateWillChangeListener(DockableStateWillChangeListener listener) {
 		context.addDockableStateWillChangeListener(listener);
 	}
 
-	/**
-	 * Removes a DockableStateWillChangeListener from this desktop.
+	/** Removes a DockableStateWillChangeListener from this desktop.
 	 * */
 	public void removeDockableStateWillChangeListener(DockableStateWillChangeListener listener) {
 		context.removeDockableStateWillChangeListener(listener);
 	}
 
-	/**
-	 * Adds a new DockingActionListener to this desktop. <p> DockingAction
-	 * Events are triggered before and after any docking action (split, tab,
-	 * close, hide...) and allow for precise tracking (and vetoing) of these
-	 * operations.
-	 * 
+	/** Adds a new DockingActionListener to this desktop.
+	 * <p>
+	 * DockingAction Events are triggered before and after any docking action (split, tab, close, hide...) and
+	 * allow for precise tracking (and vetoing) of these operations.
+	 *
 	 * @see #removeDockingActionListener(DockingActionListener)
 	 */
 	public void addDockingActionListener(DockingActionListener listener) {
 		context.addDockingActionListener(listener);
 	}
 
-	/**
-	 * Removes a DockingActionListener from this desktop.
-	 * 
+	/** Removes a DockingActionListener from this desktop.
+	 *
 	 * @see #addDockingActionListener(DockingActionListener)
 	 */
 	public void removeDockingActionListener(DockingActionListener listener) {
 		context.removeDockingActionListener(listener);
 	}
 
-	/**
-	 * Adds a new DockableSelectionListener to this desktop. <p>
+	/** Adds a new DockableSelectionListener to this desktop.
+	 * <p>
 	 * DockableSelection Events are triggered when a dockable takes the focus.
-	 * 
+	 *
 	 */
 	public void addDockableSelectionListener(DockableSelectionListener listener) {
 		context.addDockableSelectionListener(listener);
 	}
 
-	/**
-	 * Removes a DockableSelectionListener from this desktop.
+	/** Removes a DockableSelectionListener from this desktop.
 	 * */
 	public void removeDockableSelectionListener(DockableSelectionListener listener) {
 		context.removeDockableSelectionListener(listener);
 	}
 
-	/**
-	 * Registers and add a dockable on an auto-hide border. <P> this method
-	 * should be called at startup time (when the dockable isn't yet displayed).
-	 * to toggle a dockable from docked to auto-hide, please use
-	 * setAutoHide(Dockable, boolean) instead.
-	 * 
-	 * <P> However, this method will not fail if the dockable is already
-	 * displayed : in that case, it will delegate autohide to
-	 * setAutoHide(Dockable, boolean), thus dropping the dockedPosition
-	 * argument.
-	 * 
-	 * @param dockable the dockable to add (to select the border where the
-	 *            dockable will be positionned, use the
-	 *            DockKey.setAutoHideBorder mehod
-	 * 
-	 * @param dockedPosition relative positionning (may be null) indicating
-	 *            where to dock the dockable when leaving its auto-hide border.
-	 * */
+	/** Registers and add a dockable on an auto-hide border.
+	 * <P> this method should be called at startup time (when the dockable isn't yet
+	 * displayed). to toggle a dockable from docked to auto-hide, please use
+	 *  setAutoHide(Dockable, boolean) instead.
+	 *
+	 * <P> However, this method will not fail if the dockable is already displayed :
+	 * in that case, it will delegate autohide to setAutoHide(Dockable, boolean), thus
+	 * dropping the dockedPosition argument.
+	 *
+	 * @param dockable the dockable to add (to select the border where the dockable
+	 * will be positionned, use the DockKey.setAutoHideBorder mehod
+	 *
+	 * @param dockedPosition relative positionning (may be null) indicating where to
+	 * dock the dockable when leaving its auto-hide border.
+	 *   */
 	public void addHiddenDockable(Dockable dockable, RelativeDockablePosition dockedPosition) {
 		/* not used from inside the API : only for user applications */
 
@@ -3493,21 +3421,20 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Changes the width of a dockable (the dockable must already be visible).
-	 * 
-	 * <p> Note that this method works by modifying the divider location of the
-	 * nearest SplitContainer ancestor of the dockable (the first splitted
-	 * horizontally).
-	 * 
-	 * <p> As this method must be called when the desktop is visible, a simple
-	 * way to do this is to add a window listener to the parent frame of the
-	 * desktop, and call this method from the windowOpened(WindowEvent)
-	 * notification.
-	 * 
-	 * @param width new width (if between 0 and 1, width is taken as a
-	 *            proportional width, otherwise it is a pixel width.
-	 * 
+	/** Changes the width of a dockable (the dockable must already be visible).
+	 *
+	 * <p>
+	 * Note that this method works by modifying the divider location of the
+	 * nearest SplitContainer ancestor of the dockable (the first splitted horizontally).
+	 *
+	 * <p>
+	 * As this method must be called when the desktop is visible, a simple way to
+	 * do this is to add a window listener to the parent frame of the desktop, and call this
+	 * method from the windowOpened(WindowEvent) notification.
+	 *
+	 * @param width  new width (if between 0 and 1, width is taken as a proportional width,
+	 * otherwise it is a pixel width.
+	 *
 	 * */
 	public void setDockableWidth(Dockable dockable, double width) {
 		SplitContainer split = DockingUtilities.getSplitPane(dockable, JSplitPane.HORIZONTAL_SPLIT);
@@ -3520,21 +3447,18 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Changes the height of a dockable (the dockable must already be visible).
-	 * 
+	/** Changes the height of a dockable (the dockable must already be visible).
+	 *
 	 * <P> Note that this method works by modifying the divider location of the
-	 * nearest SplitContainer ancestor of the dockable (the first splitted
-	 * vertically).
-	 * 
-	 * <P> As this method must be called when the desktop is visible, a simple
-	 * way to do this is to add a window listener to the parent frame of the
-	 * desktop, and call this method from the windowOpened(WindowEvent)
-	 * notification.
-	 * 
-	 * @param height new height (if between 0 and 1, height is taken as a
-	 *            proportional height, otherwise it is a pixel height.
-	 * 
+	 * nearest SplitContainer ancestor of the dockable (the first splitted vertically).
+	 *
+	 * <P> As this method must be called when the desktop is visible, a simple way to
+	 * do this is to add a window listener to the parent frame of the desktop, and call this
+	 * method from the windowOpened(WindowEvent) notification.
+	 *
+	 * @param height new height (if between 0 and 1, height is taken as a proportional height,
+	 * otherwise it is a pixel height.
+	 *
 	 * */
 	public void setDockableHeight(Dockable dockable, double height) {
 		SplitContainer split = DockingUtilities.getSplitPane(dockable, JSplitPane.VERTICAL_SPLIT);
@@ -3547,50 +3471,43 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Updates the resizing behaviour of the desktop in order to resize this
-	 * dockable (and keep others at fixed size). <P> This method should be
-	 * called at least once (prior to showing the desktop) with an already
-	 * docked dockable. <P> If the dockable doesn't belong to the desktop
-	 * containment hierarchy, this method will do nothing.
-	 * 
-	 * @deprecated use setResizeWeight() in every dockKey for a better resizing
-	 *             behaviour
-	 * 
+	/** Updates the resizing behaviour of the desktop in order to resize
+	 * this dockable (and keep others at fixed size).
+	 * <P> This method should be called at least once (prior to showing the desktop) with an
+	 * already docked dockable.
+	 * <P> If the dockable doesn't belong to the desktop containment hierarchy,
+	 * this method will do nothing.
+	 * @deprecated use setResizeWeight() in every dockKey for a better resizing behaviour
+	 *
 	 */
 	public void setAutoResizableDockable(Dockable dockable) {
-		/* this.autoResizeableDockable = dockable; */
+		/*this.autoResizeableDockable = dockable; */
 		DockingUtilities.updateResizeWeights(dockingPanel);
 	}
 
-	/**
-	 * Registers a dockable as belonging to a tab group. <p> It is used to have
-	 * a memory of grouped (tabbed) dockables in order to keep the group
-	 * together when dockable are restored from auto-hide mode. <p> This method
-	 * is generally called by the tabbed container management, and not directly
+	/** Registers a dockable as belonging to a tab group.
+	 * <p> It is used to have a memory of grouped (tabbed) dockables in order to keep the
+	 * group together when dockable are restored from auto-hide mode.
+	 * <p> This method is generally called by the tabbed container management, and not directly
 	 * by the developper.
-	 * 
+	 *
 	 * <p> However, there is a case where calling this method can be usefull :
-	 * when, at startup, a desktop is built with multiple hidden dockables, and
-	 * the developper wants them to be grouped in a tab container when they are
-	 * restored to the desktop.
-	 * 
-	 * <p> note that the method is symetric when a group is empty : it such a
-	 * case base and newTab args can be swapped.
-	 * 
-	 * @param base an already tabbed dockable
+	 *  when, at startup, a desktop is built with multiple hidden dockables, and the developper wants
+	 * them to be grouped in a tab container when they are restored to the desktop.
+	 *
+	 * <p> note that the method is symetric when a group is empty  : it such a case base and newTab
+	 *   args can be swapped.
+	 *
+	 * @param base   an already tabbed dockable
 	 * @param newTab a dockable to add to the tab group
-	 * 
-	 * @since 1.1.2
+	 *
+	 *@since 1.1.2
 	 */
 	public void addToTabbedGroup(Dockable base, Dockable newTab) {//2005/07/13
-		/*
-		 * this method is called when a dockable is added to a
-		 * dockableTabbedContainer
-		 */
+		/* this method is called when a dockable is added to a dockableTabbedContainer */
 		LinkedList<Dockable> group = tabbedGroups.get(base);
 		if(group == null) {
-			group = new LinkedList<Dockable>();
+			group = new LinkedList();
 			group.add(base);
 			tabbedGroups.put(base, group);
 		}
@@ -3600,22 +3517,18 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * Unregisters a dockable from its current tab group (when it's removed from
-	 * it). <p> For an application developper, there should be no need to call
-	 * this method as it is managed internally by the framework, unless the
-	 * developper wants to explicitely remove a component from a tab group when
-	 * this component is in the auto-hide state.
-	 * 
-	 * @since 1.1.2
+	/** Unregisters a dockable from its current tab group (when it's removed from it).
+	 * <p> For an application developper, there should be no need to call this method as it is managed
+	 * internally by the framework, unless the developper wants to explicitely remove a component from
+	 * a tab group when this component is in the auto-hide state.
+	 *@since 1.1.2
 	 */
 	public void removeFromTabbedGroup(Dockable dockable) { // 2005/07/13
 		/* package protected */
 
-		/*
-		 * This method is invoked when a component is dragged outside of a tab
-		 * group : meaning the user doesn't want anymore this dockable to be
-		 * grouped in that tab.
+		/* This method is invoked when a component is dragged outside of a tab group : meaning
+		 * the user doesn't want anymore this dockable to be grouped in that tab.
+		 *
 		 */
 		LinkedList<Dockable> group = tabbedGroups.get(dockable);
 		if(group != null) {
@@ -3629,17 +3542,16 @@ public class DockingDesktop extends JLayeredPane {
 
 	}
 
-	/**
-	 * Creates the autohide expand panel to be used in this desktop. <p> This
-	 * method gives a chance to the developer to override expand panel creation
-	 * and provide a custom subclass.
+	/** Creates the autohide expand panel to be used in this desktop.
+	 * <p>
+	 *  This method gives a chance to the developer to override expand panel creation
+	 *  and provide a custom subclass.
 	 */
 	protected AutoHideExpandPanel createAutoHideExpandPanel() {
 		return new AutoHideExpandPanel();
 	}
 
-	/**
-	 * used to track focus changes for DockableSelection events
+	/** used to track focus changes for DockableSelection events
 	 */
 	private class FocusHandler implements PropertyChangeListener, ChangeListener {
 
@@ -3703,30 +3615,26 @@ public class DockingDesktop extends JLayeredPane {
 		this.desktopName = desktopName;
 	}
 
-	/**
-	 * Returns the docking context used by this desktop (might be shared with
-	 * other desktop).
-	 * 
+	/** Returns the docking context used by this desktop (might be shared with other desktop).
+	 *
 	 * @since 2.1
 	 */
 	public DockingContext getContext() {
 		return context;
 	}
 
-	/**
-	 * Updates the docking context used by this desktop. <p> Warning : this
-	 * method should only be used by the framework itself : changing a context
-	 * "live" can have unpredicted and undesired side effect.
-	 * 
+	/** Updates the docking context used by this desktop.
+	 *<p>
+	 * Warning : this method should only be used by the framework itself : changing
+	 * a context "live" can have unpredicted and undesired side effect.
 	 * @since 2.1
 	 */
 	public void setContext(DockingContext context) {
 		this.context = context;
 	}
 
-	/**
-	 * returns the currently maximized dockable (or null if no dockable is in
-	 * that state)
+	/** returns the currently maximized dockable
+	 * (or null if no dockable is in that state)
 	 */
 	public Dockable getMaximizedDockable() {
 		if(maximizedComponent == null) {
@@ -3737,9 +3645,8 @@ public class DockingDesktop extends JLayeredPane {
 		}
 	}
 
-	/**
-	 * combines a docking action event and vetoable state change event to accept
-	 * or reject a docking action.
+	/** combines a docking action event and vetoable state change event to accept or reject
+	 * a docking action.
 	 */
 	private boolean isDockingActionAccepted(DockingActionEvent dae, DockableStateWillChangeEvent dse) {
 		boolean accepted = context.fireAcceptDockingAction(dae);

@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -16,32 +24,33 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import com.vldocking.swing.docking.animation.ComponentAnimator;
 import com.vldocking.swing.docking.animation.*;
 import java.lang.reflect.Method;
 import javax.swing.border.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-/**
- * A component used to show the currently expanded view. <p> Auto-Hide /
- * Auto-Expand feature is a means to save space of screen replacing a Dockable
- * by a Button on one of the Desktop borders. <p> When the user clicks on the
- * button or his mouse rolls over it, the component is shown (with an expansion
- * animation) as if it was coming from behind the button's border.
- * 
+/** A component used to show the currently expanded view.
+ * <p>
+ * Auto-Hide / Auto-Expand feature is a means to save space of screen replacing
+ * a Dockable by a Button on one of the Desktop borders.
+ * <p> When the user clicks on the button or his mouse rolls over it, the component
+ * is shown (with an expansion animation) as if it was coming from behind the button's
+ * border.
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 2.0
- * @update 2005/10/06 Lilian Chamontin : protected access to the exansion timer
- *         that might be null when AutoHidePolicy is EXPAND_ON_CLICK
- * @update 2005/11/01 Lilian Chamontin : enhanced timer management to
- *         auto-collaspe the panel when mouse out of bounds
- * @update 2005/12/08 Lilian Chamontin : updated the order of component
- *         insertion for JDIC support.
+ * @update 2005/10/06 Lilian Chamontin : protected access to the exansion timer that might be
+ * null when AutoHidePolicy is EXPAND_ON_CLICK
+ * @update 2005/11/01 Lilian Chamontin : enhanced timer management to auto-collaspe the panel
+ * when mouse out of bounds
+ * @update 2005/12/08 Lilian Chamontin : updated the order of component insertion for JDIC support.
  * @update 2006/12/19 Lilian Chamontin : fixed a memory leak issue.
- * @update 2007/01/08 Lilian Chamontin : updated to use the new titlebar factory
- *         method
- * 
- * */
+ * @update 2007/01/08 Lilian Chamontin : updated to use the new titlebar factory method
+ *
+ */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class AutoHideExpandPanel extends JPanel implements SingleDockableContainer {
 
 	private static final long serialVersionUID = 1L;
@@ -58,7 +67,7 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 	private boolean isExpanding = false;
 	// true during animation phase, will be used to avoid concurrent animations (@todo)
 
-	private HashMap<Component, Dimension> savedDimensions = new HashMap<Component, Dimension>(); // Component/Dimension
+	private HashMap<Component, Dimension> savedDimensions = new HashMap(); // Component/Dimension
 
 	ExpandControler controler = new ExpandControler(); // hide event listener
 
@@ -88,24 +97,21 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 
 	private Border expandFromTopBorder, expandFromLeftBorder, expandFromBottomBorder, expandFromRightBorder;
 
-	/**
-	 * this boolean is used to disable auto-hiding temporarily, especially
-	 * during drag operation (where mouse can leave the component)
-	 */
+	/** this boolean is used to disable auto-hiding temporarily, especially during
+	 * drag operation (where mouse can leave the component) */
 	private boolean shouldCollapse = true;
 
 	/** flag used when heavywieght usage + single heavyweight component */
 	private boolean isHeavyPanelInstalled = false;
 
-	/** Used by the collapse timer */
+	/** Used by the collapse timer*/
 	private long lastTimeMouseWasIn = 0;
 
 	private boolean canUseMouseInfo = DockingUtilities.canUseMouseInfo();
 
 	private FocusCollapser collapser = new FocusCollapser(); // 2006/12/19
 
-	/**
-	 * Timer used to collapse the expand panel (when mouse is out of bounds).
+	/** Timer used to collapse the expand panel (when mouse is out of bounds).
 	 * (only for java > 1.5)
 	 */
 	private javax.swing.Timer collapseTimer // 2005/11/01
@@ -293,19 +299,17 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		//return titleBar.isActive();
 	}
 
-	/**
-	 * Returns true if this panel agrees to beeing hidden. <p> During drag
-	 * operations (resizing), some mouseEnter/mouseExit events can be lost. In
-	 * that case, the desktop relies on this method to request collaping or not.
-	 * */
+	/** Returns true if this panel agrees to beeing hidden.
+	 * <p>
+	 * During drag operations (resizing), some mouseEnter/mouseExit events
+	 * can be lost. In that case, the desktop relies on this method to
+	 * request collaping or not.
+	 *  */
 	public boolean shouldCollapse() {
 		return shouldCollapse;
 	}
 
-	/**
-	 * Returns the component used to modify the expand panel size when expanded
-	 * from the bottom
-	 */
+	/** Returns the component used to modify the expand panel size when expanded from the bottom */
 	public JPanel getTopDragger() {
 		/* This method is used by the UI to install proper borders */
 		if(topDragger == null) {
@@ -314,10 +318,7 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		return topDragger;
 	}
 
-	/**
-	 * Returns the component used to modify the expand panel size when expanded
-	 * from the right
-	 */
+	/** Returns the component used to modify the expand panel size when expanded from the right */
 	public JPanel getLeftDragger() {
 		/* This method is used by the UI to install proper borders */
 		if(leftDragger == null) {
@@ -326,10 +327,7 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		return leftDragger;
 	}
 
-	/**
-	 * Returns the component used to modify the expand panel size when expanded
-	 * from the top
-	 */
+	/** Returns the component used to modify the expand panel size when expanded from the top */
 	public JPanel getBottomDragger() {
 		/* This method is used by the UI to install proper borders */
 		if(bottomDragger == null) {
@@ -338,10 +336,7 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		return bottomDragger;
 	}
 
-	/**
-	 * Returns the component used to modify the expand panel size when expanded
-	 * from the right
-	 */
+	/** Returns the component used to modify the expand panel size when expanded from the right */
 	public JPanel getRightDragger() {
 		/* This method is used by the UI to install proper borders */
 		if(rightDragger == null) {
@@ -461,8 +456,7 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 
 	}
 
-	/**
-	 * Returns the component responsible for managing auto-expansion.
+	/** Returns the component responsible for managing auto-expansion.
 	 * */
 	/* package protected */ExpandControler getControler() {
 		return controler;
@@ -492,7 +486,7 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		}
 	}
 
-	/** Expands the currently selected button */
+	/**  Expands the currently selected button */
 	public void expand() {
 		if(selectedButton == null) {
 			return;//2007/01/10
@@ -601,16 +595,21 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 			expandedComponent = comp;
 		}
 
-		/*
-		 * // the workaround isn't needed anymore : we use the heavyweightTimer
-		 * instead if (!DockingPreferences.isLightWeightUsageEnabled()){ // this
-		 * is a workaround : mouse listener doesn't work properly // on AWT
-		 * components (they grab the event even if they are 'under' // our mouse
-		 * grabber. SwingUtilities.invokeLater(new Runnable(){ public void
-		 * run(){ // heavyPanel.requestFocus(); comp.requestFocus(); } // by
-		 * requesting focus, we can rely on the safer focusOwner property // and
-		 * use it to collapse thi panel (see FocusCollapser code below) }); }
-		 */
+		/* // the workaround isn't needed anymore : we use the heavyweightTimer instead
+
+		if (!DockingPreferences.isLightWeightUsageEnabled()){
+		// this is a workaround : mouse listener doesn't work properly
+		// on AWT components (they grab the event even if they are 'under'
+		// our mouse grabber.
+		SwingUtilities.invokeLater(new Runnable(){
+		public void run(){
+		//                heavyPanel.requestFocus();
+		comp.requestFocus();
+		}
+		// by requesting focus, we can rely on the safer focusOwner property
+		// and use it to collapse thi panel (see FocusCollapser code below)
+		});
+		}*/
 
 		titleBar.setDockable(selectedButton.getDockable());
 		desk.installDockableDragSource(titleBar);
@@ -655,9 +654,8 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		repaint();
 	}
 
-	/**
-	 * Calculates the insets needed around the center component. This is the sum
-	 * of border sizes and bordercomponents sizes.
+	/** Calculates the insets needed around the center component.
+	 * This is the sum of border sizes and bordercomponents sizes.
 	 * */
 	private Insets getComponentInsets() {
 		Insets i = getInsets(); // borders
@@ -727,10 +725,10 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		return uiClassID;
 	}
 
-	/**
-	 * Clears the state of this expand panel. <p> This is useful when
-	 * re-installing a desktop from readXml (for example, it resets dockable
-	 * expand sizes)
+	/** Clears the state of this expand panel.
+	 *<p>
+	 * This is useful when re-installing a desktop from readXml (for example,
+	 * it resets dockable expand sizes)
 	 */
 	public void clear() {
 		// clear
@@ -759,16 +757,11 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 	/** This class hides expansion implementation from API */
 	private class ExpandControler implements MouseListener, ActionListener, PropertyChangeListener {
 
-		/*
-		 * temporary button : the next to be selected after a mouseEntered event
-		 * and triggered timer delay.
-		 */
+		/* temporary button : the next to be selected after a mouseEntered event and
+		 * triggered timer delay. */
 		private AutoHideButton mouseEnteredButton;
 
-		/**
-		 * used to avoid bad interactions between focus listeners and expand
-		 * controler
-		 */
+		/** used to avoid bad interactions between focus listeners and expand controler */
 		private boolean isUnderControl = false;
 
 		public void mouseClicked(MouseEvent e) {
@@ -828,7 +821,7 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		public void mouseReleased(MouseEvent e) {}
 
 		public void propertyChange(PropertyChangeEvent e) {
-			/* triggered by autohide policy change */
+			/* triggered by autohide policy change*/
 			if(e.getPropertyName().equals(AutoHidePolicy.PROPERTY_EXPAND_MODE)) {
 				if(AutoHidePolicy.getPolicy().getExpandMode() == AutoHidePolicy.ExpandMode.EXPAND_ON_ROLLOVER) {
 					expansionTimer = new Timer(AutoHidePolicy.getPolicy().getRolloverTriggerDelay(), this);
@@ -864,7 +857,7 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 
 	private class DragListener implements MouseListener, MouseMotionListener {
 
-		/* inner class of expand panel */
+		/* inner class of expand panel*/
 		int zone;
 
 		DragListener(int zone) {
@@ -872,9 +865,8 @@ public class AutoHideExpandPanel extends JPanel implements SingleDockableContain
 		}
 
 		public void mouseDragged(MouseEvent e) {
-			/*
-			 * implement the drag effect on expand panel : a single border can
-			 * be dragged (the one not overlapping the borders of the panel
+			/* implement the drag effect on expand panel : a single border
+			 * can be dragged (the one not overlapping the borders of the panel
 			 */
 
 			// new height/width (including borders)

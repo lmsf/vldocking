@@ -1,22 +1,31 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
 import java.awt.*;
 
-/**
- * A layout adapted to autohide panels. <p> This layout is like a BorderLayout
- * but corners are always empty (for example, the TOP component starts with an x
- * coordinate equal to the width of the LEFT component).
- * 
+/** A layout adapted to autohide panels.
+ * <p> 
+ * This layout is like a BorderLayout but corners are always empty
+ * (for example, the TOP component starts with an x coordinate equal to the
+ * width of the LEFT component).
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
  */
@@ -155,9 +164,7 @@ public class DockingBorderLayout implements LayoutManager2 {
 		return 0;
 	}
 
-	/**
-	 * overridden to adjust position (x(top) = width(left), y(left) =
-	 * height(top)
+	/** overridden to adjust position (x(top) = width(left), y(left) = height(top)
 	 */
 	public void layoutContainer(Container target) {
 		synchronized(target.getTreeLock()) {

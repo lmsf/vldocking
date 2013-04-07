@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -17,12 +25,12 @@ import java.awt.Insets;
 import java.awt.Dimension;
 import java.beans.*;
 
-/**
- * The button used to show Dockables in auto-hide borders. <p> This component
- * displays the label, tooltip and icon properties of a <code>Dockable</code>'s
- * DockKey, with a custom look and feel.
- * 
- * 
+/** The button used to show Dockables in auto-hide borders.
+ * <p>
+ * This component displays the label, tooltip and icon properties of a
+ * <code>Dockable</code>'s DockKey, with a custom look and feel.
+ *
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
  */
@@ -92,10 +100,7 @@ public class AutoHideButton extends JLabel {
 
 	public AutoHideButton() {}
 
-	/**
-	 * Sets the background color according to the <code>notification</code>
-	 * boolean
-	 */
+	/** Sets the background color according to the <code>notification</code> boolean */
 	private void setNotification(boolean notification) {
 		this.isNotification = notification;
 		if(notification) {
@@ -117,7 +122,7 @@ public class AutoHideButton extends JLabel {
 		return key;
 	}
 
-	/** Initialize the button for a Dockable and a border zone */
+	/** Initialize the button for a Dockable and a border zone  */
 	public void init(Dockable dockable, int zone) {
 		DockKey key = dockable.getDockKey();
 		this.dockable = dockable;
@@ -173,7 +178,7 @@ public class AutoHideButton extends JLabel {
 		}
 	}
 
-	/** Returns the border zone of this button */
+	/** Returns the border zone of this button*/
 	public int getZone() {
 		return zone;
 	}

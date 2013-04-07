@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -17,21 +25,21 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-/**
- * An utility class providing default implementation of usefull actions for
- * pop-up menus in tab container selectors. <p>
- * 
+/** An utility class providing default implementation of usefull actions for pop-up
+ * menus in tab container selectors.
+ *<p>
+ *
  * @author Lilian Chamontin, VLSolutions
- * 
- * @update 2005/10/07 Lilian Chamontin : added the attach action for floating
- *         tabs
+ *
+ *@update 2005/10/07 Lilian Chamontin : added the attach action for floating tabs
  */
+@SuppressWarnings("unused")
 public class TabbedContainerActions {
 
 	// label resources taken from BasicInternalFrameUI...
 	private static final String CLOSE_TEXT = UIManager.getString("DockTabbedPane.closeButtonText");
 	private static final String ICONIFY_TEXT = UIManager.getString("DockTabbedPane.minimizeButtonText");
-	//private static final String RESTORE_TEXT = UIManager.getString("DockTabbedPane.restoreButtonText");
+	private static final String RESTORE_TEXT = UIManager.getString("DockTabbedPane.restoreButtonText");
 	private static final String MAXIMIZE_TEXT = UIManager.getString("DockTabbedPane.maximizeButtonText");
 	private static final String FLOAT_TEXT = UIManager.getString("DockTabbedPane.floatButtonText");
 	private static final String ATTACH_TEXT = UIManager.getString("DockTabbedPane.attachButtonText");
@@ -46,10 +54,9 @@ public class TabbedContainerActions {
 
 	private TabbedContainerActions() {}
 
-	/**
-	 * returns an action suitable for closing a dockable contained in a tab. <p>
-	 * Action properties : The icon is provided, and also the standard localized
-	 * "close" message.
+	/** returns an action suitable for closing a dockable contained in a tab.
+	 *<p> 
+	 * Action properties : The icon is provided, and also the standard localized "close" message.
 	 */
 	public static Action createCloseAction(final Dockable dockable, final DockingDesktop desktop) {
 
@@ -70,10 +77,9 @@ public class TabbedContainerActions {
 		return action;
 	}
 
-	/**
-	 * returns an action suitable for closing every dockable contained in a tab.
-	 * <p> Action properties : The icon is provided, and also an unlocalized
-	 * "Close all documents" message.
+	/** returns an action suitable for closing every dockable contained in a tab.
+	 *<p>
+	 * Action properties : The icon is provided, and also an unlocalized "Close all documents" message.
 	 */
 	public static Action createCloseAllAction(final Dockable base, final DockingDesktop desktop) {
 
@@ -90,10 +96,9 @@ public class TabbedContainerActions {
 		return action;
 	}
 
-	/**
-	 * returns an action suitable for closing every dockable contained in a tab
-	 * excepted the current one. <p> Action properties : The icon is provided,
-	 * and also an unlocalized "Close all other documents" message.
+	/** returns an action suitable for closing every dockable contained in a tab excepted the current one.
+	 *<p>
+	 * Action properties : The icon is provided, and also an unlocalized "Close all other documents" message.
 	 */
 	public static Action createCloseAllOtherAction(final Dockable exception, final DockingDesktop desktop) {
 
@@ -110,10 +115,9 @@ public class TabbedContainerActions {
 		return action;
 	}
 
-	/**
-	 * returns an action suitable for maximizing a dockable contained in a tab.
-	 * <p> Action properties : The icon is provided, and also a localized
-	 * "Maximize" message.
+	/** returns an action suitable for maximizing a dockable contained in a tab.
+	 *<p>
+	 * Action properties : The icon is provided, and also a localized "Maximize" message.
 	 */
 	public static Action createMaximizeTabAction(final Dockable dockable, final DockingDesktop desktop) {
 
@@ -134,10 +138,9 @@ public class TabbedContainerActions {
 		return action;
 	}
 
-	/**
-	 * returns an action suitable for hiding a dockable contained in a tab. <p>
-	 * Action properties : The icon is provided, and also a localized "Iconify"
-	 * message.
+	/** returns an action suitable for hiding a dockable contained in a tab.
+	 *<p>
+	 * Action properties : The icon is provided, and also a localized "Iconify" message.
 	 */
 	public static Action createHideTabAction(final Dockable dockable, final DockingDesktop desktop) {
 
@@ -158,10 +161,9 @@ public class TabbedContainerActions {
 		return action;
 	}
 
-	/**
-	 * returns an action suitable for floating (detach) a dockable contained in
-	 * a tab. <p> Action properties : The icon is provided, and a default
-	 * "Detach" message.
+	/** returns an action suitable for floating (detach) a dockable contained in a tab.
+	 *<p>
+	 * Action properties : The icon is provided, and a default "Detach" message.
 	 */
 	public static Action createFloatTabAction(final Dockable dockable, final DockingDesktop desktop) {
 
@@ -182,11 +184,9 @@ public class TabbedContainerActions {
 		return action;
 	}
 
-	/**
-	 * returns an action suitable for attaching a dockable contained in a
-	 * floating tab. <p> Action properties : The icon is provided, and a default
-	 * "Attach" message.
-	 * 
+	/** returns an action suitable for attaching a dockable contained in a floating tab.
+	 *<p>
+	 * Action properties : The icon is provided, and a default "Attach" message.
 	 * @since 2.0.1
 	 */
 	public static Action createAttachTabAction(final Dockable dockable, final DockingDesktop desktop) {

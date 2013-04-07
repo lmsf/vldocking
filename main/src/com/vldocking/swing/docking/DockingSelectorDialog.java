@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -14,49 +22,52 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.awt.event.*;
+import java.awt.event.ActionEvent;
 import javax.swing.table.*;
 
-/**
- * A Helper class providing information about the visibility of user components.
- * <p> This dialog shows which user components are docked, auto-hidden, not
- * visible, and is capable of dynamicaly altering the dockingpanel layout on
- * user selection (for example, to show an unvisible component).
- * 
- * <p> User components shown are those which are already docked and those which
- * have been registered with the registerDockableComponent() method of
- * DockingPanel.
- * 
- * <p> Example of usage : <pre> Frame f = ... // frame containing the docking
- * panel DockingPanel dockingPanel = ... DockingSelectorDialog dlg = new
- * DockingSelectorDialog(f); dlg.setDockingPanel(dockingPanel); dlg.pack();
- * dlg.setLocationRelativeTo(f); dlg.setVisible(true); // modal
- * 
- * // optional if (dlg.getClosingState() == DockingSelectorDialog.CONFIRM){ //
- * do something more } </pre>
- * 
+/** A Helper class providing information about the visibility of user components.
+ * <p>
+ * This dialog shows which user components are docked, auto-hidden,
+ * not visible, and is capable of dynamicaly altering the dockingpanel layout
+ * on user selection (for example, to show an unvisible component).
+ *
+ * <p>
+ * User components shown are those which are already docked and those
+ * which have been registered with the registerDockableComponent() method of DockingPanel.
+ *
+ * <p>
+ * Example of usage :
+ * <pre>
+ * Frame f = ...  // frame containing the docking panel
+ * DockingPanel dockingPanel = ...
+ * DockingSelectorDialog dlg = new DockingSelectorDialog(f);
+ * dlg.setDockingPanel(dockingPanel);
+ * dlg.pack();
+ * dlg.setLocationRelativeTo(f);
+ * dlg.setVisible(true); // modal
+ *
+ * // optional
+ * if (dlg.getClosingState() == DockingSelectorDialog.CONFIRM){
+ *    // do something more
+ * }
+ * </pre>
+ *
  * @see DockingPanel
- * 
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class DockingSelectorDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Closing state of the dialog when the user has selected the <b>confirm</b>
-	 * option
-	 * 
-	 * @see #getClosingState()
-	 */
+	/** Closing state of the dialog when the user has selected the <b>confirm</b> option
+	 * @see #getClosingState() */
 	public static final int CONFIRM = 0;
 
-	/**
-	 * Closing state of the dialog when the user has selected the <b>cancel</b>
-	 * option
-	 * 
-	 * @see #getClosingState()
-	 */
+	/** Closing state of the dialog when the user has selected the <b>cancel</b> option
+	 * @see #getClosingState() */
 	public static final int CANCEL = 1;
 
 	private DockablesTableModel model;
@@ -85,11 +96,11 @@ public class DockingSelectorDialog extends JDialog {
 
 	private int closingState = CANCEL;
 
-	private HashMap<DockableState, Object> visibleViews = new HashMap<DockableState, Object>(); // DockableState / Boolean (visible?)
+	private HashMap<DockableState, Boolean> visibleViews = new HashMap(); // DockableState / Boolean (visible?)
 
-	/**
-	 * Default constructor. <P> modal dialog with DISPOSE_ON_CLOSE option, needs
-	 * a pack() and setVisible(true) after creation
+	/** Default constructor.
+	 * <P> modal dialog with DISPOSE_ON_CLOSE option,
+	 * needs a pack() and setVisible(true) after creation
 	 * */
 	public DockingSelectorDialog() {
 		setModal(true);
@@ -98,10 +109,9 @@ public class DockingSelectorDialog extends JDialog {
 		init();
 	}
 
-	/**
-	 * Constructor for Dialog parent window. <P> modal dialog with
-	 * DISPOSE_ON_CLOSE option, needs a pack() and setVisible(true) after
-	 * creation.
+	/** Constructor for Dialog parent window.
+	 * <P> modal dialog with DISPOSE_ON_CLOSE option,
+	 * needs a pack() and setVisible(true) after creation.
 	 */
 	public DockingSelectorDialog(Dialog owner) {
 		super(owner, true);
@@ -110,10 +120,9 @@ public class DockingSelectorDialog extends JDialog {
 		init();
 	}
 
-	/**
-	 * Constructor for Frame parent window. <P> modal dialog with
-	 * DISPOSE_ON_CLOSE option, needs a pack() and setVisible(true) after
-	 * creation.
+	/** Constructor for Frame parent window.
+	 * <P> modal dialog with DISPOSE_ON_CLOSE option,
+	 * needs a pack() and setVisible(true) after creation.
 	 * */
 	public DockingSelectorDialog(Frame owner) {
 		super(owner, true);
@@ -192,38 +201,36 @@ public class DockingSelectorDialog extends JDialog {
 
 	}
 
-	/** Change the confirm button text (hook for i18n) */
+	/** Change the confirm button text (hook for i18n)*/
 	public void setConfirmButtonText(String text) {
 		confirmButton.setText(text);
 	}
 
-	/** Change the cancel button text (hook for i18n) */
+	/** Change the cancel button text (hook for i18n)*/
 	public void setCancelButtonText(String text) {
 		cancelButton.setText(text);
 	}
 
-	/** Change the confirm button tooltip text (hook for i18n) */
+	/** Change the confirm button tooltip text (hook for i18n)*/
 	public void setConfirmButtonTooltipText(String text) {
 		confirmButton.setToolTipText(text);
 	}
 
-	/** Change the cancel button tootip text (hook for i18n) */
+	/** Change the cancel button tootip text (hook for i18n)*/
 	public void setCancelButtonTooltipText(String text) {
 		cancelButton.setToolTipText(text);
 	}
 
-	/**
-	 * Change the wizard label text (an explanation of the behaviour of this
-	 * dialog). <P>HTML format is supported like in any JLabel.
+	/** Change the wizard label text (an explanation of the behaviour of this dialog).
+	 * <P>HTML format is supported like in any JLabel.
 	 * */
 	public void setWizardLabelText(String wizardLabelText) {
 		this.wizardLabel.setText(wizardLabelText);
 	}
 
-	/**
-	 * Requiered to initialize this dialog. <P> Invoke this method before
-	 * packing the dialog.
-	 * 
+	/** Requiered to initialize this dialog.
+	 * <P> Invoke this method before packing the dialog.
+	 *
 	 * */
 	public void setDockingDesktop(DockingDesktop desktop) {
 		this.desktop = desktop;
@@ -241,11 +248,10 @@ public class DockingSelectorDialog extends JDialog {
 		table.setRowHeight(20);
 	}
 
-	/**
-	 * Returns the users close choice as CONFIRM or CANCEL (remember this dialog
-	 * is modal). <P> Use this method if you need to know how is was closed. If
-	 * the used has confirmed, the docking panel is automaticaly updated by the
-	 * confirm button action.
+	/** Returns the users close choice as CONFIRM or CANCEL (remember this dialog is modal).
+	 * <P> Use this method if you need to know how is was closed.
+	 * If the used has confirmed, the docking panel is automaticaly updated
+	 * by the confirm button action.
 	 */
 	public int getClosingState() {
 		return closingState;
@@ -289,7 +295,6 @@ public class DockingSelectorDialog extends JDialog {
 			}
 		}
 
-		@SuppressWarnings({"unchecked", "rawtypes"})
 		public Class getColumnClass(int col) {
 			switch(col) {
 				case 0:

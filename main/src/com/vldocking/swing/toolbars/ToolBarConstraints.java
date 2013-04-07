@@ -1,8 +1,9 @@
 /*
     VLDocking Framework 3.0
-    Copyright VLSOLUTIONS, 2004-2009
+    Copyright Lilian Chamontin, 2004-2013
     
-    email : info at vlsolutions.com
+    www.vldocking.com
+    vldocking@googlegroups.com
 ------------------------------------------------------------------------
 This software is distributed under the LGPL license
 
@@ -14,7 +15,6 @@ You can read the complete license here :
     http://www.gnu.org/licenses/lgpl.html
 
 */
-
 
 package com.vldocking.swing.toolbars;
 
@@ -36,43 +36,42 @@ package com.vldocking.swing.toolbars;
  * @author Lilian Chamontin, VLSolutions
  */
 public class ToolBarConstraints {
-  /** The major order is the row index for horizontal toolbars, and the column index for 
-   * vertical toolbars.
-   */
-  public int majorOrder;
-  
-  /** The minor order is the column index for horizontal toolbars, and the row index for 
-   * vertical toolbars.
-   */
-  public int minorOrder;
 
-  
-  /** Set to -1/0/+1 during drag/drop phase to allow insertion between rows/columns.
-   * Do not use it outside drag and drop operations.
-   */
-  /* package protected */ int majorOffset = 0;
+	/** The major order is the row index for horizontal toolbars, and the column index for 
+	 * vertical toolbars.
+	 */
+	public int majorOrder;
 
-  /** Set to -1/0-31 during drag/drop phase to allow insertion between rows/columns
-   * Do not use it outside drag and drop operations.
-   */
-  /* package protected */ int minorOffset = 0;
-      
-  /** Constructs a new ToolBarConstraints at (0,0) */
-  public ToolBarConstraints() {
-  }
+	/** The minor order is the column index for horizontal toolbars, and the row index for 
+	 * vertical toolbars.
+	 */
+	public int minorOrder;
 
-  /** Constructs a new ToolBarConstraints at (majorOrder,minorOrder).
-   *<p>
-   * the majorOrder is the ROW for an horizontal layout, and the columns for a vertical layout.
-   */
-  public ToolBarConstraints(int majorOrder, int minorOrder) {
-    this.majorOrder = majorOrder;
-    this.minorOrder = minorOrder;
-  }
-  
-  /** Returns a description of these constraints. */
-  public String toString(){
-    return "ToolBarConstraints[" + majorOrder + ", " + minorOrder + "]";
-  }
-  
+	/** Set to -1/0/+1 during drag/drop phase to allow insertion between rows/columns.
+	 * Do not use it outside drag and drop operations.
+	 */
+	/* package protected */int majorOffset = 0;
+
+	/** Set to -1/0-31 during drag/drop phase to allow insertion between rows/columns
+	 * Do not use it outside drag and drop operations.
+	 */
+	/* package protected */int minorOffset = 0;
+
+	/** Constructs a new ToolBarConstraints at (0,0) */
+	public ToolBarConstraints() {}
+
+	/** Constructs a new ToolBarConstraints at (majorOrder,minorOrder).
+	 *<p>
+	 * the majorOrder is the ROW for an horizontal layout, and the columns for a vertical layout.
+	 */
+	public ToolBarConstraints(int majorOrder, int minorOrder) {
+		this.majorOrder = majorOrder;
+		this.minorOrder = minorOrder;
+	}
+
+	/** Returns a description of these constraints. */
+	public String toString() {
+		return "ToolBarConstraints[" + majorOrder + ", " + minorOrder + "]";
+	}
+
 }

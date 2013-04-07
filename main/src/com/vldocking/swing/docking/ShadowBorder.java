@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -17,15 +25,17 @@ import java.awt.Insets;
 import java.awt.*;
 import javax.swing.*;
 
-/**
- * A border using a shadow on right-bottom sides.
- * 
- * <p> Two types of border can be drawn : full shadow border and half shadow
- * border. <ul> <li> full shadow border paints darker lines on top and left to
- * define a rectangular shape (this is the kind of border used by
- * DockableContainers (DockViews). <liI> half shadow border paints only a shadow
- * (nothing on top and right) : it is used for DockedTabbedPane contents. </ul>
- * 
+/** A border using a shadow on right-bottom sides.
+ *
+ * <p>
+ *  Two types of border can be drawn : full shadow border and half shadow border.
+ * <ul>
+ *  <li> full shadow border paints darker lines on top and left to define a rectangular shape
+ * (this is the kind of border used by DockableContainers (DockViews).
+ *  <liI> half shadow border paints only a shadow (nothing on top and right) : it is used for
+ * DockedTabbedPane contents.
+ * </ul>
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
  */
@@ -49,9 +59,8 @@ public class ShadowBorder implements Border {
 		this(true);
 	}
 
-	/**
-	 * Constructs a full shadow border (if paintTopLeft is true) or a half
-	 * shadow border (is false).
+	/** Constructs a full shadow border (if paintTopLeft is true) or a half shadow border
+	 * (is false).
 	 * */
 	public ShadowBorder(boolean paintTopLeft) {
 		this.paintTopLeft = paintTopLeft;

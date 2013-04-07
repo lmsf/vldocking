@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -25,30 +33,30 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 
-/**
- * This class is responsible for the containment of a Dockable component. <p>
- * Users of the VLDocking Framework should not call this class which is a
- * utility component of DockingDesktop.
- * 
- * <p> Please rely on DockingDesktop capabilities.
- * 
+/** This class is responsible for the containment of a Dockable component.
+ * <p>
+ * Users of the VLDocking Framework should not call this class which is
+ * a utility component of DockingDesktop.
+ *
+ * <p>
+ * Please rely on DockingDesktop capabilities.
+ *
  * @author Lilian Chamontin, vlsolutions.
  * @version 1.0
- * @update 2005/11/08 Lilian Chamontin : added support for global width/height
- *         drop
+ * @update 2005/11/08 Lilian Chamontin : added support for global width/height drop
  */
 public class DockingPanel extends JPanel implements DockDropReceiver {
 
-	/** @todo see if we still need the DockDropReceiver */
+	/**  @todo  see if we still need the DockDropReceiver */
 
 	private static final long serialVersionUID = 1L;
 
-	/** Javabeans constructor */
+	/** Javabeans constructor  */
 	public DockingPanel() {
 		super(new BorderLayout());
 	}
 
-	/** act the same as a splitContainer : allow drop on the borders */
+	/** act the same as a splitContainer : allow drop on the borders*/
 	public void processDockableDrag(DockDragEvent event) {
 		scanContainer(event, false);
 	}

@@ -1,3 +1,21 @@
+/*
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
+
 package com.vldocking.swing.docking;
 
 import com.vldocking.swing.tabbedpane.JTabbedPaneSmartIcon;
@@ -24,16 +42,17 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-/**
- * This component is used to display single dockables like if they were in a
- * tabbed pane. <p> Please note this component is still in its early stages and
- * might change in future releases. <p> To use it, just install the TabFactory
- * as DockableContainerFactory
- * 
+/** This component is used to display single dockables like if they were in a tabbed pane.
+ * <p>
+ * Please note this component is still in its early stages and might change in future releases.
+ * <p>
+ * To use it, just install the TabFactory as DockableContainerFactory
+ *
  * @author Lilian Chamontin, VLSolutions
  * @see TabFactory
  * @since 2.1.3
  */
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class DockViewAsTab extends DockView implements SingleDockableContainer {
 
 	private static final long serialVersionUID = 1L;
@@ -44,12 +63,12 @@ public class DockViewAsTab extends DockView implements SingleDockableContainer {
 	private static final String FLOAT_TEXT = UIManager.getString("DockViewTitleBar.floatButtonText");
 	private static final String ATTACH_TEXT = UIManager.getString("DockViewTitleBar.attachButtonText");
 
-	//private static Icon closeIcon = UIManager.getIcon("DockViewTitleBar.menu.close");
-	//private static Icon maximizeIcon = UIManager.getIcon("DockViewTitleBar.menu.maximize");
+	private static Icon closeIcon = UIManager.getIcon("DockViewTitleBar.menu.close");
+	private static Icon maximizeIcon = UIManager.getIcon("DockViewTitleBar.menu.maximize");
 	private static Icon restoreIcon = UIManager.getIcon("DockViewTitleBar.menu.restore");
-	//private static Icon hideIcon = UIManager.getIcon("DockViewTitleBar.menu.hide");
+	private static Icon hideIcon = UIManager.getIcon("DockViewTitleBar.menu.hide");
 	private static Icon dockIcon = UIManager.getIcon("DockViewTitleBar.menu.dock");
-	//private static Icon floatIcon = UIManager.getIcon("DockViewTitleBar.menu.float");
+	private static Icon floatIcon = UIManager.getIcon("DockViewTitleBar.menu.float");
 	private static Icon attachIcon = UIManager.getIcon("DockViewTitleBar.menu.attach");
 
 	/** The tab container in which the components are added */
@@ -58,7 +77,7 @@ public class DockViewAsTab extends DockView implements SingleDockableContainer {
 	/** smart icon manager */
 	protected JTabbedPaneSmartIconManager tpManager = new JTabbedPaneSmartIconManager(tabHeader);
 
-	/** smart icon used to display the title */
+	/** smart icon used to display the title  */
 	protected JTabbedPaneSmartIcon smartIcon = new JTabbedPaneSmartIcon(null, " ", null);
 
 	protected AbstractAction closeAction = new AbstractAction("Close") {
@@ -277,9 +296,8 @@ public class DockViewAsTab extends DockView implements SingleDockableContainer {
 		}
 	}
 
-	/**
-	 * This method is invoked to hide the pop-up that could still be visible (To
-	 * avoid a visible pop-up for an invisible component)
+	/** This method is invoked to hide the pop-up that could still be visible
+	 * (To avoid a visible pop-up for an invisible component)
 	 */
 	public void closePopUp() {
 		if(currentPopUp != null) {
@@ -390,7 +408,7 @@ public class DockViewAsTab extends DockView implements SingleDockableContainer {
 	}
 
 	public void resetTabIcons() {
-		ArrayList<SmartIconJButton> icons = new ArrayList<SmartIconJButton>();
+		ArrayList icons = new ArrayList();
 		DockKey k = getDockable().getDockKey();
 		if(k.isCloseEnabled() && isCloseButtonDisplayed) {
 			icons.add(closeSmartIcon);
@@ -433,7 +451,7 @@ public class DockViewAsTab extends DockView implements SingleDockableContainer {
 	}
 
 	public String getUIClassID() {
-		return "PanelUI"; // default panel UI
+		return "PanelUI";  // default panel UI
 	}
 
 	protected TabHeader createTabHeader() {

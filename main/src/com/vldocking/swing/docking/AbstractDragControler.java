@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -37,18 +45,17 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-/**
- * Abstract drag controler : provides common behaviour for LW and HW controlers
+/** Abstract drag controler : provides common behaviour for LW and HW controlers
  * <p>(should only be used by VLDocking core framework and extensions)
  * 
  * @author Lilian Chamontin, VLSolutions
  * @since 3.0
  */
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 abstract class AbstractDragControler implements DragControler {
 
-	/*
-	 * This class is not public : it relies so heavily on vldocking internals
-	 * that I'm reluctant to give extenders an access to it.
+	/* This class is not public : it relies so heavily on vldocking internals that I'm reluctant
+	 * to give extenders an access to it.
 	 */
 	protected Shape dropShape;
 
@@ -74,7 +81,7 @@ abstract class AbstractDragControler implements DragControler {
 
 	protected ShapePainterStrategy currentShapePainterStrategy;
 
-	private HashMap<Window, ShapePainterStrategy> shapePainters = new HashMap<Window, ShapePainterStrategy>();
+	private HashMap<Window, ShapePainterStrategy> shapePainters = new HashMap();
 
 	public AbstractDragControler(DockingDesktop desktop) {
 		this.desktop = desktop;
@@ -158,10 +165,17 @@ abstract class AbstractDragControler implements DragControler {
 		}
 	}
 
+	/** This method cancels the current drag gesture.
+	 *<p>
+	 * It can be used for example by a key listener reacting to the escape key
+	 *
+	 *@since 2.0.1
+	 */
 	/**
-	 * This method cancels the current drag gesture. <p> It can be used for
-	 * example by a key listener reacting to the escape key
-	 * 
+	 * This method cancels the current drag gesture.
+	 * <p>
+	 * It can be used for example by a key listener reacting to the escape key
+	 *
 	 * @since 2.0.1
 	 */
 	public void cancelDrag() {
@@ -178,8 +192,7 @@ abstract class AbstractDragControler implements DragControler {
 	}
 
 	/**
-	 * clears the shape painters cache to avoid keeping references of old
-	 * windows
+	 * clears the shape painters cache to avoid keeping references of old windows
 	 */
 	private void clearStrategies() {
 		Window w = SwingUtilities.getWindowAncestor(desktop);
@@ -239,10 +252,8 @@ abstract class AbstractDragControler implements DragControler {
 		}
 	}
 
-	/**
-	 * invoked only when a drag gesture has beed done
-	 * 
-	 * @return true if the dockable has been dropped.
+	/** invoked only when a drag gesture has beed done
+	 * @return  true if the dockable has been dropped.
 	 */
 	private boolean processMouseReleased(MouseEvent e) {
 		// 2007/01/08 updated to return a boolean
@@ -260,7 +271,7 @@ abstract class AbstractDragControler implements DragControler {
 			underMouseNullDesktop = findDropReceiverOutsideDesktop(underMouseNullDesktop, e);
 		}
 
-		//ShapePainterStrategy shapePainterStrategy = getShapePainter(underMouse, dragSource);
+		ShapePainterStrategy shapePainterStrategy = getShapePainter(underMouse, dragSource);
 
 		int dx = dragPoint.x - startDragPoint.x;
 		int dy = dragPoint.y - startDragPoint.y;
@@ -344,7 +355,7 @@ abstract class AbstractDragControler implements DragControler {
 				// vetoed, nothing can be be done
 				return false;
 			}
-		} else { /* if (underMouse == null){ */// not under a droppable zone
+		} else { /*if (underMouse == null){ */// not under a droppable zone
 			DropProcess process = new DropProcess(e, dockableDragSource, umInfo);
 			if(process.canDockableBeDetached() && process.checkDockableWillBeDetached()) {
 				Point location = new Point(e.getPoint());
@@ -360,13 +371,11 @@ abstract class AbstractDragControler implements DragControler {
 
 	/** Allow hot swappping of two top level dockable containers (during drag) */
 	protected void processHotSwap(Component underMouse, Component dragged, ShapePainterStrategy shapePainterStrategy, boolean drop) { //2005/11/08
-		/*
-		 * This whole method should be reworked to allow hooking a
-		 * DockingActionEvent subclass to process hotswapping. This also means
-		 * we have to get rid of these "Component" and rely on
-		 * DockableContainers instead (which will allow us to properly track
-		 * dockable state changes)
-		 */
+		/* This whole method should be reworked to allow hooking a DockingActionEvent subclass
+		     * to process hotswapping.
+		     * This also means we have to get rid of these "Component" and rely on DockableContainers
+		     * instead (which will allow us to properly track dockable state changes)
+		     */
 
 		// ---------------------
 		// shortcut : if the underMouse component doesn't belong to a DockingPanel, we
@@ -448,10 +457,7 @@ abstract class AbstractDragControler implements DragControler {
 
 	}
 
-	/**
-	 * Returns information about the component right under the mouse (including
-	 * other owned windows)
-	 */
+	/** Returns information about the component right under the mouse (including other owned windows)*/
 	protected UnderMouseInfo findComponentUnderMouse(MouseEvent e) {
 
 		// are we above an insertion point ?
@@ -484,10 +490,10 @@ abstract class AbstractDragControler implements DragControler {
 			// and select the top most window at current mouse location
 
 			DockingContext ctx = desktop.getContext();
-			ArrayList<?> desktops = ctx.getDesktopList();
+			ArrayList desktops = ctx.getDesktopList();
 
 			// create a list of unique windows
-			ArrayList<Window> windows = new ArrayList<Window>();
+			ArrayList windows = new ArrayList();
 			for(int i = 0; i < desktops.size(); i++) {
 				DockingDesktop desk = (DockingDesktop) desktops.get(i);
 				Window deskWin = SwingUtilities.getWindowAncestor(desk);
@@ -501,7 +507,7 @@ abstract class AbstractDragControler implements DragControler {
 			// now we have an unordered list of windows all intersecting our point : find which one
 			// is above
 			Window topWindow = null;
-			Iterator<?> it = ctx.getOwnedWindowActionOrder().iterator();
+			Iterator it = ctx.getOwnedWindowActionOrder().iterator();
 			while(it.hasNext()) {
 				Window win = (Window) it.next();
 				if(windows.contains(win)) {
@@ -592,7 +598,7 @@ abstract class AbstractDragControler implements DragControler {
 			return;
 		}
 
-		if(targetDesktop == null) { //2006/09/11
+		if(targetDesktop == null) {   //2006/09/11
 			// deny drag gesture when desktops aren't compatible
 			if(underMouseNullDesktop != null) { // we've found a dock drop receiver
 				// we send a really simple event
@@ -603,7 +609,7 @@ abstract class AbstractDragControler implements DragControler {
 			shapePainterStrategy.showStopDragCursor();
 			setDropShape(null, shapePainterStrategy);
 			return;
-		} else if(targetDesktop.getContext() != desktop.getContext()) { //2006/09/11
+		} else if(targetDesktop.getContext() != desktop.getContext()) {   //2006/09/11
 			// deny drag gesture when desktops aren't compatible
 			shapePainterStrategy.showStopDragCursor();
 			setDropShape(null, shapePainterStrategy);
@@ -718,10 +724,7 @@ abstract class AbstractDragControler implements DragControler {
 		}
 	}
 
-	/**
-	 * A component that encapsulates the drag process (manages vetoable events,
-	 * floatability..)
-	 */
+	/** A component that encapsulates the drag process (manages vetoable events, floatability..) */
 	class DragProcess {
 
 		DockableDragSource source;
@@ -776,8 +779,7 @@ abstract class AbstractDragControler implements DragControler {
 			return event;
 		}
 
-		/**
-		 * verifies if the dockable(s) movement will not be vetoed by listeners
+		/** verifies if the dockable(s) movement will not be vetoed by listeners
 		 * */
 		public boolean isDockingActionAccepted() {
 			if(source.getDockableContainer() instanceof TabbedDockableContainer) {
@@ -795,7 +797,7 @@ abstract class AbstractDragControler implements DragControler {
 			}
 		}
 
-		/** internal method for a single dockable */
+		/** internal method for a single dockable  */
 		private boolean isSingleDockingActionAccepted(Dockable dockable) {
 			DockableState currentState = umInfo.desktop.getDockableState(dockable);
 
@@ -870,13 +872,14 @@ abstract class AbstractDragControler implements DragControler {
 			}
 			if(key.isFloatEnabled()) {
 				if(key.getLocation() != DockableState.Location.MAXIMIZED) {
-					/*
-					 * int dx = dragPoint.x - startDragPoint.x; int dy =
-					 * dragPoint.y - startDragPoint.y; if (Math.abs(dx) < 20 &&
-					 * Math.abs(dy) < 10){ // deny detach when too near from
-					 * start point 2005/11/01 return false; } else { return
-					 * true; }
-					 */
+					/* int dx = dragPoint.x - startDragPoint.x;
+					int dy = dragPoint.y - startDragPoint.y;
+					if (Math.abs(dx) < 20 && Math.abs(dy) < 10){
+					// deny detach when too near from start point 2005/11/01
+					return false;
+					} else {
+					return true;
+					}*/
 					return true; // the test above has been moved up to filter more drag events
 				} else {
 					return false;
@@ -980,7 +983,7 @@ abstract class AbstractDragControler implements DragControler {
 			if(source.getDockableContainer() instanceof TabbedDockableContainer) {
 				TabbedDockableContainer tdc = (TabbedDockableContainer) source.getDockableContainer();
 				for(int i = 0; i < tdc.getTabCount(); i++) {
-					//Dockable d = tdc.getDockableAt(i);
+					Dockable d = tdc.getDockableAt(i);
 					fireSingleDockingActionEvent(tdc.getDockableAt(i));
 				}
 			} else {
@@ -1017,7 +1020,7 @@ abstract class AbstractDragControler implements DragControler {
 			if(source.getDockableContainer() instanceof TabbedDockableContainer) {
 				desktop.setFloating((TabbedDockableContainer) source.getDockableContainer(), location);
 			} else {
-				//Dockable dockable = source.getDockable();
+				Dockable dockable = source.getDockable();
 				desktop.setFloating(source.getDockable(), true, location);
 			}
 		}

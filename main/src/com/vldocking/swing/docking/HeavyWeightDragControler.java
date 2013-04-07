@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -34,10 +42,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-/**
- * A Heavyweight implementation of the drag controler, and its associated
- * classes
- * 
+/** A Heavyweight implementation of the drag controler, and its associated classes
+ *
  * @since 3.0
  * @author Lilian Chamontin, vlsolutions.
  */
@@ -45,7 +51,7 @@ class HeavyWeightDragControler extends AbstractDragControler {
 
 	private boolean paintBackgroundUnderDragRect = UIManager.getBoolean("DragControler.paintBackgroundUnderDragRect");
 
-	/** instantiates a controler for a given docking panel */
+	/** instantiates a controler for a given docking panel*/
 	HeavyWeightDragControler(DockingDesktop desktop) {
 		super(desktop);
 	}
@@ -101,10 +107,10 @@ class HeavyWeightDragControler extends AbstractDragControler {
 	// --------------------------------- you don't want to look at the code underneath this line... --------------
 	// -----------------------------------------------------------------------------------------------------------
 	// I'll rewrite it entirely someday as i'm not pleased with it (much too complex)
-	/**
-	 * This class holds implementation strategies of shapes painting. <p> As
-	 * painting is different when pure Swing is used (glasspane) and heavyweight
-	 * components are mixed in (glasspane + canvas).
+	/** This class holds implementation strategies of shapes painting.
+	 *<p>
+	 * As painting is different when pure Swing is used (glasspane) and
+	 * heavyweight components are mixed in (glasspane + canvas).
 	 */
 	private class HWShapePainterStrategy implements ShapePainterStrategy {
 
@@ -121,11 +127,12 @@ class HeavyWeightDragControler extends AbstractDragControler {
 		// heavyweight support
 		private HeavyShape heavyShape; // instanciated only when heavyweight suport is enabled
 
-		/*
-		 * public ShapePainterStrategy(){ if (! isLightWeight){
-		 * dragGlassPane.setPaintShapes(false); heavyShape = new HeavyShape(); }
-		 * }
-		 */
+		/*public ShapePainterStrategy(){
+		if (! isLightWeight){
+		dragGlassPane.setPaintShapes(false);
+		heavyShape = new HeavyShape();
+		}
+		}*/
 		public HWShapePainterStrategy(Window window) {
 			this.window = window;
 			dragGlassPane.setPaintShapes(false);
@@ -138,29 +145,27 @@ class HeavyWeightDragControler extends AbstractDragControler {
 			heavyShape.setCursor(dragGlassPane.getCursor());
 		}
 
-		/** show the stop-drag cursor (drag not enabled) */
+		/** show the stop-drag cursor  (drag not enabled)*/
 		public void showStopDragCursor() {
 			dragGlassPane.showStopDragCursor();
 			heavyShape.setCursor(dragGlassPane.getCursor());
 		}
 
-		/** show the stop-drag cursor (drag not enabled) */
+		/** show the stop-drag cursor  (drag not enabled)*/
 		public void showSwapDragCursor() {
 			dragGlassPane.showSwapDragCursor();
 			heavyShape.setCursor(dragGlassPane.getCursor());
 		}
 
-		/** show the float (detached) cursor */
+		/** show the float (detached) cursor  */
 		public void showFloatCursor() {
 			dragGlassPane.showFloatCursor();
 			heavyShape.setCursor(dragGlassPane.getCursor());
 		}
 
 		public void repaint() {
-			/*
-			 * this is a hack that will be refactored : we post a repaint when
-			 * there is a need to show a drag shape
-			 */
+			/* this is a hack that will be refactored : we post a repaint when there is
+			 * a need to show a drag shape */
 			if(dropShape != null) {
 				heavyShape.moveToShape(dropShape); // adjust to the shape before repainting
 			} else if(heavyShape.isVisible()) {
@@ -224,9 +229,7 @@ class HeavyWeightDragControler extends AbstractDragControler {
 		}
 	}
 
-	/**
-	 * heavyweight component used to paint shapes on top of heavyweight
-	 * components
+	/** heavyweight component used to paint shapes on top of heavyweight components
 	 */
 	private class HeavyShape extends Canvas {
 
@@ -318,7 +321,8 @@ class HeavyWeightDragControler extends AbstractDragControler {
 		/** moves and resizes the canvas to the position of the drop shape */
 		public void moveToShape(Shape newShape) {
 			setVisible(true);
-			//Shape s = dropShape;
+			@SuppressWarnings("unused")
+			Shape s = dropShape;
 			Container container = getParent();
 			Point p = SwingUtilities.convertPoint((Component) dropReceiver, 0, 0, container);
 			Rectangle r = dropShape.getBounds();

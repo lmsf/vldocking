@@ -1,12 +1,20 @@
 /*
- * VLDocking Framework 3.0 Copyright VLSOLUTIONS, 2004-2009 email : info at
- * vlsolutions.com
- * ------------------------------------------------------------------------ This
- * software is distributed under the LGPL license The fact that you are
- * presently reading this and using this class means that you have had knowledge
- * of the LGPL license and that you accept its terms. You can read the complete
- * license here : http://www.gnu.org/licenses/lgpl.html
- */
+    VLDocking Framework 3.0
+    Copyright Lilian Chamontin, 2004-2013
+    
+    www.vldocking.com
+    vldocking@googlegroups.com
+------------------------------------------------------------------------
+This software is distributed under the LGPL license
+
+The fact that you are presently reading this and using this class means that you have had
+knowledge of the LGPL license and that you accept its terms.
+
+You can read the complete license here :
+
+    http://www.gnu.org/licenses/lgpl.html
+
+*/
 
 package com.vldocking.swing.docking;
 
@@ -23,15 +31,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-/**
- * A helper class used to specify and enforce constraints within a container
- * (DockingPanel or CompoundDockingPanel). <p> Constraints are currently defined
- * as anchors (AnchorConstraints objects associated to Dockables).
- * 
+/** A helper class used to specify and enforce constraints within a container
+ * (DockingPanel or CompoundDockingPanel).
+ * <p>
+ * Constraints are currently defined as anchors (AnchorConstraints objects associated to Dockables).
+ *
  * @author Lilian Chamontin, VLSolutions
  * @see AnchorConstraints
  * @since 2.1
  */
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class AnchorManager {
 
 	/** Top most ancestor container */
@@ -43,10 +52,7 @@ public class AnchorManager {
 	/** Context where docking action events are listened to */
 	private DockingContext context;
 
-	/**
-	 * Appropriate reaction upon docking actions (vetoing the ones that would
-	 * break constraints)
-	 */
+	/** Appropriate reaction upon docking actions (vetoing the ones that would break constraints) */
 	private DockingActionListener actionListener = new DockingActionListener() {
 
 		public boolean acceptDockingAction(DockingActionEvent event) {
@@ -79,14 +85,10 @@ public class AnchorManager {
 		public void dockingActionPerformed(DockingActionEvent event) {}
 	};
 
-	/**
-	 * Constructs a new AnchorManager responsible for a container (desktop or
-	 * compound)
-	 * 
-	 * @param context the context (can be taken from
-	 *            DockingDesktop.getDockingContext() used by this manager
-	 * @param container the "top level" container managed (usually a
-	 *            DockingDesktop or a CompoundDockingPanel)
+	/** Constructs a new AnchorManager responsible for a container (desktop or compound)
+	 *
+	 * @param context    the context (can be taken from DockingDesktop.getDockingContext() used by this manager
+	 * @param container  the "top level" container managed (usually a DockingDesktop or a CompoundDockingPanel)
 	 */
 	public AnchorManager(DockingContext context, Container container) {
 		this.context = context;
@@ -100,49 +102,40 @@ public class AnchorManager {
 		constraintsByDockable.clear();
 	}
 
-	/**
-	 * Associates an anchor constraints to a given dockable
-	 * 
-	 * @param dockable the dockable to anchor
+	/** Associates an anchor constraints to a given dockable
+	 * @param dockable    the dockable to anchor
 	 * @param constraints associated anchor constraints
 	 */
 	public void putDockableContraints(Dockable dockable, AnchorConstraints constraints) {
 		constraintsByDockable.put(dockable, constraints);
 	}
 
-	/**
-	 * Returns the anchor constraints associated to a given dockable
-	 * 
-	 * @param dockable the dockable to anchor
-	 * @return the constraints for this dockable, or null if no constraints is
-	 *         associated
+	/** Returns the anchor constraints associated to a given dockable
+	 * @param dockable    the dockable to anchor
+	 * @return the constraints for this dockable, or null if no constraints is associated
 	 */
 	public AnchorConstraints getDockableConstraints(Dockable dockable) {
 		return constraintsByDockable.get(dockable);
 	}
 
-	/**
-	 * Removes an anchor constraints to a given dockable
-	 * 
-	 * @param dockable the dockable whose anchor is to be removed
+	/** Removes an anchor constraints to a given dockable
+	 * @param dockable    the dockable whose anchor is to be removed
 	 */
 	public AnchorConstraints removeDockableConstraints(Dockable dockable) {
 		return constraintsByDockable.remove(dockable);
 	}
 
-	/**
-	 * Look up the spilt hierarchy to find which borders a dockable is touching.
-	 * 
+	/** Look up the spilt hierarchy to find which borders a dockable is touching.
+	 *
 	 */
 	private int getContactBorders(Dockable dockable) {
 		return RelativeDockingUtilities.findAnchors(dockable.getComponent(), container);
 	}
 
-	/**
-	 * Returns a list of all dockables contained into base
+	/** Returns a list of all dockables contained into base
 	 */
-	private ArrayList<Dockable> findDockables(Container base) {
-		ArrayList<Dockable> dockables = new ArrayList<Dockable>(10);
+	private ArrayList findDockables(Container base) {
+		ArrayList dockables = new ArrayList(10);
 		Iterator<Dockable> it = constraintsByDockable.keySet().iterator();
 		while(it.hasNext()) {
 			Dockable d = it.next();
@@ -155,7 +148,7 @@ public class AnchorManager {
 
 	private boolean acceptSplitComponent(DockingActionSplitComponentEvent event) {
 		Component base = event.getBase();
-		ArrayList<Dockable> baseDockables = findDockables((Container) base);
+		ArrayList baseDockables = findDockables((Container) base);
 
 		// we suppose that dockables in "base" are ok (respecting their own set of constraints before the split)
 		// we still have to check is splitting will break a constraint or not
@@ -208,7 +201,7 @@ public class AnchorManager {
 		// the added component must respect its own set of constraints
 		// the base dockable, once the new component added, must also respect its own set of constraints
 		Dockable base = event.getBase();
-		//AnchorConstraints acBase = getDockableConstraints(base);
+		AnchorConstraints acBase = getDockableConstraints(base);
 
 		int contactBorders = getContactBorders(base);
 		switch(event.getSplitPosition().value()) {
@@ -256,7 +249,7 @@ public class AnchorManager {
 
 	private boolean acceptSplitDockableContainer(DockingActionSplitDockableContainerEvent event) {
 		Component base = event.getBase();
-		ArrayList<Dockable> baseDockables = findDockables((Container) base);
+		ArrayList baseDockables = findDockables((Container) base);
 
 		// we suppose that dockables in "base" are ok (respecting their own set of constraints before the split)
 		// we still have to check is splitting will break a constraint or not
@@ -295,7 +288,7 @@ public class AnchorManager {
 
 		if(event.getDockableContainer() instanceof TabbedDockableContainer) {
 			// the only one managed currently (drag gesture : move a whole tabbed pane around)
-			ArrayList<Dockable> containersDockables = findDockables(event.getDockableContainer());
+			ArrayList containersDockables = findDockables(event.getDockableContainer());
 
 			// check if these dockable have constraints
 			for(int i = 0; i < containersDockables.size(); i++) {
@@ -344,8 +337,8 @@ public class AnchorManager {
 		return true;
 	}
 
-	/** checks if a given anchor is set into one of the given dockables */
-	private boolean isConstraintSet(int anchor, ArrayList<Dockable> baseDockables) {
+	/** checks if a given anchor is set into one of the given dockables*/
+	private boolean isConstraintSet(int anchor, ArrayList baseDockables) {
 		for(int i = 0; i < baseDockables.size(); i++) {
 			AnchorConstraints ac = constraintsByDockable.get(baseDockables.get(i));
 			if(ac != null) { // 2007/01/08
@@ -357,7 +350,7 @@ public class AnchorManager {
 		return false;
 	}
 
-	/** checks if a given anchor is set for a dockable */
+	/** checks if a given anchor is set for a dockable*/
 	private boolean isConstraintSet(int anchor, Dockable dockable) {
 		AnchorConstraints ac = constraintsByDockable.get(dockable);
 		if(ac == null) { //2007/01/08
