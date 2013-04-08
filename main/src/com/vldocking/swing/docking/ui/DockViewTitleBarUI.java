@@ -63,6 +63,7 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 	private static boolean useCustomPaint = System.getProperty("os.name").toLowerCase().indexOf("mac os") < 0;
 
 	private static Color panelColor = UIManager.getColor("Panel.background");
+	@SuppressWarnings("unused")
 	private static Color highlight = UIManager.getColor("VLDocking.highlight");
 	@SuppressWarnings("unused")
 	private static Color shadow = UIManager.getColor("VLDocking.shadow");
@@ -556,15 +557,28 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 			Graphics2D g2 = (Graphics2D) g.create();
 			g2.setColor(panelColor);
 			g2.fillRect(0, 0, tb.getWidth(), tb.getHeight()); // emptyborder doesn't repaint
-
+			
+			//TODO: Optimize Look and Feel specific color selecting 
 			Insets i = tb.getInsets();
-			g2.setColor(UIManager.getColor("Panel.background"));
+			if(tb.isActive()) {
+				if(UIManager.getLookAndFeel().getName().contains("Substance")) {
+					g2.setColor(UIManager.getColor("controlLtHighlight")); //Active substance
+				} else {
+					g2.setColor(UIManager.getColor("controlShadow")); //Active other
+				}
+			} else {
+				g2.setColor(UIManager.getColor("Panel.background"));
+			}
 			Rectangle r = tb.getTitleLabel().getBounds();
 			int w = r.x + r.width;
 			g2.fillRect(i.left, i.top, w, tb.getHeight() - i.top - i.bottom);
 			// gradient paint after the label text (to ensure readability)
 			if(tb.isActive()) {
-				g2.setPaint(new GradientPaint(i.left + w, 0, UIManager.getColor("Panel.background"), tb.getWidth(), 0, UIManager.getColor("controlHighlight")));
+				if(UIManager.getLookAndFeel().getName().contains("Substance")) {
+					g2.setPaint(new GradientPaint(i.left + w, 0, UIManager.getColor("controlLtHighlight"), tb.getWidth(), 0, UIManager.getColor("controlHighlight"))); //Active substance
+				} else {
+					g2.setPaint(new GradientPaint(i.left + w, 0, UIManager.getColor("controlShadow"), tb.getWidth(), 0, UIManager.getColor("controlHighlight"))); //Active other
+				}
 			} else {
 				g2.setPaint(new GradientPaint(i.left + w, 0, UIManager.getColor("Panel.background"), tb.getWidth(), 0, UIManager.getColor("controlHighlight"))); //panelColor));
 			}
