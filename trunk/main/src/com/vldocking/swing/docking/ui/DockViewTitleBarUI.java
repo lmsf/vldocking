@@ -52,6 +52,7 @@ import javax.swing.plaf.PanelUI;
 /** A UI for the {@link com.vldocking.swing.docking.DockViewTitleBar}.
  *
  * @author Lilian Chamontin, VLSolutions
+ * @author Andrew Carlson, HypnoRabbit Studios
  * @since 2.0
  * @update 2006/12/01 Lilian Chamontin : added client property support for dockKey, and react to visibleTitleBar
  * @update 2007/01/08 Lilian Chamontin : added support for autohide/dock disabled when hidden
@@ -554,21 +555,21 @@ public class DockViewTitleBarUI extends PanelUI implements PropertyChangeListene
 		if(useCustomPaint) {
 			Graphics2D g2 = (Graphics2D) g.create();
 			g2.setColor(panelColor);
-			g2.fillRect(0, 0, tb.getWidth(), tb.getHeight()); // emptyborder doesnt repaint
+			g2.fillRect(0, 0, tb.getWidth(), tb.getHeight()); // emptyborder doesn't repaint
 
 			Insets i = tb.getInsets();
-			g2.setColor(tb.getBackground());
+			g2.setColor(UIManager.getColor("Panel.background"));
 			Rectangle r = tb.getTitleLabel().getBounds();
 			int w = r.x + r.width;
 			g2.fillRect(i.left, i.top, w, tb.getHeight() - i.top - i.bottom);
-			// gradient paint after the label text (to ensure readeability)
+			// gradient paint after the label text (to ensure readability)
 			if(tb.isActive()) {
-				g2.setPaint(new GradientPaint(i.left + w, 0, tb.getBackground(), tb.getWidth(), 0, highlight));
+				g2.setPaint(new GradientPaint(i.left + w, 0, UIManager.getColor("Panel.background"), tb.getWidth(), 0, UIManager.getColor("controlHighlight")));
 			} else {
-				g2.setPaint(new GradientPaint(i.left + w, 0, tb.getBackground(), tb.getWidth(), 0, highlight)); //panelColor));
+				g2.setPaint(new GradientPaint(i.left + w, 0, UIManager.getColor("Panel.background"), tb.getWidth(), 0, UIManager.getColor("controlHighlight"))); //panelColor));
 			}
 			g2.fillRect(i.left + w, i.top, tb.getWidth() - w - i.left - i.right, tb.getHeight() - i.top - i.bottom);
-
+			
 			g2.dispose();
 		}
 		super.paint(g, c);
