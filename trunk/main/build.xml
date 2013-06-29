@@ -19,7 +19,7 @@
   <property name="src.dir" value="src" />
   <property name="javadoc.dir" value="doc" />
   
-  <property name="vldocking.version" value="3.0.1" />
+  <property name="vldocking.version" value="3.0.2" />
 
   <!-- ===================================================================== -->
   <!-- PREPARE BUILD                                                         -->
